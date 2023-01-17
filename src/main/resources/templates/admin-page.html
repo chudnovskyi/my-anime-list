@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>
+        	ADMIN PAGE
+        </title>
+        
+        <link rel="stylesheet" th:href="@{/css/demo.css}" />
+    </head>
+    <body>
+        <h2>
+        	Welcome!!! This is an admin page!
+        </h2> 
+        
+        <p th:text="'Time on the server is ' + ${theDate}" class="green">
+        
+        <div sec:authorize="hasRole('ADMIN')" class="red">
+        	Text visible to admin.
+        </div>
+        
+        <br><br>
+        
+        Username: <div sec:authentication="name"></div>
+        Roles:    <div sec:authentication="principal.authorities"></div>
+    </body>
+</html>

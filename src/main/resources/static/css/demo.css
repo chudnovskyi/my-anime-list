@@ -1,0 +1,11 @@
+.green {
+	font-style: italic;
+	color: green;
+}
+.red {
+	font-style: italic;
+	color: red;
+}
+.error {
+	color: red
+}

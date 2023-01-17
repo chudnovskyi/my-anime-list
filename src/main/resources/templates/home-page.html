@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>
+        	Welcome!
+        </title>
+        
+        <link rel="stylesheet" th:href="@{/css/demo.css}" />
+    </head>
+    <body>
+        <h2>
+        	Welcome.
+        </h2> 
+        
+        <p th:text="'Time on the server is ' + ${theDate}" class="green">
+        
+        <div sec:authorize="hasRole('USER')" class="red">
+        	Text visible to user.
+        </div>
+        
+        <div sec:authorize="hasRole('ADMIN')" class="red">
+        	Text visible to admin.
+        	<a th:href="@{/admin}">
+				Admin page
+			</a>
+        </div>
+        
+        <div sec:authorize="isAuthenticated()" class="red">
+            Text visible only to all authenticated users.
+        </div>
+        
+        <br><br>
+        
+        Authenticated username:   <div sec:authentication="name"></div>
+        Authenticated user roles: <div sec:authentication="principal.authorities"></div>
+        
+        <a th:href="@{/login}">
+			Back to login page
+		</a>
+    </body>
+</html>

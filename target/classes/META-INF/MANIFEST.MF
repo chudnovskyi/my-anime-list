@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Built-By: Home
+Build-Jdk: 17.0.4.1
+Implementation-Title: thymeleafdemo-employees-crud-security-with-jdbc-au
+ thentication
+Implementation-Version: 1.0.0
+Implementation-Vendor-Id: com.luv2code.springboot
+Implementation-URL: https://spring.io/projects/spring-boot/thymeleafdemo
+ -employees-crud-security-with-jdbc-authentication
+Created-By: Maven Integration for Eclipse
+
