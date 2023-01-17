@@ -19,6 +19,7 @@ import com.myanimelist.dao.UserDao;
 import com.myanimelist.entity.Role;
 import com.myanimelist.entity.User;
 import com.myanimelist.enums.Roles;
+import com.myanimelist.validation.entity.ValidUser;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,18 +38,19 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User findByUsername(String username) {
-		logger.info("=====>>> =====>>> findByUsername(String username)");
+		logger.info("=====>>> =====>>> findByUsername");
 		return userDao.findByUsername(username);
 	}
 
 	@Override
 	@Transactional
-	public void save(User user) {
-		logger.info("=====>>> =====>>> save(User user)");
-		String password = user.getPassword();
+	public void save(ValidUser validUser) {
+		logger.info("=====>>> =====>>> SAVING USER");
 		
-		user.setPassword(passwordEncoder.encode(password));
-
+		User user = new User();
+		user.setUsername(validUser.getUsername());
+		user.setPassword(passwordEncoder.encode(validUser.getPassword()));
+		user.setEmail(validUser.getEmail());
 		user.setRoles(Arrays.asList(roleDao.findRoleByName(Roles.ROLE_USER.name())));
 
 		userDao.save(user);
@@ -69,7 +71,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		User user = userDao.findByUsername(userName);
-		logger.info("=====>>> =====>>> loadUserByUsername");
+		logger.info("=====>>> =====>>> __loadUserByUsername__");
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}

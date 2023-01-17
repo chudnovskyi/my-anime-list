@@ -59,7 +59,7 @@
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
 								<li th:each="err : ${#fields.errors('username')}"
-									th:text="'User name ' + ${err}" />
+									th:text="${err}" />
 							</ul>
 						</div>
 
@@ -74,7 +74,7 @@
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
 								<li th:each="err : ${#fields.errors('password')}"
-									th:text="'Password ' + ${err}" />
+									th:text="${err}" />
 							</ul>
 						</div>
 
@@ -89,7 +89,7 @@
 							style="margin-bottom: 25px" class="text-danger">
 							<ul>
 								<li th:each="err : ${#fields.errors('email')}"
-									th:text="'Email ' + ${err}" />
+									th:text="${err}" />
 							</ul>
 						</div>
 
