@@ -8,16 +8,24 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Constraint(validatedBy = EmailValidator.class)
-@Target(ElementType.FIELD)
+@Constraint(validatedBy = FieldMatchValidator.class)
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Email {
+public @interface FieldMatch {
 	
-	public String[] domains() default {""};
+	public String firstField();
+
+	public String secondField();
 	
 	public String message() default "";
-	
+
 	public Class<?>[] groups() default {};
 	
 	public Class<? extends Payload>[] payload() default {};
+
+	@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface List {
+		public FieldMatch[] value();
+	}
 }

@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.myanimelist.validation.Email;
+import com.myanimelist.validation.FieldMatch;
 
 /* 
  * I use a separate entity class for 
@@ -16,6 +17,9 @@ import com.myanimelist.validation.Email;
  * layer, all fields will be transferred 
  * to the "real" User object.
  */
+@FieldMatch.List({
+    @FieldMatch(firstField = "password", secondField = "matchingPassword", message = "{ConfirmPassword.Match}")
+})
 public class ValidUser {
 
 	@NotNull(message = "{Username.NotNull}")
@@ -25,10 +29,13 @@ public class ValidUser {
 	@NotNull(message = "{Password.NotNull}")
 	@Size(min = 3, message = "{Password.Size}")
 	private String password;
+	
+	@NotNull(message = "{ConfirmPassword.NotNull}")
+	private String matchingPassword;
 
 	@NotNull(message = "{Email.NotNull}")
-	@Email(suffix = {"gmail.com", "karazin.ua"}, 
-			message = "{Email.domains}")
+	@Email(domains = {"gmail.com", "karazin.ua"}, 
+			message = "{Email.Domains}")
 	private String email;
 
 	public String getUsername() {
@@ -45,6 +52,14 @@ public class ValidUser {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getMatchingPassword() {
+		return matchingPassword;
+	}
+
+	public void setMatchingPassword(String matchingPassword) {
+		this.matchingPassword = matchingPassword;
 	}
 
 	public String getEmail() {

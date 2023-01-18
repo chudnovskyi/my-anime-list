@@ -47,7 +47,8 @@
 								</div>
 							</div>
 						</div>
-
+						
+						<!-- Username -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-user"></i>
@@ -63,6 +64,7 @@
 							</ul>
 						</div>
 
+						<!-- Password -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i>
@@ -77,7 +79,24 @@
 									th:text="${err}" />
 							</ul>
 						</div>
+						
+						<!-- Matching Password -->
+						<div style="margin-bottom: 25px" class="input-group">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-lock"></i>
+							</span> 
+							<input type="password" th:field="*{matchingPassword}" placeholder="confirm password (*)" 
+								class="form-control" th:errorclass="fieldError" />
+						</div>
+						<div th:if="${#fields.hasErrors('matchingPassword')}"
+							style="margin-bottom: 25px" class="text-danger">
+							<ul>
+								<li th:each="err : ${#fields.errors('matchingPassword')}" 
+									th:text="${err}" />
+							</ul>						
+						</div>
 
+						<!-- Email -->
 						<div style="margin-bottom: 25px" class="input-group">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-user"></i>
