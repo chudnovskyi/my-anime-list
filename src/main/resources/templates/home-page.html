@@ -39,8 +39,8 @@
 			<p th:text="'First name: ' + ${session.authenticatedUser.username} + ', Email: ' + ${session.authenticatedUser.email}"></p>
 		</div>	
         
-        <a th:href="@{/login}">
-			Back to login page
-		</a>
+        <form th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout" />
+		</form>	
     </body>
 </html>
