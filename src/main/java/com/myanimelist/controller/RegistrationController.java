@@ -45,7 +45,8 @@ public class RegistrationController {
 	@PostMapping("/proccess")
 	public String proccess(
 			@Valid @ModelAttribute(name = "user") ValidUser user,
-			BindingResult bindingResult) {
+			BindingResult bindingResult,
+			Model theModel) {
 		
 		if (bindingResult.hasErrors()) {
 			return "register-form";
@@ -54,8 +55,8 @@ public class RegistrationController {
 		try {
 			userService.save(user);
 		} catch (UsernameAlreadyRegistered e) {
-			// to-do: return back to the registration form, print error message (bind attribute to the model)
-			return "register-failure";
+ 			theModel.addAttribute("alreadyRegistered", "Username already registered!");
+			return "register-form";
 		}
 		
 		return "register-confirmation";
