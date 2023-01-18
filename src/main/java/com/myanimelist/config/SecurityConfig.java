@@ -18,12 +18,18 @@ public class SecurityConfig {
 
 	private UserService userService;
 	
-	// prevents Circular Dependencies
 	@Autowired
     public SecurityConfig(@Lazy UserService userService) {
         this.userService = userService;
     }
-
+	
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	
+    @Autowired
+    public void setCustomAuthenticationSuccessHandler(@Lazy CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
+    	this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
+    }
+    
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -48,6 +54,7 @@ public class SecurityConfig {
 			.formLogin()
 				.loginPage("/login")
 				.loginProcessingUrl("/authenticate")
+				.successHandler(customAuthenticationSuccessHandler)
 				.permitAll()
 			.and()
 			

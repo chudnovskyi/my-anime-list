@@ -31,8 +31,13 @@
         
         <br><br>
         
-        Authenticated username:   <div sec:authentication="name"></div>
-        Authenticated user roles: <div sec:authentication="principal.authorities"></div>
+        Username: <div sec:authentication="name"></div>
+        Roles:    <div sec:authentication="principal.authorities"></div>
+        
+        <!-- Check for login error -->																	
+		<div th:if="${session.authenticatedUser}" >
+			<p th:text="'First name: ' + ${session.authenticatedUser.username} + ', Email: ' + ${session.authenticatedUser.email}"></p>
+		</div>	
         
         <a th:href="@{/login}">
 			Back to login page
