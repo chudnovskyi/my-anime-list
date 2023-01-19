@@ -14,7 +14,7 @@
 		        <tr>
 		            <th>ID</th>
 		            <th>TITLE</th>
-		            <th>EMAIL</th>
+		            <th>RATING</th>
 		        </tr>
 		    </thead>
 		    <tbody>
@@ -30,5 +30,27 @@
 			Back to home page
 		</a>
 		
+		<div th:if="${pagination}" >
+			<p th:text="'Current page: ' + ${pagination.current_page}"></p>
+			<p th:text="'Total pages: ' + ${pagination.last_visible_page}"></p>
+		</div>
+		
+		<div th:if="${pagination.current_page > 1}" class="inline">
+			<form method="post" th:action="@{/anime/find-by-name/__${pagination.current_page - 1}__}" th:object="${animeForm}">
+				<input type="hidden" th:field="*{title}" id="title">
+			    <button type="submit" name="submit" value="value" class="link-button">
+			    	<-
+			    </button>
+			</form> 
+		</div>
+		
+		<div th:if="${pagination.has_next_page == true}" class="inline">
+			<form method="post" th:action="@{/anime/find-by-name/__${pagination.current_page + 1}__}" th:object="${animeForm}">
+				<input type="hidden" th:field="*{title}" id="title">
+			    <button type="submit" name="submit" value="value" class="link-button">
+			    	->
+			    </button>
+			</form> 
+		</div>
     </body>
 </html>

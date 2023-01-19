@@ -56,7 +56,7 @@
                 <!-- Page content-->
                 <div class="container-fluid">
 			        <div th:if="${param.search}">
-		                <form action="#" th:action="@{/anime/find-by-name}" method="post" th:object="${animeForm}">
+		                <form action="#" th:action="@{/anime/find-by-name/1}" method="post" th:object="${animeForm}">
 					        <label>Enter anime name (eng):</label>
 					        <input type="text" th:field="*{title}" /><br/>
 					 

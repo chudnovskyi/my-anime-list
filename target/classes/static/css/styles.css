@@ -11327,3 +11327,9 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     margin-left: -15rem;
   }
 }
+
+.inline { 
+display: inline-block; 
+border: 1px solid red; 
+margin:10px;
+}
