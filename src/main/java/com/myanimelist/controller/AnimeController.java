@@ -1,51 +1,36 @@
 package com.myanimelist.controller;
 
-import java.util.logging.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 
 import com.myanimelist.rest.entity.Anime;
-import com.myanimelist.rest.entity.AnimeList;
+import com.myanimelist.rest.entity.ResponseAnimeWrapper;
+import com.myanimelist.service.AnimeService;
 
 @Controller
 @RequestMapping("/anime")
 public class AnimeController {
 	
-	private Logger logger = Logger.getLogger(getClass().getName());
-	
 	@Autowired
-	private Environment env;
+	private AnimeService animeService;
 	
 	@PostMapping("/find-by-name/{pageId}")
-	public String getAnimeByName(
+	public String findByName(
 			@ModelAttribute(name = "animeForm") Anime animeForm,
 			@PathVariable(name = "pageId") int pageId,
 			Model theModel) {
 		
-		String urlToFind = env.getProperty("find.name") + animeForm.getTitle() + "&page=" + pageId;
-		
-		logUrl(urlToFind);
-		
-		RestTemplate restTemplate = new RestTemplate();
-		
-		AnimeList animeList = restTemplate.getForObject(urlToFind, AnimeList.class);
+		ResponseAnimeWrapper wrapper = animeService.findByNameAndPage(animeForm, pageId);
 		
 		theModel.addAttribute("animeForm", animeForm);
-		theModel.addAttribute("animeList", animeList.getData());
-		theModel.addAttribute("pagination", animeList.getPagination());
+		theModel.addAttribute("animeList", wrapper.getData());
+		theModel.addAttribute("pagination", wrapper.getPagination());
 		
 		return "anime-list";
-	}
-	
-	private void logUrl(String url) {
-		logger.info("------------------------" + url + "------------------------");
 	}
 }

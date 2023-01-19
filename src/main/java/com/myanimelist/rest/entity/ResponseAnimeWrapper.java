@@ -3,7 +3,7 @@ package com.myanimelist.rest.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimeList {
+public class ResponseAnimeWrapper {
 
 	private Pagination pagination;
 	private List<Anime> data;
@@ -12,15 +12,15 @@ public class AnimeList {
 		data = new ArrayList<>();
 	}
 
-	public AnimeList() {
+	public ResponseAnimeWrapper() {
 
 	}
 
-	public AnimeList(List<Anime> data) {
+	public ResponseAnimeWrapper(List<Anime> data) {
 		this.data = data;
 	}
 
-	public AnimeList(Pagination pagination, List<Anime> data) {
+	public ResponseAnimeWrapper(Pagination pagination, List<Anime> data) {
 		this.pagination = pagination;
 		this.data = data;
 	}
