@@ -11,17 +11,23 @@
     
 		<table class="table table-secondary">
 		    <thead>
-		        <tr>
-		            <th>ID</th>
-		            <th>TITLE</th>
-		            <th>RATING</th>
+		        <tr align="center">
+		            <th>Image</th>
+		            <th class="col-5 text-truncate">Title</th>
+		            <th class="col-2 text-truncate">Year</th>
+		            <th class="col-2 text-truncate">Episodes</th>
+		            <th class="col-2 text-truncate">Score</th>
+		            <th class="col-2 text-truncate">More info</th>
 		        </tr>
 		    </thead>
 		    <tbody>
 		        <tr th:each="anime: ${animeList}">
-				    <td th:text="${anime.mal_id}" />
-				    <td th:text="${anime.title}" />
-				    <td th:text="${anime.rating}" />
+				    <td><img th:src="${anime.images.jpg.image_url}"></td>
+				    <td th:text="${anime.title}"    style=font-size:22px align="center"/>
+				    <td th:text="${anime.year}"     style=font-size:30px align="center"/>
+				    <td th:text="${anime.episodes}" style=font-size:30px align="center"/>
+				    <td th:text="${anime.score}"    style=font-size:30px align="center"/>
+				    <td><a th:href="@{/home}">todo: href to anime</a></td>
 		        </tr>
 		    </tbody>
 		</table>

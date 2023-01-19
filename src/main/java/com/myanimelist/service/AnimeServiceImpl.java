@@ -23,8 +23,10 @@ public class AnimeServiceImpl implements AnimeService {
 		String url = 
 				env.getProperty("find.name") + animeForm.getTitle() + 
 				env.getProperty("param.page") + pageId + 
-				env.getProperty("param.order_by.title") +
-				env.getProperty("param.sort.asc");
+				env.getProperty("param.limit") + 10 + 
+				env.getProperty("param.order_by.rank") +
+				env.getProperty("param.order_by.score") +
+				env.getProperty("param.sort.desc");
 		
 		logUrl(url);
 		
