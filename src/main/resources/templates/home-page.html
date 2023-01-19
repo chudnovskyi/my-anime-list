@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -7,7 +7,7 @@
         <meta name="author" content="" />
         
         <title>
-        	Welcome!
+        	My Anime List
         </title>
 
         <link rel="icon" type="image/x-icon" th:href="@{assets/favicon.ico}" />
@@ -17,14 +17,14 @@
         <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
             <div class="border-end bg-white" id="sidebar-wrapper">
-                <div class="sidebar-heading border-bottom bg-light">Start Bootstrap</div>
+                <div class="sidebar-heading border-bottom bg-light">My Anime List</div>
                 <div class="list-group list-group-flush">
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Shortcuts</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/home?search}">Search</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/home?unknown}">-</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/home?unknown}">-</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/home?unknown}">-</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/home?unknown}">-</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/home?unknown}">-</a>
                 </div>
             </div>
             <!-- Page content wrapper-->
@@ -36,15 +36,17 @@
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                                <li class="nav-item active"><a class="nav-link" href="#!">Home</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#!">Link</a></li>
+                                <li class="nav-item active"><a class="nav-link" th:href="@{/home?profile}">Profile</a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/github}">GitHub</a></li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="#!">Action</a>
-                                        <a class="dropdown-item" href="#!">Another action</a>
+                                        <a class="dropdown-item" th:href="@{/home?unknown}">Action</a>
+                                        <a class="dropdown-item" th:href="@{/home?unknown}">Another action</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#!">Something else here</a>
+                                       	<form th:action="@{/logout}" method="POST" style="text-align: center;">
+											<input type="submit" value="Logout" />
+										</form>	
                                     </div>
                                 </li>
                             </ul>
@@ -53,40 +55,35 @@
                 </nav>
                 <!-- Page content-->
                 <div class="container-fluid">
-			        <h2>
-			        	Welcome.
-			        </h2> 
+			        <div th:if="${param.search}">
+						<form>
+			                Search for anime name: <input type="text" name="search" />
+			                <input type="submit" value="Search" class="add-button" />
+			            </form>
+					</div>
+					
+					<div th:if="${param.profile}">
+						<h2>
+				        	Welcome.
+				        </h2> 
+				        
+						<p th:text="'Time on the server is: ' + ${theDate}" class="green">
 			        
-			        <p th:text="'Time on the server is ' + ${theDate}" class="green">
-			        
-			        <div sec:authorize="hasRole('USER')" class="red">
-			        	Text visible to user.
-			        </div>
-			        
-			        <div sec:authorize="hasRole('ADMIN')" class="red">
-			        	Text visible to admin.
-			        	<a th:href="@{/admin}">
-							Admin page
-						</a>
-			        </div>
-			        
-			        <div sec:authorize="isAuthenticated()" class="red">
-			            Text visible only to all authenticated users.
-			        </div>
-			        
-			        <br><br>
-			        
-			        Username: <div sec:authentication="name"></div>
-			        Roles:    <div sec:authentication="principal.authorities"></div>
-			        
-			        <!-- Check for login error -->																	
-					<div th:if="${session.authenticatedUser}" >
-						<p th:text="'First name: ' + ${session.authenticatedUser.username} + ', Email: ' + ${session.authenticatedUser.email}"></p>
-					</div>	
-			        
-			        <form th:action="@{/logout}" method="POST">
-						<input type="submit" value="Logout" />
-					</form>	
+				        <br><br>
+				        
+						<div th:if="${session.authenticatedUser}" >
+							<p th:text="'Username: ' + ${session.authenticatedUser.username}"></p>
+							<p th:text="'Email: ' + ${session.authenticatedUser.email}"></p>
+						</div>
+						
+						Roles: <div sec:authentication="principal.authorities"></div>
+						
+						<div sec:authorize="hasRole('ADMIN')" class="red">
+							<a th:href="@{/admin}">
+								Admin page
+							</a>
+						</div>	
+					</div>
                 </div>
             </div>
         </div>

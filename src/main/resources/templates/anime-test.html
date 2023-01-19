@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>
+        	ANIME TEST
+        </title>
+        
+        <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    </head>
+    <body>
+    
+		<table class="table table-secondary">
+		    <thead>
+		        <tr>
+		            <th>ID</th>
+		            <th>TITLE</th>
+		            <th>EMAIL</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr th:each="anime: ${animeData}">
+				    <td th:text="${anime.mal_id}" />
+				    <td th:text="${anime.title}" />
+				    <td th:text="${anime.rating}" />
+		        </tr>
+		    </tbody>
+		</table>
+		
+    </body>
+</html>
