@@ -2,6 +2,8 @@ package com.myanimelist.controller;
 
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,25 +19,28 @@ public class AnimeController {
 	
 	private Logger logger = Logger.getLogger(getClass().getName());
 	
-	private static final String URL_SEARCH_BY_NAME = "https://api.jikan.moe/v4/anime?q=";
+	@Autowired
+	private Environment env;
 	
 	@GetMapping("/{animeName}")
-	public String getAnimeById(
+	public String getAnimeByName(
 			@PathVariable(name = "animeName") String animeName,
 			Model theModel) {
 		
-		String urlToFind = URL_SEARCH_BY_NAME + animeName;
+		String urlToFind = env.getProperty("find.name") + animeName;
 		
-		logger.info("------------------------" + urlToFind + "------------------------");
+		logUrl(urlToFind);
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
 		AnimeList animeList = restTemplate.getForObject(urlToFind, AnimeList.class);
 		
-		logger.info("-----" + animeList.getData() + "-----");
-		
-		theModel.addAttribute("animeData", animeList.getData());
+		theModel.addAttribute("animeList", animeList.getData());
 		
 		return "anime-test";
+	}
+	
+	private void logUrl(String url) {
+		logger.info("------------------------" + url + "------------------------");
 	}
 }
