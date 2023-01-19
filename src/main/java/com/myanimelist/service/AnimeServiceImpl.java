@@ -20,7 +20,27 @@ public class AnimeServiceImpl implements AnimeService {
 	@Override
 	public ResponseAnimeWrapper findByTitleAndPage(String title, int pageId) {
 		String url = 
-				env.getProperty("find.name") + title + 
+				env.getProperty("find.all") + 
+				env.getProperty("param.title") + title + 
+				env.getProperty("param.page") + pageId + 
+				env.getProperty("param.limit") + 10 + 
+				env.getProperty("param.order_by.rank") +
+				env.getProperty("param.order_by.score") +
+				env.getProperty("param.sort.desc");
+		
+		logUrl(url);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		ResponseAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseAnimeWrapper.class);
+		
+		return wrapper;
+	}
+	
+	@Override
+	public ResponseAnimeWrapper findTop(int pageId) {
+		String url = 
+				env.getProperty("find.all") + 
 				env.getProperty("param.page") + pageId + 
 				env.getProperty("param.limit") + 10 + 
 				env.getProperty("param.order_by.rank") +

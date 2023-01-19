@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class AnimeController {
 	@Autowired
 	private AnimeService animeService;
 	
-	@PostMapping("/find-by-name/{pageId}")
+	@PostMapping("/{pageId}")
 	public String findByName(
 			@Valid @ModelAttribute("searchAnime") ValidSearchAnime searchAnime,
 			BindingResult bindingResult,
@@ -39,6 +40,23 @@ public class AnimeController {
 		theModel.addAttribute("animeList", wrapper.getData());
 		theModel.addAttribute("pagination", wrapper.getPagination());
 		
-		return "anime-list";
+		return "anime-search";
+	}
+	
+	@GetMapping("/top/{pageId}")
+	public String top(
+			@PathVariable(name = "pageId") int pageId,
+			Model theModel) {
+		
+		ResponseAnimeWrapper wrapper = animeService.findTop(pageId);
+		
+		theModel.addAttribute("animeList", wrapper.getData());
+		theModel.addAttribute("pagination", wrapper.getPagination());
+		
+		/*
+		 * I redirect to "anime-top" but not "anime-search" because
+		 * idk how to correctly automatize one html form for two or more methods.
+		 */
+		return "anime-top";
 	}
 }
