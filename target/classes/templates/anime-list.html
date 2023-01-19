@@ -27,7 +27,7 @@
 				    <td th:text="${anime.year}"     style=font-size:30px align="center"/>
 				    <td th:text="${anime.episodes}" style=font-size:30px align="center"/>
 				    <td th:text="${anime.score}"    style=font-size:30px align="center"/>
-				    <td><a th:href="@{/home}">todo: href to anime</a></td>
+				    <td align="center"><a th:href="@{/home}">todo: href to anime</a></td>
 		        </tr>
 		    </tbody>
 		</table>
@@ -42,7 +42,7 @@
 		</div>
 		
 		<div th:if="${pagination.current_page > 1}" class="inline">
-			<form method="post" th:action="@{/anime/find-by-name/__${pagination.current_page - 1}__}" th:object="${animeForm}">
+			<form method="post" th:action="@{/anime/find-by-name/__${pagination.current_page - 1}__}" th:object="${searchAnime}">
 				<input type="hidden" th:field="*{title}" id="title">
 			    <button type="submit" name="submit" value="value" class="link-button">
 			    	<-
@@ -51,7 +51,7 @@
 		</div>
 		
 		<div th:if="${pagination.has_next_page == true}" class="inline">
-			<form method="post" th:action="@{/anime/find-by-name/__${pagination.current_page + 1}__}" th:object="${animeForm}">
+			<form method="post" th:action="@{/anime/find-by-name/__${pagination.current_page + 1}__}" th:object="${searchAnime}">
 				<input type="hidden" th:field="*{title}" id="title">
 			    <button type="submit" name="submit" value="value" class="link-button">
 			    	->

@@ -7,7 +7,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.entity.ResponseAnimeWrapper;
 
 @Service
@@ -19,9 +18,9 @@ public class AnimeServiceImpl implements AnimeService {
 	private Environment env;
 	
 	@Override
-	public ResponseAnimeWrapper findByNameAndPage(Anime animeForm, int pageId) {
+	public ResponseAnimeWrapper findByTitleAndPage(String title, int pageId) {
 		String url = 
-				env.getProperty("find.name") + animeForm.getTitle() + 
+				env.getProperty("find.name") + title + 
 				env.getProperty("param.page") + pageId + 
 				env.getProperty("param.limit") + 10 + 
 				env.getProperty("param.order_by.rank") +

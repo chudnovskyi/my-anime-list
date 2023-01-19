@@ -56,11 +56,42 @@
                 <!-- Page content-->
                 <div class="container-fluid">
 			        <div th:if="${param.search}">
-		                <form action="#" th:action="@{/anime/find-by-name/1}" method="post" th:object="${animeForm}">
-					        <label>Enter anime name (eng):</label>
-					        <input type="text" th:field="*{title}" /><br/>
-					 
-					        <button type="submit">Find</button>    
+		                <form th:action="@{/anime/find-by-name/1}" 
+		                	th:object="${searchAnime}" method="POST" class="form-control-plaintext">
+					        <label>
+					        	Enter anime name:
+					        </label>
+					        
+					        <!-- Init binder not working. Why?? -->
+					        <div style="margin-bottom: 25px" class="input-group">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" th:field="*{title}" placeholder="title (*)" 
+									class="form-control" th:errorclass="fieldError" />
+							</div>
+							
+							<div style="margin-top: 10px" class="form-group">
+								<div class="col-sm-6 controls">
+									<button type="submit" class="btn btn-primary">
+										Find
+									</button>
+								</div>
+							</div>
+							
+							<!-- Why not working??? -->
+							<div th:if="${#fields.hasErrors('title')}"
+								style="margin-bottom: 25px" class="text-danger">
+								<ul>
+									<li th:each="err : ${#fields.errors('title')}"
+										th:text="${err}" />
+								</ul>
+							</div>
+							
+							<!-- Temporary Alternative -->
+							<div th:if="${param.error}">
+								At least 3 symbols!
+							</div>
 					    </form>
 					</div>
 					
