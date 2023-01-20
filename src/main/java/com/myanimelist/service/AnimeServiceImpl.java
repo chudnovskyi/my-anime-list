@@ -66,7 +66,9 @@ public class AnimeServiceImpl implements AnimeService {
 		
 		logUrl(url);
 		
-		ResponseSingleAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseSingleAnimeWrapper.class);
+		ResponseSingleAnimeWrapper wrapper = null;
+		
+		wrapper = restTemplate.getForObject(url, ResponseSingleAnimeWrapper.class);
 		
 		return wrapper.getData();
 	}

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.myanimelist.entity.User;
-import com.myanimelist.exception.UsernameAlreadyRegistered;
+import com.myanimelist.exception.UsernameAlreadyExistsException;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -53,7 +53,7 @@ public class UserDaoImpl implements UserDao {
 		
 		if (userToCheck != null) {
 			logger.info("=====>>> =====>>> THERE'S ALREADY USER WITH SUCH USERNAME");
-			throw new UsernameAlreadyRegistered("username " + theUser.getUsername() + " already registered ...");
+			throw new UsernameAlreadyExistsException("username " + theUser.getUsername() + " already registered ...");
 		}
 		
 		currentSession.saveOrUpdate(theUser);

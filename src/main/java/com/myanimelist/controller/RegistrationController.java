@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.myanimelist.exception.UsernameAlreadyRegistered;
+import com.myanimelist.exception.UsernameAlreadyExistsException;
 import com.myanimelist.service.UserService;
 import com.myanimelist.validation.entity.ValidUser;
 
@@ -54,7 +54,7 @@ public class RegistrationController {
 		
 		try {
 			userService.save(user);
-		} catch (UsernameAlreadyRegistered e) {
+		} catch (UsernameAlreadyExistsException e) {
  			theModel.addAttribute("alreadyRegistered", "Username already registered!");
 			return "register-form";
 		}
