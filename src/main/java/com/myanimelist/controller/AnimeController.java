@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.entity.ResponseAnimeWrapper;
 import com.myanimelist.service.AnimeService;
 import com.myanimelist.validation.entity.ValidSearchAnime;
@@ -58,5 +59,17 @@ public class AnimeController {
 		 * idk how to correctly automatize one html form for two or more methods.
 		 */
 		return "anime-top";
+	}
+	
+	@GetMapping("/find/{animeId}")
+	public String getAnimeById(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		Anime anime = animeService.findAnimeById(animeId);
+		System.out.println(anime);
+		theModel.addAttribute("anime", anime);
+		
+		return "anime-details";
 	}
 }

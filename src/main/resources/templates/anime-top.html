@@ -27,7 +27,7 @@
 				    <td th:text="${anime.year}"     style=font-size:30px align="center"/>
 				    <td th:text="${anime.episodes}" style=font-size:30px align="center"/>
 				    <td th:text="${anime.score}"    style=font-size:30px align="center"/>
-				    <td align="center"><a th:href="@{/home}">todo: href to anime</a></td>
+				    <td align="center"><a th:href="@{/anime/find/{id}(id=${anime.mal_id})}">Details</a></td>
 		        </tr>
 		    </tbody>
 		</table>

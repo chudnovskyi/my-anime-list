@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>
+        	ANIME BY ID
+        </title>
+        
+        <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    </head>
+    <body>
+    	<img align="left" th:src="${anime.images.jpg.large_image_url}">
+    	
+    	<p>Links to rate, add as favourite etc...</p>
+    	
+		<table class="table table-primary">
+			<tbody>
+				<tr>
+					<td>Title:</td>
+			        <td><p th:text="${anime.title}"/></td>
+				</tr>
+				<tr>
+		        	<td>Year:</td>
+					<td><p th:text="${anime.year}"/></td>
+		        </tr>
+				<tr>
+		        	<td>Episodes:</td>
+					<td><p th:text="${anime.episodes}"/></td>
+		        </tr>
+				<tr>
+		        	<td>Rank:</td>
+					<td><p th:text="${anime.rank}"/></td>
+		        </tr>
+				<tr>
+		        	<td>Score:</td>
+					<td><p th:text="${anime.score}"/></td>
+		        </tr>
+				<tr>
+		        	<td>Type:</td>
+					<td><p th:text="${anime.type}"/></td>
+		        </tr>
+				<tr>
+		        	<td>Status:</td>
+					<td><p th:text="${anime.status}"/></td>
+		        </tr>
+				<tr>
+		        	<td>Rating:</td>
+					<td><p th:text="${anime.rating}"/></td>
+		        </tr>
+				<tr>
+		        	<td>Synopsis:</td>
+					<td><p th:text="${anime.synopsis}"/></td>
+		        </tr>
+				<tr>
+		        	<td>Background:</td>
+					<td><p th:text="${anime.background}"/></td>
+		        </tr>
+		    </tbody>
+		</table>
+    </body>
+</html>
