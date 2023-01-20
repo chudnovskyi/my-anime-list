@@ -8,6 +8,10 @@
         <link rel="stylesheet" th:href="@{/css/styles.css}" />
     </head>
     <body>
+    	<a th:href="@{/home}">
+			Back to home page
+		</a>
+		
     	<img align="left" th:src="${anime.images.jpg.large_image_url}">
     	
     	<p>Links to rate, add as favourite etc...</p>
@@ -60,10 +64,6 @@
 		        </tr>
 		    </tbody>
 		</table>
-		
-		<a th:href="@{/home}">
-			Back to home page
-		</a>
 		
     </body>
 </html>

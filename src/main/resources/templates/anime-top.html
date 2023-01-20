@@ -8,6 +8,9 @@
         <link rel="stylesheet" th:href="@{/css/styles.css}" />
     </head>
     <body>
+    	<a th:href="@{/home}">
+			Back to home page
+		</a>
     
 		<table class="table table-secondary">
 		    <thead>
@@ -31,10 +34,6 @@
 		        </tr>
 		    </tbody>
 		</table>
-		
-		<a th:href="@{/home}">
-			Back to home page
-		</a>
 		
 		<div th:if="${pagination}" >
 			<p th:text="'Current page: ' + ${pagination.current_page}"></p>
