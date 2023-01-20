@@ -47,8 +47,8 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/home**") .hasRole("USER")
-				.antMatchers("/anime/**") .hasRole("USER")
+				.antMatchers("/home**").hasRole("USER")
+				.antMatchers("/anime/**").hasRole("USER")
 				.antMatchers("/admin").hasRole("ADMIN")
 			.and()
 			

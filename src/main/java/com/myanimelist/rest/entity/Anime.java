@@ -18,6 +18,8 @@ public class Anime {
 	private String background;
 
 	private Images images;
+	
+	private Trailer trailer;
 
 	public Anime() {
 
@@ -119,10 +121,19 @@ public class Anime {
 		this.images = images;
 	}
 
+	public Trailer getTrailer() {
+		return trailer;
+	}
+
+	public void setTrailer(Trailer trailer) {
+		this.trailer = trailer;
+	}
+
 	@Override
 	public String toString() {
 		return "Anime [mal_id=" + mal_id + ", episodes=" + episodes + ", rank=" + rank + ", year=" + year + ", score="
 				+ score + ", title=" + title + ", type=" + type + ", status=" + status + ", rating=" + rating
-				+ ", synopsis=" + synopsis + ", background=" + background + ", images=" + images + "]";
+				+ ", synopsis=" + synopsis + ", background=" + background + ", images=" + images + ", trailer="
+				+ trailer + "]";
 	}
 }

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.myanimelist.rest.entity.Anime;
-import com.myanimelist.rest.entity.ResponseAnimeWrapper;
-import com.myanimelist.rest.entity.SingleAnimeWrapper;
+import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
+import com.myanimelist.rest.wrapper.SingleAnimeWrapper;
 
 @Service
 public class AnimeServiceImpl implements AnimeService {
@@ -22,10 +22,29 @@ public class AnimeServiceImpl implements AnimeService {
 	private Logger logger = Logger.getLogger(getClass().getName());
 	
 	@Override
-	public ResponseAnimeWrapper findByTitleAndPage(String title, int pageId) {
+	public ResponseAnimeWrapper findByTitle(String title, int pageId) {
 		String url = 
 				env.getProperty("find.all") + 
 				env.getProperty("param.title") + title + 
+				env.getProperty("param.page") + pageId + 
+				env.getProperty("param.limit") + 
+				env.getProperty("param.order_by.rank") +
+				env.getProperty("param.order_by.score") +
+				env.getProperty("param.sort.desc");
+		
+		logUrl(url);
+		
+		ResponseAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseAnimeWrapper.class);
+		
+		return wrapper;
+	}
+	
+	@Override
+	public ResponseAnimeWrapper findByTitleAndGenres(String title, String genres, int pageId) {
+		String url = 
+				env.getProperty("find.all") + 
+				env.getProperty("param.title") + title + 
+				env.getProperty("param.genres") + genres + 
 				env.getProperty("param.page") + pageId + 
 				env.getProperty("param.limit") + 
 				env.getProperty("param.order_by.rank") +
@@ -81,6 +100,6 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	private void logUrl(String url) {
-		logger.info("------------------------" + url + "------------------------");
+		logger.info("------------------------>> " + url);
 	}
 }

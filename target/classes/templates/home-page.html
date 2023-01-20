@@ -71,6 +71,12 @@
 									class="form-control" th:errorclass="fieldError" />
 							</div>
 							
+							<select class="form-control" th:field="*{genres}" multiple="multiple">
+							    <option th:each="genre : ${genres}"
+							            th:value="${genre.key}"
+							            th:text="${genre.value}">genre name</option>
+							</select>
+							
 							<div style="margin-top: 10px" class="form-group">
 								<div class="col-sm-6 controls">
 									<button type="submit" class="btn btn-primary">

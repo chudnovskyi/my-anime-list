@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.myanimelist.rest.entity.Anime;
-import com.myanimelist.rest.entity.ResponseAnimeWrapper;
+import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
 import com.myanimelist.service.AnimeService;
 import com.myanimelist.validation.entity.ValidSearchAnime;
 
@@ -35,7 +35,13 @@ public class AnimeController {
 			return "redirect:/home?search&error";
 		}
 		
-		ResponseAnimeWrapper wrapper = animeService.findByTitleAndPage(searchAnime.getTitle(), pageId);
+		ResponseAnimeWrapper wrapper = null;
+		
+		if (searchAnime.getGenres() == null) {
+			wrapper = animeService.findByTitle(searchAnime.getTitle(), pageId);
+		} else {
+			wrapper = animeService.findByTitleAndGenres(searchAnime.getTitle(), searchAnime.getGenres(), pageId);
+		}
 		
 		theModel.addAttribute("searchAnime", searchAnime);
 		theModel.addAttribute("animeList", wrapper.getData());

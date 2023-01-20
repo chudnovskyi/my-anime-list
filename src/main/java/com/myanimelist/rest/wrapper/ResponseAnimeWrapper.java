@@ -1,7 +1,10 @@
-package com.myanimelist.rest.entity;
+package com.myanimelist.rest.wrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.myanimelist.rest.entity.Anime;
+import com.myanimelist.rest.entity.Pagination;
 
 public class ResponseAnimeWrapper {
 

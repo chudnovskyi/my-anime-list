@@ -1,4 +1,6 @@
-package com.myanimelist.rest.entity;
+package com.myanimelist.rest.wrapper;
+
+import com.myanimelist.rest.entity.Anime;
 
 public class SingleAnimeWrapper {
 

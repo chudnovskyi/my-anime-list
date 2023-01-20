@@ -54,7 +54,16 @@
 		        	<td>Background:</td>
 					<td><p th:text="${anime.background}"/></td>
 		        </tr>
+		        <tr th:if="${anime.trailer.embed_url}">
+		        	<td>Trailer:</td>
+					<td><iframe width="960" height="540" th:src="${anime.trailer.embed_url}"></iframe></td>
+		        </tr>
 		    </tbody>
 		</table>
+		
+		<a th:href="@{/home}">
+			Back to home page
+		</a>
+		
     </body>
 </html>
