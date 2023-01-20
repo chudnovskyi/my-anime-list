@@ -23,10 +23,10 @@
 		    <tbody>
 		        <tr th:each="anime: ${animeList}">
 				    <td><img th:src="${anime.images.jpg.image_url}"></td>
-				    <td th:text="${anime.title}"    style=font-size:22px align="center"/>
-				    <td th:text="${anime.year}"     style=font-size:30px align="center"/>
-				    <td th:text="${anime.episodes}" style=font-size:30px align="center"/>
-				    <td th:text="${anime.score}"    style=font-size:30px align="center"/>
+				    <td style=font-size:22px align="center"><p th:if="${anime.title}"		th:text="${anime.title}"/></td>
+				    <td style=font-size:30px align="center"><p th:if="${anime.year}"		th:text="${anime.year}"/></td>
+				    <td style=font-size:30px align="center"><p th:if="${anime.episodes}"	th:text="${anime.episodes}"/></td>
+				    <td style=font-size:30px align="center"><p th:if="${anime.score}"		th:text="${anime.score}"/></p></td>
 				    <td align="center"><a th:href="@{/anime/find/{id}(id=${anime.mal_id})}">Details</a></td>
 		        </tr>
 		    </tbody>

@@ -121,6 +121,8 @@ public class Anime {
 
 	@Override
 	public String toString() {
-		return "Anime [mal_id=" + mal_id + ", title=" + title + ", rating=" + rating + "]";
+		return "Anime [mal_id=" + mal_id + ", episodes=" + episodes + ", rank=" + rank + ", year=" + year + ", score="
+				+ score + ", title=" + title + ", type=" + type + ", status=" + status + ", rating=" + rating
+				+ ", synopsis=" + synopsis + ", background=" + background + ", images=" + images + "]";
 	}
 }

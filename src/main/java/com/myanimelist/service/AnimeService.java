@@ -10,4 +10,6 @@ public interface AnimeService {
 	public ResponseAnimeWrapper findTop(int pageId);
 
 	public Anime findAnimeById(int animeId);
+
+	public Anime findRandomAnime();
 }

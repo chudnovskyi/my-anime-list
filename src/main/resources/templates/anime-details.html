@@ -14,43 +14,43 @@
     	
 		<table class="table table-primary">
 			<tbody>
-				<tr>
+				<tr th:if="${anime.title}">
 					<td>Title:</td>
 			        <td><p th:text="${anime.title}"/></td>
 				</tr>
-				<tr>
+				<tr th:if="${anime.year}">
 		        	<td>Year:</td>
 					<td><p th:text="${anime.year}"/></td>
 		        </tr>
-				<tr>
+				<tr th:if="${anime.episodes}">
 		        	<td>Episodes:</td>
 					<td><p th:text="${anime.episodes}"/></td>
 		        </tr>
-				<tr>
+				<tr th:if="${anime.rank}">
 		        	<td>Rank:</td>
 					<td><p th:text="${anime.rank}"/></td>
 		        </tr>
-				<tr>
+				<tr th:if="${anime.score}">
 		        	<td>Score:</td>
 					<td><p th:text="${anime.score}"/></td>
 		        </tr>
-				<tr>
+				<tr th:if="${anime.type}">
 		        	<td>Type:</td>
 					<td><p th:text="${anime.type}"/></td>
 		        </tr>
-				<tr>
+				<tr th:if="${anime.status}">
 		        	<td>Status:</td>
 					<td><p th:text="${anime.status}"/></td>
 		        </tr>
-				<tr>
+				<tr th:if="${anime.rating}">
 		        	<td>Rating:</td>
 					<td><p th:text="${anime.rating}"/></td>
 		        </tr>
-				<tr>
+				<tr th:if="${anime.synopsis}">
 		        	<td>Synopsis:</td>
 					<td><p th:text="${anime.synopsis}"/></td>
 		        </tr>
-				<tr>
+				<tr th:if="${anime.background}">
 		        	<td>Background:</td>
 					<td><p th:text="${anime.background}"/></td>
 		        </tr>

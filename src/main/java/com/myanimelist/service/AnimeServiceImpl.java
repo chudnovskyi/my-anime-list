@@ -68,6 +68,18 @@ public class AnimeServiceImpl implements AnimeService {
 		return wrapper.getData();
 	}
 	
+	@Override
+	public Anime findRandomAnime() {
+		String url =
+				env.getProperty("find.rand");
+		
+		logUrl(url);
+		
+		SingleAnimeWrapper wrapper = restTemplate.getForObject(url, SingleAnimeWrapper.class);
+		
+		return wrapper.getData();
+	}
+	
 	private void logUrl(String url) {
 		logger.info("------------------------" + url + "------------------------");
 	}

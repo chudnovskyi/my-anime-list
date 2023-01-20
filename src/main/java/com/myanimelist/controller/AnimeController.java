@@ -67,7 +67,18 @@ public class AnimeController {
 			Model theModel) {
 		
 		Anime anime = animeService.findAnimeById(animeId);
-		System.out.println(anime);
+		
+		theModel.addAttribute("anime", anime);
+		
+		return "anime-details";
+	}
+	
+	@GetMapping("/random")
+	public String random(
+			Model theModel) {
+		
+		Anime anime = animeService.findRandomAnime();
+		
 		theModel.addAttribute("anime", anime);
 		
 		return "anime-details";
