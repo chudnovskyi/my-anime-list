@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
-import com.myanimelist.rest.wrapper.SingleAnimeWrapper;
+import com.myanimelist.rest.wrapper.ResponseSingleAnimeWrapper;
 
 @Service
 public class AnimeServiceImpl implements AnimeService {
@@ -22,34 +22,21 @@ public class AnimeServiceImpl implements AnimeService {
 	private Logger logger = Logger.getLogger(getClass().getName());
 	
 	@Override
-	public ResponseAnimeWrapper findByTitle(String title, int pageId) {
-		String url = 
-				env.getProperty("find.all") + 
-				env.getProperty("param.title") + title + 
-				env.getProperty("param.page") + pageId + 
-				env.getProperty("param.limit") + 
-				env.getProperty("param.order_by.rank") +
+	public ResponseAnimeWrapper findSearched(String title, String genres, int pageId) {
+		String url =
+				env.getProperty("find.all") +
+				env.getProperty("param.page") + pageId +
+				env.getProperty("param.limit") +
 				env.getProperty("param.order_by.score") +
 				env.getProperty("param.sort.desc");
 		
-		logUrl(url);
+		if (title != null && !title.isBlank()) {
+			url += env.getProperty("param.title") + title;
+		}
 		
-		ResponseAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseAnimeWrapper.class);
-		
-		return wrapper;
-	}
-	
-	@Override
-	public ResponseAnimeWrapper findByTitleAndGenres(String title, String genres, int pageId) {
-		String url = 
-				env.getProperty("find.all") + 
-				env.getProperty("param.title") + title + 
-				env.getProperty("param.genres") + genres + 
-				env.getProperty("param.page") + pageId + 
-				env.getProperty("param.limit") + 
-				env.getProperty("param.order_by.rank") +
-				env.getProperty("param.order_by.score") +
-				env.getProperty("param.sort.desc");
+		if (genres != null && !genres.isBlank()) {
+			url += env.getProperty("param.genres") + genres;
+		}
 		
 		logUrl(url);
 		
@@ -60,13 +47,10 @@ public class AnimeServiceImpl implements AnimeService {
 	
 	@Override
 	public ResponseAnimeWrapper findTop(int pageId) {
-		String url = 
-				env.getProperty("find.all") + 
+		String url =
+				env.getProperty("find.top") +
 				env.getProperty("param.page") + pageId + 
-				env.getProperty("param.limit") + 
-				env.getProperty("param.order_by.rank") +
-				env.getProperty("param.order_by.score") +
-				env.getProperty("param.sort.desc");
+				env.getProperty("param.limit");
 		
 		logUrl(url);
 		
@@ -82,7 +66,7 @@ public class AnimeServiceImpl implements AnimeService {
 		
 		logUrl(url);
 		
-		SingleAnimeWrapper wrapper = restTemplate.getForObject(url, SingleAnimeWrapper.class);
+		ResponseSingleAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseSingleAnimeWrapper.class);
 		
 		return wrapper.getData();
 	}
@@ -94,7 +78,7 @@ public class AnimeServiceImpl implements AnimeService {
 		
 		logUrl(url);
 		
-		SingleAnimeWrapper wrapper = restTemplate.getForObject(url, SingleAnimeWrapper.class);
+		ResponseSingleAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseSingleAnimeWrapper.class);
 		
 		return wrapper.getData();
 	}

@@ -5,9 +5,7 @@ import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
 
 public interface AnimeService {
 
-	public ResponseAnimeWrapper findByTitle(String title, int pageId);
-
-	public ResponseAnimeWrapper findByTitleAndGenres(String title, String genres, int pageId);
+	public ResponseAnimeWrapper findSearched(String title, String genres, int pageId);
 
 	public ResponseAnimeWrapper findTop(int pageId);
 	

@@ -1,11 +1,8 @@
 package com.myanimelist.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,22 +23,12 @@ public class AnimeController {
 	
 	@PostMapping("/{pageId}")
 	public String findByName(
-			@Valid @ModelAttribute("searchAnime") ValidSearchAnime searchAnime,
-			BindingResult bindingResult,
+			@ModelAttribute("searchAnime") ValidSearchAnime searchAnime,
 			@PathVariable(name = "pageId") int pageId,
 			Model theModel) {
 		
-		if (bindingResult.hasErrors()) {
-			return "redirect:/home?search&error";
-		}
-		
-		ResponseAnimeWrapper wrapper = null;
-		
-		if (searchAnime.getGenres() == null) {
-			wrapper = animeService.findByTitle(searchAnime.getTitle(), pageId);
-		} else {
-			wrapper = animeService.findByTitleAndGenres(searchAnime.getTitle(), searchAnime.getGenres(), pageId);
-		}
+		ResponseAnimeWrapper wrapper = 
+				animeService.findSearched(searchAnime.getTitle(), searchAnime.getGenres(), pageId);
 		
 		theModel.addAttribute("searchAnime", searchAnime);
 		theModel.addAttribute("animeList", wrapper.getData());

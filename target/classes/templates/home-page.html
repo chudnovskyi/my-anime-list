@@ -71,7 +71,7 @@
 									class="form-control" th:errorclass="fieldError" />
 							</div>
 							
-							<select class="form-control" th:field="*{genres}" multiple="multiple">
+							<select class="form-control" th:field="*{genres}" multiple="multiple" size="10">
 							    <option th:each="genre : ${genres}"
 							            th:value="${genre.key}"
 							            th:text="${genre.value}">genre name</option>
@@ -83,20 +83,6 @@
 										Find
 									</button>
 								</div>
-							</div>
-							
-							<!-- Why not working??? -->
-							<div th:if="${#fields.hasErrors('title')}"
-								style="margin-bottom: 25px" class="text-danger">
-								<ul>
-									<li th:each="err : ${#fields.errors('title')}"
-										th:text="${err}" />
-								</ul>
-							</div>
-							
-							<!-- Temporary Alternative -->
-							<div th:if="${param.error}">
-								At least 3 symbols!
 							</div>
 					    </form>
 					</div>

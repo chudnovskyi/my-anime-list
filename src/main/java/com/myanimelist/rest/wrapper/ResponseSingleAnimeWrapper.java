@@ -2,11 +2,11 @@ package com.myanimelist.rest.wrapper;
 
 import com.myanimelist.rest.entity.Anime;
 
-public class SingleAnimeWrapper {
+public class ResponseSingleAnimeWrapper {
 
 	private Anime data;
 
-	public SingleAnimeWrapper() {
+	public ResponseSingleAnimeWrapper() {
 		
 	}
 
