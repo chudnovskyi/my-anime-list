@@ -1,13 +1,14 @@
 CREATE DATABASE  IF NOT EXISTS `my-anime-list`;
 USE `my-anime-list`;
 
-DROP TABLE IF EXISTS `users_anime`;
 DROP TABLE IF EXISTS `users_roles`;
+DROP TABLE IF EXISTS `users_reviews`;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `role`;
+DROP TABLE IF EXISTS `review`;
 
 CREATE TABLE `user` (
-	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`id` int NOT NULL AUTO_INCREMENT,
 	`username` varchar(50) UNIQUE NOT NULL,
     `password` char(60) NOT NULL,
 	`email` varchar(50) NOT NULL,
@@ -27,7 +28,7 @@ INSERT INTO `user` (`username`, `password`, `email`)
         ('bob', '$2a$12$22u3/szAs.3aq1/gkyVUfem929OOxqmPTX9S10aOVQKtWh4sp3TR6', 'bob@gmail.com');
 
 CREATE TABLE `role` (
-	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(50) NOT NULL,
     PRIMARY KEY (`id`)
 );
@@ -39,12 +40,12 @@ INSERT INTO `role` (name)
         ('ROLE_ADMIN');
 
 CREATE TABLE `users_roles` (
-	`user_id` int(11) NOT NULL,
-    `role_id` int(11) NOT NULL,
+	`user_id` int NOT NULL,
+    `role_id` int NOT NULL,
     
     PRIMARY KEY (`user_id`, `role_id`),
     
-    CONSTRAINT `FK_USER` FOREIGN KEY (`user_id`) 
+    CONSTRAINT `FK_USER_01` FOREIGN KEY (`user_id`) 
 		REFERENCES `user`(`id`)
 			ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `FK_ROLE` FOREIGN KEY (`role_id`) 
@@ -58,9 +59,32 @@ INSERT INTO `users_roles` (`user_id`, `role_id`)
         ('1', '2'),
         ('1', '3'),
         ('2', '1');
+        
+CREATE TABLE `review` (
+	`id` int NOT NULL AUTO_INCREMENT,
+    `user_id` int NOT NULL,
+	`anime_id` int NOT NULL,
+    `content` text NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `FK_USER_02` FOREIGN KEY (`user_id`) 
+		REFERENCES `user`(`id`)
+			ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+--
+-- 41467 -> Bleach: Sennen Kessen-hen, Top 1 in the rank list.
+-- 1     -> Cowboy Bebop
+--
+
+INSERT INTO `review` (`user_id`, `anime_id`, `content`)
+	VALUES
+		('2', '41467', 'amazing'),
+        ('1', '41467', 'nice'),
+        ('2', '1', 'not bad');
 
 SELECT * FROM user;
 SELECT * FROM role;
+SELECT * FROM review;
 SELECT * FROM users_roles
 	ORDER BY user_id;
 
@@ -71,3 +95,8 @@ FROM user AS u
 	LEFT OUTER JOIN role AS r
 		ON r.id = ur.role_id
 GROUP BY u.id;
+
+SELECT u.id AS `user id`, u.username, r.anime_id AS `anime id`, r.content
+FROM review AS r
+	INNER JOIN user AS u
+		ON r.user_id = u.id;

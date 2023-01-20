@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -41,20 +42,20 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<Role> roles;
 	
+	@OneToMany(
+			mappedBy = "user", // The field IN CLASS REVIEW that owns the relationship (has a FK). 
+							   // Required unlessthe relationship is unidirectional.
+			fetch = FetchType.LAZY, 
+			cascade = {
+				CascadeType.DETACH, 
+				CascadeType.MERGE, 
+				CascadeType.PERSIST, 
+				CascadeType.REFRESH
+			})
+	private Collection<Review> reviews;
+	
 	public User() {
 
-	}
-
-	public User(int id, String username, String password, String email) {
-		this.username = username;
-		this.password = password;
-		this.email = email;
-	}
-
-	public User(String username, String password, String email) {
-		this.username = username;
-		this.password = password;
-		this.email = email;
 	}
 
 	public int getId() {
@@ -97,9 +98,17 @@ public class User {
 		this.roles = roles;
 	}
 
+	public Collection<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(Collection<Review> reviews) {
+		this.reviews = reviews;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", roles="
-				+ roles + "]";
+				+ roles + ", reviews=" + reviews + "]";
 	}
 }

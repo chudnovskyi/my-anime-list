@@ -1,5 +1,7 @@
 package com.myanimelist.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,9 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.myanimelist.entity.Review;
 import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
 import com.myanimelist.service.AnimeService;
+import com.myanimelist.service.ReviewService;
 import com.myanimelist.validation.entity.ValidSearchAnime;
 
 @Controller
@@ -20,6 +24,9 @@ public class AnimeController {
 	
 	@Autowired
 	private AnimeService animeService;
+	
+	@Autowired
+	private ReviewService reviewService;
 	
 	@PostMapping("/{pageId}")
 	public String findByName(
@@ -60,8 +67,10 @@ public class AnimeController {
 			Model theModel) {
 		
 		Anime anime = animeService.findAnimeById(animeId);
+		List<Review> reviews = reviewService.findReviewsByAnimeId(animeId);
 		
 		theModel.addAttribute("anime", anime);
+		theModel.addAttribute("reviews", reviews);
 		
 		return "anime-details";
 	}

@@ -65,5 +65,20 @@
 		    </tbody>
 		</table>
 		
+		<table class="table table-striped">
+		    <thead>
+		        <tr align="center">
+		            <th class="col-2 text-truncate">Username</th>
+		            <th class="col-2 text-truncate">Review</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr th:each="review: ${reviews}">
+				    <td th:text="${review.user.username}" align="center"/>
+				    <td th:text="${review.content}" align="center"/>
+		        </tr>
+		    </tbody>
+		</table>
+		
     </body>
 </html>
