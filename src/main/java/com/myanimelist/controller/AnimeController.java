@@ -16,6 +16,7 @@ import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
 import com.myanimelist.service.AnimeService;
 import com.myanimelist.service.ReviewService;
+import com.myanimelist.validation.entity.ValidReview;
 import com.myanimelist.validation.entity.ValidSearchAnime;
 
 @Controller
@@ -72,6 +73,8 @@ public class AnimeController {
 		theModel.addAttribute("anime", anime);
 		theModel.addAttribute("reviews", reviews);
 		
+		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
+		
 		return "anime-details";
 	}
 	
@@ -80,8 +83,12 @@ public class AnimeController {
 			Model theModel) {
 		
 		Anime anime = animeService.findRandomAnime();
+		List<Review> reviews = reviewService.findReviewsByAnimeId(anime.getMal_id());
 		
 		theModel.addAttribute("anime", anime);
+		theModel.addAttribute("reviews", reviews);
+		
+		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
 		
 		return "anime-details";
 	}

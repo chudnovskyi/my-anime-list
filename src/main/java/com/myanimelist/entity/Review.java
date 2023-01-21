@@ -40,6 +40,12 @@ public class Review {
 	public Review() {
 
 	}
+	
+	public Review(int anime_id, String content, User user) {
+		this.anime_id = anime_id;
+		this.content = content;
+		this.user = user;
+	}
 
 	public int getId() {
 		return id;

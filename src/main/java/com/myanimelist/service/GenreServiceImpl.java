@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.myanimelist.rest.wrapper.ResponseGenreWrapper;
@@ -25,6 +26,7 @@ public class GenreServiceImpl implements GenreService {
 	private Map<Integer, String> genres;
 	
 	@Override
+	@Transactional
 	public Map<Integer, String> findAllGenres() {
 		// not sure if this is the best approach ... 
 		if (genres == null) {

@@ -9,9 +9,13 @@ import javax.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import com.myanimelist.entity.Review;
+import com.myanimelist.service.UserService;
+import com.myanimelist.validation.entity.ValidReview;
 
 @Repository
 public class ReviewDaoImpl implements ReviewDao {
@@ -20,6 +24,9 @@ public class ReviewDaoImpl implements ReviewDao {
 
 	@Autowired
 	private EntityManager entityManager;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public List<Review> findReviewsByAnimeId(int animeId) {
@@ -42,5 +49,23 @@ public class ReviewDaoImpl implements ReviewDao {
 		}
 		
 		return reviews;
+	}
+
+	@Override
+	public void save(ValidReview reviewForm) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		
+		Review review = new Review(
+				reviewForm.getAnimeId(),
+				reviewForm.getContent(),
+				userService.findByUsername(currentPrincipalName)
+				);
+
+		session.save(review);
+		
+		logger.info("USERNAME: " + review.getUser().getUsername() + " added review " + review.getContent());
 	}
 }
