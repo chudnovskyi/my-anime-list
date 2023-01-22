@@ -2,10 +2,11 @@ CREATE DATABASE  IF NOT EXISTS `my-anime-list`;
 USE `my-anime-list`;
 
 DROP TABLE IF EXISTS `users_roles`;
-DROP TABLE IF EXISTS `users_reviews`;
+DROP TABLE IF EXISTS `users_anime`;
 DROP TABLE IF EXISTS `review`;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `role`;
+DROP TABLE IF EXISTS `anime`;
 
 CREATE TABLE `user` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -82,11 +83,49 @@ INSERT INTO `review` (`user_id`, `anime_id`, `content`)
         ('1', '41467', 'nice'),
         ('2', '1', 'not bad');
 
+CREATE TABLE `anime` (
+	`mal_id` int NOT NULL, -- refers to JikanAPI `mal_id`
+    `title` text NOT NULL,
+    `image` text NOT NULL,
+    PRIMARY KEY (`mal_id`)
+);
+
+INSERT INTO `anime` (`mal_id`, `title`, `image`)
+	VALUES 
+		('1', 'Cowboy Bebop', 'https://cdn.myanimelist.net/images/anime/4/19644.jpg'),
+		('41467', 'Bleach: Sennen Kessen-hen', 'https://cdn.myanimelist.net/images/anime/1764/126627.jpg');
+        
+CREATE TABLE `users_anime` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`user_id` int NOT NULL,
+    `mal_id` int NOT NULL,
+    `score` int DEFAULT NULL,
+    `favourite` bool NOT NULL DEFAULT FALSE,
+    
+    PRIMARY KEY (`id`),
+    UNIQUE (`user_id`, `mal_id`),
+    
+    CONSTRAINT `FK_USER_03` FOREIGN KEY (`user_id`) 
+		REFERENCES `user`(`id`)
+			ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT `FK_ANIME` FOREIGN KEY (`mal_id`) 
+		REFERENCES `anime`(`mal_id`)
+			ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+INSERT INTO `users_anime` (`user_id`, `mal_id`, `score`, `favourite`)
+	VALUES
+		('1', '41467', '9', TRUE),
+        ('2', '41467', '7', FALSE),
+        ('2', '1', '10', TRUE);
+
 SELECT * FROM user;
 SELECT * FROM role;
 SELECT * FROM review;
 SELECT * FROM users_roles
 	ORDER BY user_id;
+SELECT * FROM users_anime;
+SELECT * FROM anime;
 
 SELECT u.id, u.username, u.password, u.email, GROUP_CONCAT(r.name SEPARATOR ', ') AS `roles`
 FROM user AS u
@@ -101,3 +140,10 @@ FROM review AS r
 	INNER JOIN user AS u
 		ON r.user_id = u.id
 ORDER BY 1;
+
+SELECT u.username, a.mal_id, a.title, ua.score, ua.favourite, a.image
+FROM user AS u
+	INNER JOIN users_anime AS ua
+		ON u.id = ua.user_id
+	INNER JOIN anime AS a
+		ON a.mal_id = ua.mal_id;

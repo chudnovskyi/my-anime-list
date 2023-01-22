@@ -15,7 +15,11 @@
 		
     	<img align="left" th:src="${anime.images.jpg.large_image_url}">
     	
-    	<p>Links to rate, add as favourite etc...</p>
+    	<br><br>
+    	
+    	<a th:href="@{/anime/viewed/{animeId}(animeId = ${anime.mal_id})}">
+	        <span th:text="viewed"></span>
+	    </a>
     	
 		<table class="table table-primary">
 			<tbody>

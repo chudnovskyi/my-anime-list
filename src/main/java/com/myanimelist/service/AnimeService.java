@@ -1,5 +1,8 @@
 package com.myanimelist.service;
 
+import java.util.List;
+
+import com.myanimelist.entity.UserAnimeDetail;
 import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
 
@@ -12,4 +15,8 @@ public interface AnimeService {
 	public Anime findAnimeById(int animeId);
 
 	public Anime findRandomAnime();
+
+	public void setAnimeAsViewed(int animeId);
+
+	public List<UserAnimeDetail> getViewedList();
 }

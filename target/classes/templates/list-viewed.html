@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>
+        	VIEWED
+        </title>
+        
+        <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    </head>
+    <body>
+    	<a th:href="@{/home}">
+			Back to home page
+		</a>
+		
+		<table class="table table-secondary">
+		    <thead>
+		        <tr align="center">
+		            <th class="col-1 text-truncate">Image</th>
+		            <th class="col-8 text-truncate">Name</th>
+		            <th class="col-1 text-truncate">Score</th>
+		            <th class="col-1 text-truncate">Favourite</th>
+		            <th class="col-1 text-truncate">More info</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr th:each="anime: ${animeList}">
+		        	<td align="center"><img th:src="${anime.animeDetail.image}"></td>
+				    <td style=font-size:28px align="center"><p th:if="${anime.animeDetail.title}" th:text="${anime.animeDetail.title}"/></td>
+				    <td style=font-size:28px align="center"><p th:if="${anime.score}" th:text="${anime.score}"/></td>
+				    <td style=font-size:28px align="center"><p th:if="${anime.favourite}" th:text="${anime.favourite}"/></td>
+				    <td align="center"><a th:href="@{/anime/find/{id}(id=${anime.animeDetail.mal_id})}">Details</a></td>
+		        </tr>
+		    </tbody>
+		</table>
+    </body>
+</html>

@@ -1,6 +1,8 @@
 package com.myanimelist.entity;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,6 +56,9 @@ public class User {
 			})
 	private Collection<Review> reviews;
 	
+	@OneToMany(mappedBy = "user")
+	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<UserAnimeDetail>();
+	
 	public User() {
 
 	}
@@ -104,6 +109,14 @@ public class User {
 
 	public void setReviews(Collection<Review> reviews) {
 		this.reviews = reviews;
+	}
+
+	public Set<UserAnimeDetail> getUserAnimeDetails() {
+		return userAnimeDetails;
+	}
+
+	public void setUserAnimeDetails(Set<UserAnimeDetail> userAnimeDetails) {
+		this.userAnimeDetails = userAnimeDetails;
 	}
 
 	@Override

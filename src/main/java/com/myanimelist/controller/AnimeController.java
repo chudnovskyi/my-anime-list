@@ -1,6 +1,7 @@
 package com.myanimelist.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,8 @@ public class AnimeController {
 	
 	@Autowired
 	private ReviewService reviewService;
+	
+	private Logger logger = Logger.getLogger(getClass().getName());
 	
 	@PostMapping("/{pageId}")
 	public String findByName(
@@ -97,5 +100,19 @@ public class AnimeController {
 		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
 		
 		return "anime-details";
+	}
+	
+	@GetMapping("/viewed/{animeId}")
+	public String setAnimeAsViewed(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		try {
+			animeService.setAnimeAsViewed(animeId);
+		} catch (Exception e) {
+			logger.info("!!!!! SQLIntegrityConstraintViolationException: Duplicate entry !!!!!!");
+		}
+
+		return "redirect:/anime/find/" + animeId;
 	}
 }
