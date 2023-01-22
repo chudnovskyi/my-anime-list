@@ -3,7 +3,6 @@ package com.myanimelist.validation.entity;
 public class ValidSearchAnime {
 
 	private String title;
-	
 	private String genres;
 
 	public ValidSearchAnime() {

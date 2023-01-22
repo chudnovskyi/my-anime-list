@@ -3,9 +3,9 @@ USE `my-anime-list`;
 
 DROP TABLE IF EXISTS `users_roles`;
 DROP TABLE IF EXISTS `users_reviews`;
+DROP TABLE IF EXISTS `review`;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `role`;
-DROP TABLE IF EXISTS `review`;
 
 CREATE TABLE `user` (
 	`id` int NOT NULL AUTO_INCREMENT,
@@ -96,7 +96,8 @@ FROM user AS u
 		ON r.id = ur.role_id
 GROUP BY u.id;
 
-SELECT u.id AS `user id`, u.username, r.anime_id AS `anime id`, r.content
+SELECT r.id, u.id AS `user id`, u.username, r.anime_id AS `anime id`, r.content
 FROM review AS r
 	INNER JOIN user AS u
-		ON r.user_id = u.id;
+		ON r.user_id = u.id
+ORDER BY 1;

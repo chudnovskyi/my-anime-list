@@ -1,8 +1,14 @@
 package com.myanimelist.validation.entity;
 
-public class ValidReview {
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+public class ValidReview {
+	
 	private int animeId;
+	
+	@NotNull(message = "{Review.NotNull}")
+	@Size(min = 5, message = "{Review.Size}")
 	private String content;
 
 	public ValidReview() {

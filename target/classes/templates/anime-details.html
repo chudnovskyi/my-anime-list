@@ -97,6 +97,14 @@
 					class="form-control" th:errorclass="fieldError" />
 			</div>
 			
+			<div th:if="${#fields.hasErrors('content')}"
+				style="margin-bottom: 25px" class="text-danger">
+				<ul>
+					<li th:each="err : ${#fields.errors('content')}"
+						th:text="${err}" />
+				</ul>
+			</div>
+			
 			<div style="margin-top: 10px" class="form-group">
 				<div class="col-sm-6 controls">
 					<button type="submit" class="btn btn-primary">

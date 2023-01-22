@@ -29,7 +29,6 @@ public class RegistrationController {
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-		
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 	

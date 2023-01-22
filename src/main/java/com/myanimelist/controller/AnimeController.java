@@ -73,7 +73,13 @@ public class AnimeController {
 		theModel.addAttribute("anime", anime);
 		theModel.addAttribute("reviews", reviews);
 		
-		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
+		/*
+		 * for correct work of validation in the reviewForm 
+		 * field after redirect due to bindingResult error
+		 */
+		if (!theModel.containsAttribute("reviewForm")) {
+			theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
+	    }
 		
 		return "anime-details";
 	}
