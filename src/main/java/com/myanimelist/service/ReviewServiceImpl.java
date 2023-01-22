@@ -27,4 +27,10 @@ public class ReviewServiceImpl implements ReviewService {
 	public void save(ValidReview reviewForm) {
 		reviewDao.save(reviewForm);
 	}
+
+	@Override
+	@Transactional
+	public Review remove(int reviewId) {
+		return reviewDao.remove(reviewId);
+	}
 }

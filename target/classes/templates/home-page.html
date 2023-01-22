@@ -53,6 +53,18 @@
                         </div>
                     </div>
                 </nav>
+                
+                <!-- Place for messages: error, alert etc ... -->
+				<div class="form-group">
+					<div class="col-xs-15">
+						<div>
+							<div th:if="${userHasNoAccess}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+								<span th:text="${userHasNoAccess}"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+                
                 <!-- Page content-->
                 <div class="container-fluid">
 			        <div th:if="${param.search}">

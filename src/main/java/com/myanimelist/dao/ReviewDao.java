@@ -10,4 +10,6 @@ public interface ReviewDao {
 	public List<Review> findReviewsByAnimeId(int animeId);
 
 	public void save(ValidReview reviewForm);
+
+	public Review remove(int reviewId);
 }

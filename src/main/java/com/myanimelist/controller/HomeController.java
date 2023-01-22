@@ -19,9 +19,7 @@ public class HomeController {
 			Model theModel) {
 		
 		theModel.addAttribute("theDate", new java.util.Date());
-
 		theModel.addAttribute("searchAnime", new ValidSearchAnime());
-		
 		theModel.addAttribute("genres", genreService.findAllGenres());
 
 		return "home-page";

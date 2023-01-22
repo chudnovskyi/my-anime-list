@@ -69,14 +69,22 @@
 		<table class="table table-striped" th:if="${!reviews.empty}">
 		    <thead>
 		        <tr align="center">
-		            <th class="col-2 text-truncate">Username</th>
-		            <th class="col-2 text-truncate">Review</th>
+		            <th class="col-1 text-truncate">Username</th>
+		            <th class="col-4 text-truncate">Review</th>
+		            <th class="col-1 text-truncate" />
 		        </tr>
 		    </thead>
 		    <tbody>
 		        <tr th:each="review: ${reviews}">
 				    <td th:text="${review.user.username}" align="center"/>
 				    <td th:text="${review.content}" align="center"/>
+				    <td align="center">
+				    	<a th:href="@{/reviews/remove/{reviewId}(reviewId = ${review.id})}"
+				    	   th:if="${#authentication.principal.username} == ${review.user.username}">
+					        <span th:text="DELETE"></span>
+					    </a>
+				    </td>
+				    
 		        </tr>
 		    </tbody>
 		</table>

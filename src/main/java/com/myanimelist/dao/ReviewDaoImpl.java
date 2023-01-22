@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import com.myanimelist.entity.Review;
+import com.myanimelist.exception.UserHasNoAccessException;
 import com.myanimelist.service.UserService;
 import com.myanimelist.validation.entity.ValidReview;
 
@@ -67,5 +68,28 @@ public class ReviewDaoImpl implements ReviewDao {
 		session.save(review);
 		
 		logger.info("USERNAME: " + review.getUser().getUsername() + " added review " + review.getContent());
+	}
+
+	@Override
+	public Review remove(int reviewId) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		
+		Review review = session
+				.get(Review.class, reviewId);
+		
+		if (review.getUser().getUsername().equals(currentPrincipalName)) {
+			session.remove(review);
+			logger.info("USERNAME: " + review.getUser().getUsername() + " DELETED REVIEW WITH ID " + reviewId);
+		} else {
+			throw new UserHasNoAccessException(""
+					+ "User with username " + currentPrincipalName + " "
+					+ "cannot remove review " + review + " "
+					+ "belonging to " + review.getUser().getUsername());
+		}
+		
+		return review;
 	}
 }
