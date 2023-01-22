@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.myanimelist.rest.entity.Anime;
@@ -23,7 +22,6 @@ public class AnimeServiceImpl implements AnimeService {
 	private Logger logger = Logger.getLogger(getClass().getName());
 	
 	@Override
-	@Transactional
 	public ResponseAnimeWrapper findSearched(String title, String genres, int pageId) {
 		String url =
 				env.getProperty("find.all") +
@@ -48,7 +46,6 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	@Override
-	@Transactional
 	public ResponseAnimeWrapper findTop(int pageId) {
 		String url =
 				env.getProperty("find.top") +
@@ -63,7 +60,6 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	@Override
-	@Transactional
 	public Anime findAnimeById(int animeId) {
 		String url =
 				env.getProperty("find.id") + animeId;
@@ -76,7 +72,6 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	@Override
-	@Transactional
 	public Anime findRandomAnime() {
 		String url =
 				env.getProperty("find.rand");

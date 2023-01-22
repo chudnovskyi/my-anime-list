@@ -1,6 +1,6 @@
 package com.myanimelist.service;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.myanimelist.rest.entity.Genre;
 import com.myanimelist.rest.wrapper.ResponseGenreWrapper;
 
 @Service
@@ -26,7 +26,6 @@ public class GenreServiceImpl implements GenreService {
 	private Map<Integer, String> genres;
 	
 	@Override
-	@Transactional
 	public Map<Integer, String> findAllGenres() {
 		// not sure if this is the best approach ... 
 		if (genres == null) {
@@ -37,12 +36,20 @@ public class GenreServiceImpl implements GenreService {
 			
 			ResponseGenreWrapper wrapper = restTemplate.getForObject(url, ResponseGenreWrapper.class);
 			
-			genres = new HashMap<>();
+			genres = new LinkedHashMap<>();
 			
 			genres = wrapper.getData()
 					.stream()
-					.collect(Collectors.toMap((x) -> x.getMal_id(), (x) -> x.getName()));
-		} 
+					.sorted((o1, o2) -> o1.getName().compareTo(o2.getName()))
+					.collect(Collectors.toMap(
+								Genre::getMal_id, 
+								Genre::getName,
+								(v1, v2) -> { 
+									throw new RuntimeException(String.format("Duplicate key for values %s and %s", v1, v2));
+								}, 
+								LinkedHashMap::new)
+							);
+		}
 		
 		return genres;
 	}
