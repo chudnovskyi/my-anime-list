@@ -3,8 +3,10 @@ package com.myanimelist.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -40,7 +42,15 @@ public class AnimeDetail {
 	@Column(name = "image")
 	private String image;
 
-	@OneToMany(mappedBy = "animeDetail")
+	@OneToMany(
+			mappedBy = "animeDetail",
+			fetch = FetchType.LAZY,
+			cascade = {
+					CascadeType.DETACH,
+					CascadeType.MERGE,
+					CascadeType.PERSIST,
+					CascadeType.REFRESH
+			})
 	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<UserAnimeDetail>();
 
 	public AnimeDetail() {

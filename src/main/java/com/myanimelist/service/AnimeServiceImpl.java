@@ -99,6 +99,18 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	@Override
+	@Transactional
+	public void setAnimeAsFavourite(int animeId) {
+		animeDao.setAnimeAsFavourite(animeId);
+	}
+
+	@Override
+	@Transactional
+	public void setAnimeScore(int animeId, int score) {
+		animeDao.setAnimeScore(animeId, score);
+	}
+	
+	@Override
 	public List<UserAnimeDetail> getViewedList() {
 		return animeDao.getViewedList();
 	}

@@ -36,8 +36,13 @@ public class User {
 	private String email;
 	
 	@ManyToMany(
-			fetch = FetchType.LAZY, 
-			cascade = CascadeType.ALL)
+			fetch = FetchType.LAZY,
+			cascade = {
+					CascadeType.DETACH,
+					CascadeType.MERGE,
+					CascadeType.PERSIST,
+					CascadeType.REFRESH
+			})
 	@JoinTable(
 			name = "users_roles", 
 			joinColumns = @JoinColumn(name = "user_id"), 
@@ -49,14 +54,22 @@ public class User {
 							   // Required unlessthe relationship is unidirectional.
 			fetch = FetchType.LAZY, 
 			cascade = {
-				CascadeType.DETACH, 
-				CascadeType.MERGE, 
-				CascadeType.PERSIST, 
-				CascadeType.REFRESH
+					CascadeType.DETACH, 
+					CascadeType.MERGE, 
+					CascadeType.PERSIST, 
+					CascadeType.REFRESH
 			})
 	private Collection<Review> reviews;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(
+			mappedBy = "user",
+			fetch = FetchType.LAZY,
+			cascade = {
+					CascadeType.DETACH,
+					CascadeType.MERGE,
+					CascadeType.PERSIST,
+					CascadeType.REFRESH
+			})
 	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<UserAnimeDetail>();
 	
 	public User() {

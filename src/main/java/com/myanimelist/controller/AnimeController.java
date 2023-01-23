@@ -69,10 +69,22 @@ public class AnimeController {
 	public String getAnimeById(
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
-		
+
 		Anime anime = animeService.findAnimeById(animeId);
+
 		List<Review> reviews = reviewService.findReviewsByAnimeId(animeId);
 		
+		boolean isViewedByUser = animeService.getViewedList()
+			.stream()
+			.filter(userAnimeDetail -> userAnimeDetail.getAnimeDetail().getMal_id() == animeId)
+			.peek(animeViewedByUser -> {
+				theModel.addAttribute("userScore", animeViewedByUser.getScore());
+				theModel.addAttribute("isUserFavourite", animeViewedByUser.isFavourite());
+			})
+			.findFirst()
+			.isPresent();
+		
+		theModel.addAttribute("isViewedByUser", isViewedByUser);
 		theModel.addAttribute("anime", anime);
 		theModel.addAttribute("reviews", reviews);
 		
@@ -94,9 +106,20 @@ public class AnimeController {
 		Anime anime = animeService.findRandomAnime();
 		List<Review> reviews = reviewService.findReviewsByAnimeId(anime.getMal_id());
 		
+		boolean isViewedByUser = animeService.getViewedList()
+				.stream()
+				.filter(userAnimeDetail -> userAnimeDetail.getAnimeDetail().getMal_id() == anime.getMal_id())
+				.peek(animeViewedByUser -> {
+					theModel.addAttribute("userScore", animeViewedByUser.getScore());
+					theModel.addAttribute("isUserFavourite", animeViewedByUser.isFavourite());
+				})
+				.findFirst()
+				.isPresent();
+			
+			theModel.addAttribute("isViewedByUser", isViewedByUser);
+		
 		theModel.addAttribute("anime", anime);
 		theModel.addAttribute("reviews", reviews);
-		
 		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
 		
 		return "anime-details";
@@ -110,7 +133,50 @@ public class AnimeController {
 		try {
 			animeService.setAnimeAsViewed(animeId);
 		} catch (Exception e) {
-			logger.info("!!!!! SQLIntegrityConstraintViolationException: Duplicate entry !!!!!!");
+			logger.info("!!! SQLIntegrityConstraintViolationException: Duplicate entry !!!");
+		}
+
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/favourite/{animeId}")
+	public String setAnimeAsFavourite(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		try {
+			animeService.setAnimeAsFavourite(animeId);
+		} catch (Exception e) {
+			logger.info("! SQLIntegrityConstraintViolationException: Duplicate entry !");
+		}
+
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/score/{score}/{animeId}")
+	public String setAnimeScore(
+			@PathVariable(name = "animeId") int animeId,
+			@PathVariable(name = "score") int score,
+			Model theModel) {
+		
+		try {
+			animeService.setAnimeScore(animeId, score);
+		} catch (Exception e) {
+			logger.info("! SQLIntegrityConstraintViolationException: Duplicate entry !");
+		}
+
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/score/reset/{animeId}")
+	public String setAnimeScoreToZero(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		try {
+			animeService.setAnimeScore(animeId, 0);
+		} catch (Exception e) {
+			logger.info("! SQLIntegrityConstraintViolationException: Duplicate entry !");
 		}
 
 		return "redirect:/anime/find/" + animeId;

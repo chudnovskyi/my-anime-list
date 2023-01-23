@@ -1,6 +1,7 @@
 package com.myanimelist.dao;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -39,8 +40,6 @@ public class AnimeDaoImpl implements AnimeDao {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		
-		logger.info("@@@ " + currentPrincipalName + " SETTING ANIME WITH ID " + animeId + " AS VIEWD @@@");
-		
 		User user = userService.findByUsername(currentPrincipalName);
 		
 		AnimeDetail animeDetail = getAnimeDetail(animeId, session);
@@ -55,14 +54,47 @@ public class AnimeDaoImpl implements AnimeDao {
 				);
 		}
 		
-		if (!isUserAnimeDetailExists(user, animeDetail, session)) {
+		List<UserAnimeDetail> userAnimeDetails = session.createQuery(""
+				+ "FROM UserAnimeDetail "
+				+ "WHERE user = :theUser AND "
+				+ "animeDetail = :theAnimeDetail", 
+				UserAnimeDetail.class)
+			.setParameter("theUser", user)
+			.setParameter("theAnimeDetail", animeDetail)
+			.getResultList();
+
+		if (userAnimeDetails.isEmpty()) {
+			logger.info("Setting anime as VIEWED");
 			UserAnimeDetail userAnimeDetail = new UserAnimeDetail();
+			
 			userAnimeDetail.setUser(user);
 			userAnimeDetail.setAnimeDetail(animeDetail);
 			
 			session.save(userAnimeDetail);
 		} else {
-			logger.info("___________-- ANIME DETAILS ALREADY EXISTS --___________");
+			logger.info("Setting anime as UNviewed");
+			
+			/*
+			 *  IDK why, but in MY case i dont need to have CascadeType.ALL in UserAnimeDetail,
+			 *  but, if a remove this, or just select all 5 props manually, program won't work ...
+			 *  
+			 *  So, i have to set this field to null just not to commit FK exception
+			 *  (only in case if there's more than 1 user that selected this anime as viewed)
+			 */
+			
+			int howManyUsersHaveThisAnimeAsViewed = session.createQuery(""
+					+ "FROM UserAnimeDetail "
+					+ "WHERE animeDetail = :theAnimeDetail", 
+					UserAnimeDetail.class)
+				.setParameter("theAnimeDetail", animeDetail)
+				.getResultList()
+				.size();
+			
+			if (howManyUsersHaveThisAnimeAsViewed > 1) {
+				userAnimeDetails.get(0).setAnimeDetail(null);
+			}
+			
+			session.remove(userAnimeDetails.get(0));
 		}
 	}
 	
@@ -85,6 +117,54 @@ public class AnimeDaoImpl implements AnimeDao {
 		return userAnimeDetailList;
 	}
 	
+	@Override
+	public void setAnimeAsFavourite(int animeId) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		
+		Optional<UserAnimeDetail> userAnimeDetail = session.createQuery(""
+				+ "FROM UserAnimeDetail "
+				+ "WHERE user_id = :theUser", 
+				UserAnimeDetail.class)
+			.setParameter("theUser", userService.findByUsername(currentPrincipalName))
+			.getResultList()
+			.stream()
+			.filter(animeDetailList -> animeDetailList.getAnimeDetail().getMal_id() == animeId)
+			.findFirst();
+		
+		userAnimeDetail.ifPresentOrElse(
+				(x) -> x.setFavourite(!x.isFavourite()), 
+				() -> { 
+						throw new RuntimeException("setAnimeAsFavourite -> impossible to find animeDetails"); 
+					});
+	}
+	
+	@Override
+	public void setAnimeScore(int animeId, int score) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		
+		Optional<UserAnimeDetail> userAnimeDetail = session.createQuery(""
+				+ "FROM UserAnimeDetail "
+				+ "WHERE user_id = :theUser", 
+				UserAnimeDetail.class)
+			.setParameter("theUser", userService.findByUsername(currentPrincipalName))
+			.getResultList()
+			.stream()
+			.filter(animeDetailList -> animeDetailList.getAnimeDetail().getMal_id() == animeId)
+			.findFirst();
+		
+		userAnimeDetail.ifPresentOrElse(
+				(x) -> x.setScore(score), 
+				() -> { 
+						throw new RuntimeException("setAnimeScore -> impossible to find animeDetails"); 
+					});
+	}
+	
 	private AnimeDetail getAnimeDetail(int animeId, Session session) {
 		List<AnimeDetail> animeDetailList = session.createQuery(""
 				+ "FROM AnimeDetail "
@@ -94,18 +174,5 @@ public class AnimeDaoImpl implements AnimeDao {
 			.getResultList();
 		
 		return animeDetailList.isEmpty() ? null : animeDetailList.get(0);
-	}
-	
-	private boolean isUserAnimeDetailExists(User theUser, AnimeDetail theAnimeDetail, Session session) {
-		List<UserAnimeDetail> animeDetail = session.createQuery(""
-				+ "FROM UserAnimeDetail "
-				+ "WHERE user = :theUser AND "
-				+ "animeDetail = :theAnimeDetail", 
-				UserAnimeDetail.class)
-			.setParameter("theUser", theUser)
-			.setParameter("theAnimeDetail", theAnimeDetail)
-			.getResultList();
-		
-		return !animeDetail.isEmpty();
 	}
 }
