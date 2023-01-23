@@ -42,15 +42,20 @@ public class AnimeDaoImpl implements AnimeDao {
 		logger.info("@@@ " + currentPrincipalName + " SETTING ANIME WITH ID " + animeId + " AS VIEWD @@@");
 		
 		User user = userService.findByUsername(currentPrincipalName);
-		Anime anime = animeService.findAnimeById(animeId);
 		
-		AnimeDetail animeDetail = new AnimeDetail(
-				animeId, 
-				anime.getTitle(), 
-				anime.getImages().getJpg().getImage_url()
-			);
+		AnimeDetail animeDetail = getAnimeDetail(animeId, session);
 		
-		if (!isAnimeDetailExists(user, animeDetail, session)) {
+		if (animeDetail == null) {
+			Anime anime = animeService.findAnimeById(animeId);
+			
+			animeDetail = new AnimeDetail(
+					animeId, 
+					anime.getTitle(), 
+					anime.getImages().getJpg().getImage_url()
+				);
+		}
+		
+		if (!isUserAnimeDetailExists(user, animeDetail, session)) {
 			UserAnimeDetail userAnimeDetail = new UserAnimeDetail();
 			userAnimeDetail.setUser(user);
 			userAnimeDetail.setAnimeDetail(animeDetail);
@@ -80,7 +85,18 @@ public class AnimeDaoImpl implements AnimeDao {
 		return userAnimeDetailList;
 	}
 	
-	private boolean isAnimeDetailExists(User theUser, AnimeDetail theAnimeDetail, Session session) {
+	private AnimeDetail getAnimeDetail(int animeId, Session session) {
+		List<AnimeDetail> animeDetailList = session.createQuery(""
+				+ "FROM AnimeDetail "
+				+ "WHERE mal_id = :theAnimeId",
+				AnimeDetail.class)
+			.setParameter("theAnimeId", animeId)
+			.getResultList();
+		
+		return animeDetailList.isEmpty() ? null : animeDetailList.get(0);
+	}
+	
+	private boolean isUserAnimeDetailExists(User theUser, AnimeDetail theAnimeDetail, Session session) {
 		List<UserAnimeDetail> animeDetail = session.createQuery(""
 				+ "FROM UserAnimeDetail "
 				+ "WHERE user = :theUser AND "

@@ -25,7 +25,6 @@ public class RegistrationController {
 	@Autowired
 	private UserService userService;
 
-	// pre-process all web requests (deletes white spaces)
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
@@ -58,6 +57,7 @@ public class RegistrationController {
 			return "register-form";
 		}
 		
-		return "register-confirmation";
+		theModel.addAttribute("successfullyRegistered", "You have successfully registered!");
+		return "login-form";
 	}
 }

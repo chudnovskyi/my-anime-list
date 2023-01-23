@@ -13,9 +13,9 @@
 			Back to home page
 		</a>
 		
+		<br>
+		
     	<img align="left" th:src="${anime.images.jpg.large_image_url}">
-    	
-    	<br><br>
     	
     	<a th:href="@{/anime/viewed/{animeId}(animeId = ${anime.mal_id})}">
 	        <span th:text="viewed"></span>
