@@ -1,7 +1,6 @@
 package com.myanimelist.controller;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,8 +28,6 @@ public class AnimeController {
 	
 	@Autowired
 	private ReviewService reviewService;
-	
-	private Logger logger = Logger.getLogger(getClass().getName());
 	
 	@PostMapping("/{pageId}")
 	public String findByName(
@@ -71,22 +68,11 @@ public class AnimeController {
 			Model theModel) {
 
 		Anime anime = animeService.findAnimeById(animeId);
-
 		List<Review> reviews = reviewService.findReviewsByAnimeId(animeId);
 		
-		boolean isViewedByUser = animeService.getViewedList()
-			.stream()
-			.filter(userAnimeDetail -> userAnimeDetail.getAnimeDetail().getMal_id() == animeId)
-			.peek(animeViewedByUser -> {
-				theModel.addAttribute("userScore", animeViewedByUser.getScore());
-				theModel.addAttribute("isUserFavourite", animeViewedByUser.isFavourite());
-			})
-			.findFirst()
-			.isPresent();
-		
-		theModel.addAttribute("isViewedByUser", isViewedByUser);
 		theModel.addAttribute("anime", anime);
 		theModel.addAttribute("reviews", reviews);
+		theModel.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMal_id()));
 		
 		/*
 		 * for correct work of validation in the reviewForm 
@@ -106,36 +92,61 @@ public class AnimeController {
 		Anime anime = animeService.findRandomAnime();
 		List<Review> reviews = reviewService.findReviewsByAnimeId(anime.getMal_id());
 		
-		boolean isViewedByUser = animeService.getViewedList()
-				.stream()
-				.filter(userAnimeDetail -> userAnimeDetail.getAnimeDetail().getMal_id() == anime.getMal_id())
-				.peek(animeViewedByUser -> {
-					theModel.addAttribute("userScore", animeViewedByUser.getScore());
-					theModel.addAttribute("isUserFavourite", animeViewedByUser.isFavourite());
-				})
-				.findFirst()
-				.isPresent();
-			
-			theModel.addAttribute("isViewedByUser", isViewedByUser);
-		
 		theModel.addAttribute("anime", anime);
 		theModel.addAttribute("reviews", reviews);
 		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
+		theModel.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMal_id()));
 		
 		return "anime-details";
 	}
 	
-	@GetMapping("/viewed/{animeId}")
-	public String setAnimeAsViewed(
+	@GetMapping("/watching/{animeId}")
+	public String setAnimeAsWatching(
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		try {
-			animeService.setAnimeAsViewed(animeId);
-		} catch (Exception e) {
-			logger.info("!!! SQLIntegrityConstraintViolationException: Duplicate entry !!!");
-		}
+		animeService.setAnimeAsWatching(animeId);
 
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/planning/{animeId}")
+	public String setAnimeAsPlanning(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		animeService.setAnimeAsPlanning(animeId);
+		
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/completed/{animeId}")
+	public String setAnimeAsCompleted(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		animeService.setAnimeAsCompleted(animeId);
+		
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/on-hold/{animeId}")
+	public String setAnimeAsHoldOn(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		animeService.setAnimeAsHoldOn(animeId);
+		
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/dropped/{animeId}")
+	public String setAnimeAsDropped(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		animeService.setAnimeAsDropped(animeId);
+		
 		return "redirect:/anime/find/" + animeId;
 	}
 	
@@ -144,11 +155,17 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		try {
-			animeService.setAnimeAsFavourite(animeId);
-		} catch (Exception e) {
-			logger.info("! SQLIntegrityConstraintViolationException: Duplicate entry !");
-		}
+		animeService.setAnimeAsFavourite(animeId);
+
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/reset/{animeId}")
+	public String reset(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		animeService.reset(animeId);
 
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -159,11 +176,7 @@ public class AnimeController {
 			@PathVariable(name = "score") int score,
 			Model theModel) {
 		
-		try {
-			animeService.setAnimeScore(animeId, score);
-		} catch (Exception e) {
-			logger.info("! SQLIntegrityConstraintViolationException: Duplicate entry !");
-		}
+		animeService.setAnimeScore(animeId, score);
 
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -173,11 +186,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		try {
-			animeService.setAnimeScore(animeId, 0);
-		} catch (Exception e) {
-			logger.info("! SQLIntegrityConstraintViolationException: Duplicate entry !");
-		}
+		animeService.setAnimeScore(animeId, 0);
 
 		return "redirect:/anime/find/" + animeId;
 	}

@@ -16,11 +16,35 @@ public interface AnimeService {
 
 	public Anime findRandomAnime();
 
-	public void setAnimeAsViewed(int animeId);
+	public UserAnimeDetail getUserAnimeDetail(int animeId);
+	
+	public List<UserAnimeDetail> getUserAnimeDetailList();
 
-	public List<UserAnimeDetail> getViewedList();
+	public List<UserAnimeDetail> getUserAnimeWatchingList();
 
+	public List<UserAnimeDetail> getUserAnimePlanningList();
+
+	public List<UserAnimeDetail> getUserAnimeFinishedList();
+
+	public List<UserAnimeDetail> getUserAnimeHoldOnList();
+
+	public List<UserAnimeDetail> getUserAnimeDroppedList();
+
+	public List<UserAnimeDetail> getUserAnimeFavouriteList();
+
+	public void setAnimeAsWatching(int animeId);
+
+	public void setAnimeAsPlanning(int animeId);
+
+	public void setAnimeAsCompleted(int animeId);
+
+	public void setAnimeAsHoldOn(int animeId);
+
+	public void setAnimeAsDropped(int animeId);
+	
 	public void setAnimeAsFavourite(int animeId);
 
 	public void setAnimeScore(int animeId, int score);
+
+	public void reset(int animeId);
 }

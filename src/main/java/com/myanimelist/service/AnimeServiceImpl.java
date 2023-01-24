@@ -93,9 +93,91 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	@Override
+	public UserAnimeDetail getUserAnimeDetail(int animeId) {
+		return animeDao.getUserAnimeDetail(animeId);
+	}
+	
+	@Override
+	public List<UserAnimeDetail> getUserAnimeDetailList() {
+		return animeDao.getUserAnimeDetailList();
+	}
+	
+	@Override
+	public List<UserAnimeDetail> getUserAnimeWatchingList() {
+		return getUserAnimeDetailList()
+				.stream()
+				.filter(UserAnimeDetail::isWatching)
+				.toList();
+	}
+
+	@Override
+	public List<UserAnimeDetail> getUserAnimePlanningList() {
+		return getUserAnimeDetailList()
+				.stream()
+				.filter(UserAnimeDetail::isPlanning)
+				.toList();
+	}
+
+	@Override
+	public List<UserAnimeDetail> getUserAnimeFinishedList() {
+		return getUserAnimeDetailList()
+				.stream()
+				.filter(UserAnimeDetail::isCompleted)
+				.toList();
+	}
+
+	@Override
+	public List<UserAnimeDetail> getUserAnimeHoldOnList() {
+		return getUserAnimeDetailList()
+				.stream()
+				.filter(UserAnimeDetail::isOn_hold)
+				.toList();
+	}
+
+	@Override
+	public List<UserAnimeDetail> getUserAnimeDroppedList() {
+		return getUserAnimeDetailList()
+				.stream()
+				.filter(UserAnimeDetail::isDropped)
+				.toList();
+	}
+
+	@Override
+	public List<UserAnimeDetail> getUserAnimeFavouriteList() {
+		return getUserAnimeDetailList()
+				.stream()
+				.filter(UserAnimeDetail::isFavourite)
+				.toList();
+	}
+	
+	@Override
 	@Transactional
-	public void setAnimeAsViewed(int animeId) {
-		animeDao.setAnimeAsViewed(animeId);
+	public void setAnimeAsWatching(int animeId) {
+		animeDao.setAnimeAsWatching(animeId);
+	}
+
+	@Override
+	@Transactional
+	public void setAnimeAsPlanning(int animeId) {
+		animeDao.setAnimeAsPlanning(animeId);
+	}
+
+	@Override
+	@Transactional
+	public void setAnimeAsCompleted(int animeId) {
+		animeDao.setAnimeAsCompleted(animeId);
+	}
+
+	@Override
+	@Transactional
+	public void setAnimeAsHoldOn(int animeId) {
+		animeDao.setAnimeAsHoldOn(animeId);
+	}
+
+	@Override
+	@Transactional
+	public void setAnimeAsDropped(int animeId) {
+		animeDao.setAnimeAsDropped(animeId);
 	}
 	
 	@Override
@@ -111,8 +193,9 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	@Override
-	public List<UserAnimeDetail> getViewedList() {
-		return animeDao.getViewedList();
+	@Transactional
+	public void reset(int animeId) {
+		animeDao.reset(animeId);
 	}
 	
 	private void logUrl(String url) {

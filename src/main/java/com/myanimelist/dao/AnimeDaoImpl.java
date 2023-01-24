@@ -34,87 +34,124 @@ public class AnimeDaoImpl implements AnimeDao {
 	private AnimeService animeService;
 	
 	@Override
-	public void setAnimeAsViewed(int animeId) {
+	public UserAnimeDetail getUserAnimeDetail(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-		
-		User user = userService.findByUsername(currentPrincipalName);
-		
-		AnimeDetail animeDetail = getAnimeDetail(animeId, session);
-		
-		if (animeDetail == null) {
-			Anime anime = animeService.findAnimeById(animeId);
-			
-			animeDetail = new AnimeDetail(
-					animeId, 
-					anime.getTitle(), 
-					anime.getImages().getJpg().getImage_url()
-				);
-		}
-		
-		List<UserAnimeDetail> userAnimeDetails = session.createQuery(""
+		List<UserAnimeDetail> resultList = session.createQuery(""
 				+ "FROM UserAnimeDetail "
-				+ "WHERE user = :theUser AND "
-				+ "animeDetail = :theAnimeDetail", 
+				+ "WHERE mal_id = :theAnimeId "
+				+ "AND user = :theUser",
 				UserAnimeDetail.class)
-			.setParameter("theUser", user)
-			.setParameter("theAnimeDetail", animeDetail)
+			.setParameter("theAnimeId", animeId)
+			.setParameter("theUser", userService.findByUsername(getAuthUsername()))
 			.getResultList();
-
-		if (userAnimeDetails.isEmpty()) {
-			logger.info("Setting anime as VIEWED");
-			UserAnimeDetail userAnimeDetail = new UserAnimeDetail();
-			
-			userAnimeDetail.setUser(user);
-			userAnimeDetail.setAnimeDetail(animeDetail);
-			
-			session.save(userAnimeDetail);
-		} else {
-			logger.info("Setting anime as UNviewed");
-			
-			/*
-			 *  IDK why, but in MY case i dont need to have CascadeType.ALL in UserAnimeDetail,
-			 *  but, if a remove this, or just select all 5 props manually, program won't work ...
-			 *  
-			 *  So, i have to set this field to null just not to commit FK exception
-			 *  (only in case if there's more than 1 user that selected this anime as viewed)
-			 */
-			
-			int howManyUsersHaveThisAnimeAsViewed = session.createQuery(""
-					+ "FROM UserAnimeDetail "
-					+ "WHERE animeDetail = :theAnimeDetail", 
-					UserAnimeDetail.class)
-				.setParameter("theAnimeDetail", animeDetail)
-				.getResultList()
-				.size();
-			
-			if (howManyUsersHaveThisAnimeAsViewed > 1) {
-				userAnimeDetails.get(0).setAnimeDetail(null);
-			}
-			
-			session.remove(userAnimeDetails.get(0));
-		}
+		
+		return resultList.isEmpty() ? new UserAnimeDetail() : resultList.get(0);
 	}
 	
 	@Override
-	public List<UserAnimeDetail> getViewedList() {
+	public List<UserAnimeDetail> getUserAnimeDetailList() {
 		Session session = entityManager.unwrap(Session.class);
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-		
-		List<UserAnimeDetail> userAnimeDetailList = session.createQuery(""
+		return session.createQuery(""
 				+ "FROM UserAnimeDetail "
 				+ "WHERE user_id = :theUser", 
 				UserAnimeDetail.class)
-			.setParameter("theUser", userService.findByUsername(currentPrincipalName))
-			.getResultList();
+			.setParameter("theUser", userService.findByUsername(getAuthUsername()))
+			.getResultList()
+			.stream()
+			.sorted((o1, o2) -> o2.getScore() - o1.getScore())
+			.toList();
+	}
+	
+	@Override
+	public void setAnimeAsWatching(int animeId) {
+		Session session = entityManager.unwrap(Session.class);
 		
-		userAnimeDetailList.sort((o1, o2) -> o2.getScore() - o1.getScore());
+		User user = userService.findByUsername(getAuthUsername());
 		
-		return userAnimeDetailList;
+		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
+		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
+		
+		logger.info("Setting anime " + animeId + " as WATCHING");
+		
+		userAnimeDetail.setUser(user);
+		userAnimeDetail.setAnimeDetail(animeDetail);
+		userAnimeDetail.setWatching(true);
+		
+		session.save(userAnimeDetail);
+	}
+
+	@Override
+	public void setAnimeAsPlanning(int animeId) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		User user = userService.findByUsername(getAuthUsername());
+		
+		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
+		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
+		
+		logger.info("Setting anime " + animeId + " as PLANNING");
+		
+		userAnimeDetail.setUser(user);
+		userAnimeDetail.setAnimeDetail(animeDetail);
+		userAnimeDetail.setPlanning(true);
+		
+		session.save(userAnimeDetail);
+	}
+
+	@Override
+	public void setAnimeAsCompleted(int animeId) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		User user = userService.findByUsername(getAuthUsername());
+		
+		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
+		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
+		
+		logger.info("Setting anime " + animeId + " as COMPLETED");
+		
+		userAnimeDetail.setUser(user);
+		userAnimeDetail.setAnimeDetail(animeDetail);
+		userAnimeDetail.setCompleted(true);
+		
+		session.save(userAnimeDetail);
+	}
+
+	@Override
+	public void setAnimeAsHoldOn(int animeId) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		User user = userService.findByUsername(getAuthUsername());
+		
+		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
+		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
+		
+		logger.info("Setting anime " + animeId + " as ON HOLD");
+		
+		userAnimeDetail.setUser(user);
+		userAnimeDetail.setAnimeDetail(animeDetail);
+		userAnimeDetail.setOn_hold(true);
+		
+		session.save(userAnimeDetail);
+	}
+
+	@Override
+	public void setAnimeAsDropped(int animeId) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		User user = userService.findByUsername(getAuthUsername());
+		
+		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
+		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
+		
+		logger.info("Setting anime " + animeId + " as DROPPED");
+		
+		userAnimeDetail.setUser(user);
+		userAnimeDetail.setAnimeDetail(animeDetail);
+		userAnimeDetail.setDropped(true);
+		
+		session.save(userAnimeDetail);
 	}
 	
 	@Override
@@ -165,7 +202,41 @@ public class AnimeDaoImpl implements AnimeDao {
 					});
 	}
 	
-	private AnimeDetail getAnimeDetail(int animeId, Session session) {
+	@Override
+	public void reset(int animeId) {
+		Session session = entityManager.unwrap(Session.class);
+		
+		logger.info("RESETING ANIME WITH ID " + animeId);
+		
+		/*
+		 *  IDK why, but in MY case i dont need to have CascadeType.ALL in UserAnimeDetail,
+		 *  but, if a remove this, or just select all 5 props manually, program won't work ...
+		 *  
+		 *  So, i have to set this field to null just not to commit FK exception
+		 *  (only in case if there's more than 1 user that selected this anime as viewed)
+		 */
+		
+		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
+		
+		List<UserAnimeDetail> userAnimeDetailList = session.createQuery(""
+				+ "FROM UserAnimeDetail "
+				+ "WHERE animeDetail = :theAnimeDetail", 
+				UserAnimeDetail.class)
+			.setParameter("theAnimeDetail", animeDetail)
+			.getResultList();
+		
+		if (userAnimeDetailList.size() > 1) {
+			session.remove(userAnimeDetailList.stream()
+					.filter(x -> x.getUser() == userService.findByUsername(getAuthUsername()))
+					.filter(x -> x.getAnimeDetail() == animeDetail)
+					.findFirst()
+					.get()); 
+		} else {
+			session.remove(userAnimeDetailList.get(0));
+		}
+	}
+	
+	private AnimeDetail getOrCreateAnimeDetail(int animeId, Session session) {
 		List<AnimeDetail> animeDetailList = session.createQuery(""
 				+ "FROM AnimeDetail "
 				+ "WHERE mal_id = :theAnimeId",
@@ -173,6 +244,20 @@ public class AnimeDaoImpl implements AnimeDao {
 			.setParameter("theAnimeId", animeId)
 			.getResultList();
 		
-		return animeDetailList.isEmpty() ? null : animeDetailList.get(0);
+		if (animeDetailList.isEmpty()) {
+			Anime anime = animeService.findAnimeById(animeId);
+			
+			return new AnimeDetail(
+					animeId, 
+					anime.getTitle(), 
+					anime.getImages().getJpg().getImage_url()
+				);
+		} else {
+			return animeDetailList.get(0);
+		}
+	}
+	
+	private String getAuthUsername() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 }
