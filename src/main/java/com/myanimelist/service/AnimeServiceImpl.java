@@ -1,11 +1,16 @@
 package com.myanimelist.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -108,51 +113,63 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	@Override
-	public List<UserAnimeDetail> getUserAnimeWatchingList() {
-		return getUserAnimeDetailList()
+	public Page<UserAnimeDetail> getUserAnimeWatchingList(Pageable pageable) {
+		List<UserAnimeDetail> anime = getUserAnimeDetailList()
 				.stream()
 				.filter(UserAnimeDetail::isWatching)
 				.toList();
+		
+		return getPegable(anime, pageable);
 	}
 
 	@Override
-	public List<UserAnimeDetail> getUserAnimePlanningList() {
-		return getUserAnimeDetailList()
+	public Page<UserAnimeDetail> getUserAnimePlanningList(Pageable pageable) {
+		List<UserAnimeDetail> anime = getUserAnimeDetailList()
 				.stream()
 				.filter(UserAnimeDetail::isPlanning)
 				.toList();
+		
+		return getPegable(anime, pageable);
 	}
 
 	@Override
-	public List<UserAnimeDetail> getUserAnimeFinishedList() {
-		return getUserAnimeDetailList()
+	public Page<UserAnimeDetail> getUserAnimeFinishedList(Pageable pageable) {
+		List<UserAnimeDetail> anime = getUserAnimeDetailList()
 				.stream()
 				.filter(UserAnimeDetail::isCompleted)
 				.toList();
+		
+		return getPegable(anime, pageable);
 	}
 
 	@Override
-	public List<UserAnimeDetail> getUserAnimeOnHoldList() {
-		return getUserAnimeDetailList()
+	public Page<UserAnimeDetail> getUserAnimeOnHoldList(Pageable pageable) {
+		List<UserAnimeDetail> anime = getUserAnimeDetailList()
 				.stream()
 				.filter(UserAnimeDetail::isOn_hold)
 				.toList();
+		
+		return getPegable(anime, pageable);
 	}
 
 	@Override
-	public List<UserAnimeDetail> getUserAnimeDroppedList() {
-		return getUserAnimeDetailList()
+	public Page<UserAnimeDetail> getUserAnimeDroppedList(Pageable pageable) {
+		List<UserAnimeDetail> anime = getUserAnimeDetailList()
 				.stream()
 				.filter(UserAnimeDetail::isDropped)
 				.toList();
+		
+		return getPegable(anime, pageable);
 	}
 
 	@Override
-	public List<UserAnimeDetail> getUserAnimeFavouriteList() {
-		return getUserAnimeDetailList()
+	public Page<UserAnimeDetail> getUserAnimeFavouriteList(Pageable pageable) {
+		List<UserAnimeDetail> anime = getUserAnimeDetailList()
 				.stream()
 				.filter(UserAnimeDetail::isFavourite)
 				.toList();
+		
+		return getPegable(anime, pageable);
 	}
 	
 	@Override
@@ -201,6 +218,23 @@ public class AnimeServiceImpl implements AnimeService {
 	@Transactional
 	public void reset(int animeId) {
 		animeDao.reset(animeId);
+	}
+	
+	private PageImpl<UserAnimeDetail> getPegable(List<UserAnimeDetail> animeList, Pageable pageable) {
+		int pageSize = pageable.getPageSize();
+		int currentPage = pageable.getPageNumber();
+	    int startItem = currentPage * pageSize;
+		
+		int size = animeList.size();
+		
+		if (animeList.size() < startItem) {
+			animeList = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, animeList.size());
+            animeList = animeList.subList(startItem, toIndex);
+        }
+		
+		return new PageImpl<UserAnimeDetail>(animeList, PageRequest.of(currentPage, pageSize), size);
 	}
 	
 	private void logUrl(String url) {

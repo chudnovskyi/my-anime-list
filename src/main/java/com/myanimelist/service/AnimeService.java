@@ -2,6 +2,9 @@ package com.myanimelist.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.myanimelist.entity.UserAnimeDetail;
 import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
@@ -20,17 +23,17 @@ public interface AnimeService {
 	
 	public List<UserAnimeDetail> getUserAnimeDetailList();
 
-	public List<UserAnimeDetail> getUserAnimeWatchingList();
+	public Page<UserAnimeDetail> getUserAnimeWatchingList(Pageable pageable);
 
-	public List<UserAnimeDetail> getUserAnimePlanningList();
+	public Page<UserAnimeDetail> getUserAnimePlanningList(Pageable pageable);
 
-	public List<UserAnimeDetail> getUserAnimeFinishedList();
+	public Page<UserAnimeDetail> getUserAnimeFinishedList(Pageable pageable);
 
-	public List<UserAnimeDetail> getUserAnimeOnHoldList();
+	public Page<UserAnimeDetail> getUserAnimeOnHoldList(Pageable pageable);
 
-	public List<UserAnimeDetail> getUserAnimeDroppedList();
+	public Page<UserAnimeDetail> getUserAnimeDroppedList(Pageable pageable);
 
-	public List<UserAnimeDetail> getUserAnimeFavouriteList();
+	public Page<UserAnimeDetail> getUserAnimeFavouriteList(Pageable pageable);
 
 	public void setAnimeAsWatching(int animeId);
 
