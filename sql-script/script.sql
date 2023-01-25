@@ -13,6 +13,7 @@ CREATE TABLE `user` (
 	`username` varchar(50) UNIQUE NOT NULL,
     `password` char(60) NOT NULL,
 	`email` varchar(50) NOT NULL,
+    `image` MEDIUMBLOB DEFAULT NULL,
 	PRIMARY KEY (`id`)
 );
 
@@ -93,14 +94,27 @@ CREATE TABLE `anime` (
 INSERT INTO `anime` (`mal_id`, `title`, `image`)
 	VALUES 
 		('1', 'Cowboy Bebop', 'https://cdn.myanimelist.net/images/anime/4/19644.jpg'),
-		('41467', 'Bleach: Sennen Kessen-hen', 'https://cdn.myanimelist.net/images/anime/1764/126627.jpg');
-        
+		('41467', 'Bleach: Sennen Kessen-hen', 'https://cdn.myanimelist.net/images/anime/1764/126627.jpg'),
+        ('11061', 'Hunter x Hunter (2011)', 'https://cdn.myanimelist.net/images/anime/1337/99013.jpg'),
+        ('9999', 'One Piece 3D: Mugiwara Chase', 'https://cdn.myanimelist.net/images/anime/4/32455.jpg');
+	
+--
+-- Business rules:
+-- 	1) User can't score anime if it's in `planning` tab
+--  2) Only `watching`/`completed` anime can be added into `favourite` section
+--  3) Anime can be added only in one tab at a time (not including `favourite`)
+-- 
 CREATE TABLE `users_anime` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`user_id` int NOT NULL,
     `mal_id` int NOT NULL,
     `score` int DEFAULT NULL,
     `favourite` bool NOT NULL DEFAULT FALSE,
+    `watching` bool NOT NULL DEFAULT FALSE,
+    `planning` bool NOT NULL DEFAULT FALSE,
+    `completed` bool NOT NULL DEFAULT FALSE,
+    `on_hold` bool NOT NULL DEFAULT FALSE,
+    `dropped` bool NOT NULL DEFAULT FALSE,
     
     PRIMARY KEY (`id`),
     UNIQUE (`user_id`, `mal_id`),
@@ -113,11 +127,17 @@ CREATE TABLE `users_anime` (
 			ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
-INSERT INTO `users_anime` (`user_id`, `mal_id`, `score`, `favourite`)
+INSERT INTO `users_anime` 
+(`user_id`, `mal_id`, `score`, `watching`, `planning`, `dropped`, `completed`, `on_hold`, `favourite`)
 	VALUES
-		('1', '41467', '9', TRUE),
-        ('2', '41467', '7', FALSE),
-        ('2', '1', '10', TRUE);
+		('1', '1', 		'9', 	FALSE,		FALSE,		FALSE,		TRUE,		FALSE,		TRUE),
+        ('1', '11061', 	'3', 	FALSE,		FALSE,		TRUE,		FALSE,		FALSE,		FALSE),
+        ('1', '41467', 	'5', 	FALSE,		FALSE,		FALSE,		FALSE,		TRUE,		FALSE),
+        ('1', '9999', 	'0', 	FALSE,		TRUE,		FALSE,		FALSE,		FALSE,		FALSE),
+        ('2', '1', 		'1', 	FALSE,		FALSE,		TRUE,		FALSE,		FALSE,		FALSE),
+        ('2', '11061', 	'10', 	FALSE,		FALSE,		FALSE,		TRUE,		FALSE,		TRUE),
+        ('2', '41467', 	'8', 	TRUE,		FALSE,		FALSE,		FALSE,		FALSE,		TRUE),
+        ('2', '9999', 	'3', 	TRUE,		FALSE,		FALSE,		FALSE,		FALSE,		FALSE);
 
 SELECT * FROM user;
 SELECT * FROM role;
@@ -139,11 +159,12 @@ SELECT r.id, u.id AS `user id`, u.username, r.anime_id AS `anime id`, r.content
 FROM review AS r
 	INNER JOIN user AS u
 		ON r.user_id = u.id
-ORDER BY 1;
+ORDER BY 2;
 
-SELECT u.username, a.mal_id, a.title, ua.score, ua.favourite, a.image
+SELECT u.username, a.mal_id, a.title, ua.score, ua.favourite, ua.watching, ua.planning, ua.completed, ua.on_hold, ua.dropped
 FROM user AS u
 	INNER JOIN users_anime AS ua
 		ON u.id = ua.user_id
 	INNER JOIN anime AS a
-		ON a.mal_id = ua.mal_id;
+		ON a.mal_id = ua.mal_id
+ORDER BY username;

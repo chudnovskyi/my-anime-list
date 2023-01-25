@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 
 	@Autowired
-	private RoleDao roleDao;
+	private RoleDao roleDao; 
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -54,6 +54,18 @@ public class UserServiceImpl implements UserService {
 		user.setRoles(Arrays.asList(roleDao.findRoleByName(Roles.ROLE_USER.name())));
 
 		userDao.save(user);
+	}
+	
+	@Override
+	@Transactional
+	public void uploadProfilePicture(byte[] bytes) {
+		userDao.uploadProfilePicture(bytes);
+	}
+	
+	@Override
+	@Transactional
+	public byte[] getUserImage() {
+		return userDao.getUserImage();
 	}
 
 	/*

@@ -103,12 +103,25 @@
 					</div>
 					
 					<div th:if="${param.profile}">
-						<h2>
-				        	Welcome.
-				        </h2> 
+						<h2>Welcome.</h2> 
 				        
 						<p th:text="'Time on the server is: ' + ${theDate}" class="green">
 			        
+			        	<p>Profile picture:</p>
+			        	<td><img th:src="${'data:image/jpeg;charset=utf-8;base64,' + userImage}" alt=""></td>
+			        	<form th:action="@{/profile/save-image}" method="post" enctype="multipart/form-data">
+						    <div>
+							    <input type="file" name="image" accept="image/png, image/jpeg" />
+						    </div>
+						    <div style="margin-top: 10px" class="form-group">
+								<div class="col-sm-6 controls">
+									<button type="submit" class="btn btn-success">
+										Upload
+									</button>
+								</div>
+							</div>
+						</form>
+						
 				        <br><br>
 				        
 						<div th:if="${session.authenticatedUser}" >
@@ -122,7 +135,7 @@
 							<a th:href="@{/admin}">
 								Admin page
 							</a>
-						</div>	
+						</div>
 					</div>
                 </div>
             </div>

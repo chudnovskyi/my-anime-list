@@ -16,20 +16,14 @@ import com.myanimelist.service.UserService;
 @EnableWebSecurity
 public class SecurityConfig {
 
+	@Autowired
+	@Lazy
 	private UserService userService;
 	
 	@Autowired
-    public SecurityConfig(@Lazy UserService userService) {
-        this.userService = userService;
-    }
-	
+	@Lazy
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 	
-    @Autowired
-    public void setCustomAuthenticationSuccessHandler(@Lazy CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
-    	this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
-    }
-    
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

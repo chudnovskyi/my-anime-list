@@ -10,4 +10,8 @@ public interface UserService extends UserDetailsService {
 	public User findByUsername(String username);
 
 	public void save(ValidUser user);
+
+	public void uploadProfilePicture(byte[] bytes);
+
+	public byte[] getUserImage();
 }

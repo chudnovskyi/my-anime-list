@@ -7,4 +7,8 @@ public interface UserDao {
     public User findByUsername(String userName);
     
     public void save(User user);
+
+	public void uploadProfilePicture(byte[] bytes);
+
+	public byte[] getUserImage();
 }
