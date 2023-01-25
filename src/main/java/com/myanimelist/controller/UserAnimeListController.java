@@ -42,11 +42,11 @@ public class UserAnimeListController {
 		return "list-viewed";
 	}
 	
-	@GetMapping("/hold-on")
-	public String holdOn(
+	@GetMapping("/on-hold")
+	public String onHold(
 			Model theModel) {
 		
-		theModel.addAttribute("animeList", animeService.getUserAnimeHoldOnList());
+		theModel.addAttribute("animeList", animeService.getUserAnimeOnHoldList());
 		
 		return "list-viewed";
 	}

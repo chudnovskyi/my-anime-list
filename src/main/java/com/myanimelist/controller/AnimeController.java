@@ -1,7 +1,5 @@
 package com.myanimelist.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.myanimelist.entity.Review;
 import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
 import com.myanimelist.service.AnimeService;
@@ -55,10 +52,6 @@ public class AnimeController {
 		theModel.addAttribute("animeList", wrapper.getData());
 		theModel.addAttribute("pagination", wrapper.getPagination());
 		
-		/*
-		 * I redirect to "anime-top" but not "anime-search" because
-		 * idk how to correctly automatize one html form for two or more methods.
-		 */
 		return "anime-top";
 	}
 	
@@ -68,14 +61,13 @@ public class AnimeController {
 			Model theModel) {
 
 		Anime anime = animeService.findAnimeById(animeId);
-		List<Review> reviews = reviewService.findReviewsByAnimeId(animeId);
 		
 		theModel.addAttribute("anime", anime);
-		theModel.addAttribute("reviews", reviews);
+		theModel.addAttribute("reviews", reviewService.findReviewsByAnimeId(animeId));
 		theModel.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMal_id()));
 		
 		/*
-		 * for correct work of validation in the reviewForm 
+		 * for correct working of validation in the reviewForm 
 		 * field after redirect due to bindingResult error
 		 */
 		if (!theModel.containsAttribute("reviewForm")) {
@@ -90,11 +82,10 @@ public class AnimeController {
 			Model theModel) {
 		
 		Anime anime = animeService.findRandomAnime();
-		List<Review> reviews = reviewService.findReviewsByAnimeId(anime.getMal_id());
 		
 		theModel.addAttribute("anime", anime);
-		theModel.addAttribute("reviews", reviews);
 		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
+		theModel.addAttribute("reviews", reviewService.findReviewsByAnimeId(anime.getMal_id()));
 		theModel.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMal_id()));
 		
 		return "anime-details";
@@ -131,11 +122,11 @@ public class AnimeController {
 	}
 	
 	@GetMapping("/on-hold/{animeId}")
-	public String setAnimeAsHoldOn(
+	public String setAnimeAsOnHold(
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.setAnimeAsHoldOn(animeId);
+		animeService.setAnimeAsOnHold(animeId);
 		
 		return "redirect:/anime/find/" + animeId;
 	}

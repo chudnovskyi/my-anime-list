@@ -94,7 +94,12 @@ public class AnimeServiceImpl implements AnimeService {
 	
 	@Override
 	public UserAnimeDetail getUserAnimeDetail(int animeId) {
-		return animeDao.getUserAnimeDetail(animeId);
+		List<UserAnimeDetail> userAnimeDetailList = getUserAnimeDetailList()
+				.stream()
+				.filter(animeDetailList -> animeDetailList.getAnimeDetail().getMal_id() == animeId)
+				.toList();
+		
+		return userAnimeDetailList.isEmpty() ? new UserAnimeDetail() : userAnimeDetailList.get(0);
 	}
 	
 	@Override
@@ -127,7 +132,7 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 
 	@Override
-	public List<UserAnimeDetail> getUserAnimeHoldOnList() {
+	public List<UserAnimeDetail> getUserAnimeOnHoldList() {
 		return getUserAnimeDetailList()
 				.stream()
 				.filter(UserAnimeDetail::isOn_hold)
@@ -170,8 +175,8 @@ public class AnimeServiceImpl implements AnimeService {
 
 	@Override
 	@Transactional
-	public void setAnimeAsHoldOn(int animeId) {
-		animeDao.setAnimeAsHoldOn(animeId);
+	public void setAnimeAsOnHold(int animeId) {
+		animeDao.setAnimeAsOnHold(animeId);
 	}
 
 	@Override

@@ -6,8 +6,6 @@ import com.myanimelist.entity.UserAnimeDetail;
 
 public interface AnimeDao {
 	
-	public UserAnimeDetail getUserAnimeDetail(int animeId);
-
 	public List<UserAnimeDetail> getUserAnimeDetailList();
 
 	public void setAnimeAsWatching(int animeId);
@@ -16,7 +14,7 @@ public interface AnimeDao {
 
 	public void setAnimeAsCompleted(int animeId);
 
-	public void setAnimeAsHoldOn(int animeId);
+	public void setAnimeAsOnHold(int animeId);
 
 	public void setAnimeAsDropped(int animeId);
 	

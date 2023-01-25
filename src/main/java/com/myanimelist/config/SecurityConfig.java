@@ -49,6 +49,7 @@ public class SecurityConfig {
 			.authorizeRequests()
 				.antMatchers("/home**").hasRole("USER")
 				.antMatchers("/anime/**").hasRole("USER")
+				.antMatchers("/list/**").hasRole("USER")
 				.antMatchers("/reviews/**").hasRole("USER")
 				.antMatchers("/admin").hasRole("ADMIN")
 			.and()

@@ -26,7 +26,7 @@ public interface AnimeService {
 
 	public List<UserAnimeDetail> getUserAnimeFinishedList();
 
-	public List<UserAnimeDetail> getUserAnimeHoldOnList();
+	public List<UserAnimeDetail> getUserAnimeOnHoldList();
 
 	public List<UserAnimeDetail> getUserAnimeDroppedList();
 
@@ -38,7 +38,7 @@ public interface AnimeService {
 
 	public void setAnimeAsCompleted(int animeId);
 
-	public void setAnimeAsHoldOn(int animeId);
+	public void setAnimeAsOnHold(int animeId);
 
 	public void setAnimeAsDropped(int animeId);
 	

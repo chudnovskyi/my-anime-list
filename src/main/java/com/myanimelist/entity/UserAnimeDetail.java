@@ -106,7 +106,9 @@ public class UserAnimeDetail {
 	}
 	
 	public void setWatching(boolean watching) {
-		setParamsToFalse();
+		if (watching == true) {
+			setParamsToFalse();
+		}
 		this.watching = watching;
 	}
 	
@@ -115,9 +117,11 @@ public class UserAnimeDetail {
 	}
 
 	public void setPlanning(boolean planning) {
-		setParamsToFalse();
-		setFavourite(false);
-		setScore(0);
+		if (planning == true) {
+			setParamsToFalse();
+			setFavourite(false);
+			setScore(0);
+		}
 		this.planning = planning;
 	}
 
@@ -126,7 +130,9 @@ public class UserAnimeDetail {
 	}
 
 	public void setCompleted(boolean completed) {
-		setParamsToFalse();
+		if (completed == true) {
+			setParamsToFalse();
+		}
 		this.completed = completed;
 	}
 
@@ -135,8 +141,10 @@ public class UserAnimeDetail {
 	}
 
 	public void setOn_hold(boolean on_hold) {
-		setParamsToFalse();
-		setFavourite(false);
+		if (on_hold == true) {
+			setParamsToFalse();
+			setFavourite(false);
+		}
 		this.on_hold = on_hold;
 	}
 
@@ -145,18 +153,19 @@ public class UserAnimeDetail {
 	}
 
 	public void setDropped(boolean dropped) {
-		setParamsToFalse();
-		setFavourite(false);
+		if (dropped == true) {
+			setParamsToFalse();
+			setFavourite(false);
+		}
 		this.dropped = dropped;
 	}
 	
-	// most likely it will be refactored.
 	private void setParamsToFalse() {
-		completed = false;
-		dropped = false;
-		on_hold = false;
-		watching = false;
-		planning = false;;
+		setCompleted(false);
+		setDropped(false);
+		setOn_hold(false);
+		setWatching(false);
+		setPlanning(false);
 	}
 
 	@Override

@@ -1,19 +1,16 @@
 package com.myanimelist.dao;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import com.myanimelist.entity.AnimeDetail;
-import com.myanimelist.entity.User;
 import com.myanimelist.entity.UserAnimeDetail;
 import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.service.AnimeService;
@@ -34,22 +31,6 @@ public class AnimeDaoImpl implements AnimeDao {
 	private AnimeService animeService;
 	
 	@Override
-	public UserAnimeDetail getUserAnimeDetail(int animeId) {
-		Session session = entityManager.unwrap(Session.class);
-		
-		List<UserAnimeDetail> resultList = session.createQuery(""
-				+ "FROM UserAnimeDetail "
-				+ "WHERE mal_id = :theAnimeId "
-				+ "AND user = :theUser",
-				UserAnimeDetail.class)
-			.setParameter("theAnimeId", animeId)
-			.setParameter("theUser", userService.findByUsername(getAuthUsername()))
-			.getResultList();
-		
-		return resultList.isEmpty() ? new UserAnimeDetail() : resultList.get(0);
-	}
-	
-	@Override
 	public List<UserAnimeDetail> getUserAnimeDetailList() {
 		Session session = entityManager.unwrap(Session.class);
 		
@@ -68,15 +49,7 @@ public class AnimeDaoImpl implements AnimeDao {
 	public void setAnimeAsWatching(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		User user = userService.findByUsername(getAuthUsername());
-		
-		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
-		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
-		
-		logger.info("Setting anime " + animeId + " as WATCHING");
-		
-		userAnimeDetail.setUser(user);
-		userAnimeDetail.setAnimeDetail(animeDetail);
+		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
 		userAnimeDetail.setWatching(true);
 		
 		session.save(userAnimeDetail);
@@ -86,15 +59,7 @@ public class AnimeDaoImpl implements AnimeDao {
 	public void setAnimeAsPlanning(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		User user = userService.findByUsername(getAuthUsername());
-		
-		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
-		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
-		
-		logger.info("Setting anime " + animeId + " as PLANNING");
-		
-		userAnimeDetail.setUser(user);
-		userAnimeDetail.setAnimeDetail(animeDetail);
+		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
 		userAnimeDetail.setPlanning(true);
 		
 		session.save(userAnimeDetail);
@@ -104,33 +69,17 @@ public class AnimeDaoImpl implements AnimeDao {
 	public void setAnimeAsCompleted(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		User user = userService.findByUsername(getAuthUsername());
-		
-		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
-		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
-		
-		logger.info("Setting anime " + animeId + " as COMPLETED");
-		
-		userAnimeDetail.setUser(user);
-		userAnimeDetail.setAnimeDetail(animeDetail);
+		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
 		userAnimeDetail.setCompleted(true);
 		
 		session.save(userAnimeDetail);
 	}
 
 	@Override
-	public void setAnimeAsHoldOn(int animeId) {
+	public void setAnimeAsOnHold(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		User user = userService.findByUsername(getAuthUsername());
-		
-		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
-		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
-		
-		logger.info("Setting anime " + animeId + " as ON HOLD");
-		
-		userAnimeDetail.setUser(user);
-		userAnimeDetail.setAnimeDetail(animeDetail);
+		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
 		userAnimeDetail.setOn_hold(true);
 		
 		session.save(userAnimeDetail);
@@ -140,15 +89,7 @@ public class AnimeDaoImpl implements AnimeDao {
 	public void setAnimeAsDropped(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		User user = userService.findByUsername(getAuthUsername());
-		
-		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
-		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
-		
-		logger.info("Setting anime " + animeId + " as DROPPED");
-		
-		userAnimeDetail.setUser(user);
-		userAnimeDetail.setAnimeDetail(animeDetail);
+		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
 		userAnimeDetail.setDropped(true);
 		
 		session.save(userAnimeDetail);
@@ -156,57 +97,29 @@ public class AnimeDaoImpl implements AnimeDao {
 	
 	@Override
 	public void setAnimeAsFavourite(int animeId) {
-		Session session = entityManager.unwrap(Session.class);
+		UserAnimeDetail userAnimeDetail = animeService.getUserAnimeDetail(animeId);
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-		
-		Optional<UserAnimeDetail> userAnimeDetail = session.createQuery(""
-				+ "FROM UserAnimeDetail "
-				+ "WHERE user_id = :theUser", 
-				UserAnimeDetail.class)
-			.setParameter("theUser", userService.findByUsername(currentPrincipalName))
-			.getResultList()
-			.stream()
-			.filter(animeDetailList -> animeDetailList.getAnimeDetail().getMal_id() == animeId)
-			.findFirst();
-		
-		userAnimeDetail.ifPresentOrElse(
-				(x) -> x.setFavourite(!x.isFavourite()), 
-				() -> { 
-						throw new RuntimeException("setAnimeAsFavourite -> impossible to find animeDetails"); 
-					});
+		if (userAnimeDetail.getId() != 0) {
+			userAnimeDetail.setFavourite(!userAnimeDetail.isFavourite());
+		} else {
+			logger.info("setAnimeAsFavourite -> impossible to find animeDetails");
+		}
 	}
 	
 	@Override
 	public void setAnimeScore(int animeId, int score) {
-		Session session = entityManager.unwrap(Session.class);
+		UserAnimeDetail userAnimeDetail = animeService.getUserAnimeDetail(animeId);
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-		
-		Optional<UserAnimeDetail> userAnimeDetail = session.createQuery(""
-				+ "FROM UserAnimeDetail "
-				+ "WHERE user_id = :theUser", 
-				UserAnimeDetail.class)
-			.setParameter("theUser", userService.findByUsername(currentPrincipalName))
-			.getResultList()
-			.stream()
-			.filter(animeDetailList -> animeDetailList.getAnimeDetail().getMal_id() == animeId)
-			.findFirst();
-		
-		userAnimeDetail.ifPresentOrElse(
-				(x) -> x.setScore(score), 
-				() -> { 
-						throw new RuntimeException("setAnimeScore -> impossible to find animeDetails"); 
-					});
+		if (userAnimeDetail.getId() != 0) {
+			userAnimeDetail.setScore(score);
+		} else {
+			logger.info("setAnimeScore -> impossible to find animeDetails");
+		}
 	}
 	
 	@Override
 	public void reset(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
-		
-		logger.info("RESETING ANIME WITH ID " + animeId);
 		
 		/*
 		 *  IDK why, but in MY case i dont need to have CascadeType.ALL in UserAnimeDetail,
@@ -216,27 +129,27 @@ public class AnimeDaoImpl implements AnimeDao {
 		 *  (only in case if there's more than 1 user that selected this anime as viewed)
 		 */
 		
-		AnimeDetail animeDetail = getOrCreateAnimeDetail(animeId, session);
-		
 		List<UserAnimeDetail> userAnimeDetailList = session.createQuery(""
 				+ "FROM UserAnimeDetail "
 				+ "WHERE animeDetail = :theAnimeDetail", 
 				UserAnimeDetail.class)
-			.setParameter("theAnimeDetail", animeDetail)
+			.setParameter("theAnimeDetail", animeService.getUserAnimeDetail(animeId).getAnimeDetail())
 			.getResultList();
 		
 		if (userAnimeDetailList.size() > 1) {
-			session.remove(userAnimeDetailList.stream()
-					.filter(x -> x.getUser() == userService.findByUsername(getAuthUsername()))
-					.filter(x -> x.getAnimeDetail() == animeDetail)
-					.findFirst()
-					.get()); 
+			session.remove(
+						userAnimeDetailList.stream()
+							.filter(x -> x.getUser() == userService.findByUsername(getAuthUsername()))
+							.findFirst()
+							.get()
+						); 
 		} else {
+			logger.info("Onlu user " + getAuthUsername() + " had anime " + animeId + " as selected. Removing it from db");
 			session.remove(userAnimeDetailList.get(0));
 		}
 	}
 	
-	private AnimeDetail getOrCreateAnimeDetail(int animeId, Session session) {
+	private UserAnimeDetail getOrCreateAnimeDetail(int animeId, Session session) {
 		List<AnimeDetail> animeDetailList = session.createQuery(""
 				+ "FROM AnimeDetail "
 				+ "WHERE mal_id = :theAnimeId",
@@ -244,17 +157,26 @@ public class AnimeDaoImpl implements AnimeDao {
 			.setParameter("theAnimeId", animeId)
 			.getResultList();
 		
+		AnimeDetail animeDetail = null;
+		
 		if (animeDetailList.isEmpty()) {
 			Anime anime = animeService.findAnimeById(animeId);
 			
-			return new AnimeDetail(
+			animeDetail = new AnimeDetail(
 					animeId, 
 					anime.getTitle(), 
 					anime.getImages().getJpg().getImage_url()
 				);
 		} else {
-			return animeDetailList.get(0);
+			animeDetail = animeDetailList.get(0);
 		}
+		
+		UserAnimeDetail userAnimeDetail = animeService.getUserAnimeDetail(animeId);
+		
+		userAnimeDetail.setUser(userService.findByUsername(getAuthUsername()));
+		userAnimeDetail.setAnimeDetail(animeDetail);
+		
+		return userAnimeDetail;
 	}
 	
 	private String getAuthUsername() {
