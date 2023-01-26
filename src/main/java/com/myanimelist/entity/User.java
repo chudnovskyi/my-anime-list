@@ -1,5 +1,6 @@
 package com.myanimelist.entity;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,12 +37,15 @@ public class User {
 	@Column(name = "email")
 	private String email;
 	
+	@Column(name = "activation_code")
+	private String activationCode;
+	
 	@Lob
 	@Column(name = "image")
 	private byte[] image;
 	
 	@ManyToMany(
-			fetch = FetchType.LAZY,
+			fetch = FetchType.EAGER,
 			cascade = {
 					CascadeType.DETACH,
 					CascadeType.MERGE,
@@ -113,6 +117,14 @@ public class User {
 		this.email = email;
 	}
 
+	public String getActivationCode() {
+		return activationCode;
+	}
+
+	public void setActivationCode(String activationCode) {
+		this.activationCode = activationCode;
+	}
+
 	public byte[] getImage() {
 		return image;
 	}
@@ -147,7 +159,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", roles="
-				+ roles + ", reviews=" + reviews + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", activationCode=" + activationCode + ", image=" + Arrays.toString(image) + ", roles=" + roles
+				+ ", reviews=" + reviews + ", userAnimeDetails=" + userAnimeDetails + "]";
 	}
 }

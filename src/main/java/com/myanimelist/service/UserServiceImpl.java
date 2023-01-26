@@ -2,6 +2,7 @@ package com.myanimelist.service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
 	private RoleDao roleDao; 
 	
 	@Autowired
+	private MailSernderService mailSernderService;
+	
+	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Override
@@ -52,8 +56,34 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(validUser.getPassword()));
 		user.setEmail(validUser.getEmail());
 		user.setRoles(Arrays.asList(roleDao.findRoleByName(Roles.ROLE_USER.name())));
-
+		user.setActivationCode(UUID.randomUUID().toString());
+		
 		userDao.save(user);
+		
+		String message = String.format(""
+				+ "Hello, %s! \n"
+				+ "Welcome to MyAnimeList. Please, follow link to verify your account: \n"
+				+ "http://localhost:8080/register/activate/%s",
+				user.getUsername(),
+				user.getActivationCode());
+		
+		mailSernderService.send(
+				user.getEmail(), 
+				"Activation code", 
+				message);
+	}
+	
+	@Override
+	@Transactional
+	public boolean activeteUser(String code) {
+		User user = userDao.findByActivationCode(code);
+		
+		if (user == null) {
+			return false;
+		} else {
+			user.setActivationCode(null);
+			return true;
+		}
 	}
 	
 	@Override
@@ -64,8 +94,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public byte[] getUserImage() {
-		return userDao.getUserImage();
+	public byte[] getProfilePicture() {
+		return userDao.getProfilePicture();
 	}
 
 	/*

@@ -11,6 +11,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -40,6 +41,22 @@ public class RegistrationController {
 		return "register-form";
 	}
 	
+	@GetMapping("/activate/{code}")
+	public String activate(
+			@PathVariable(name = "code") String code,
+			Model theModel) {
+		
+		boolean isActivated = userService.activeteUser(code);
+		
+		if (isActivated) {
+			theModel.addAttribute("accountActivationSuccess", "User successfully activated");
+		} else {
+			theModel.addAttribute("accountActivationFailure", "Activation code not found ...");
+		}
+		
+		return "login-form";
+	}
+	
 	@PostMapping("/proccess")
 	public String proccess(
 			@Valid @ModelAttribute(name = "user") ValidUser user,
@@ -57,7 +74,7 @@ public class RegistrationController {
 			return "register-form";
 		}
 		
-		theModel.addAttribute("successfullyRegistered", "You have successfully registered!");
+		theModel.addAttribute("successfullyRegistered", "A verification email has been sent to: \n" + user.getEmail());
 		return "login-form";
 	}
 }

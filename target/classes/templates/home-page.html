@@ -42,16 +42,10 @@
                             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                                 <li class="nav-item active"><a class="nav-link" th:href="@{/home?profile}">Profile</a></li>
                                 <li class="nav-item"><a class="nav-link" th:href="@{/github}">GitHub</a></li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" th:href="@{/home?unknown}">Action</a>
-                                        <a class="dropdown-item" th:href="@{/home?unknown}">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                       	<form th:action="@{/logout}" method="POST" style="text-align: center;">
-											<input type="submit" value="Logout" />
-										</form>	
-                                    </div>
+                                <li class="nav-item">
+                                	<form th:action="@{/logout}" method="POST" style="text-align: center;">
+                                		<input type="submit" value="Logout" class="nav-link" />
+                                	</form>
                                 </li>
                             </ul>
                         </div>
@@ -108,7 +102,7 @@
 						<p th:text="'Time on the server is: ' + ${theDate}" class="green">
 			        
 			        	<p>Profile picture:</p>
-			        	<td><img th:src="${'data:image/jpeg;charset=utf-8;base64,' + userImage}" alt=""></td>
+			        	<td><img th:src="${'data:image/jpeg;charset=utf-8;base64,' + profilePicture}" alt=""></td>
 			        	<form th:action="@{/profile/save-image}" method="post" enctype="multipart/form-data">
 						    <div>
 							    <input type="file" name="image" accept="image/png, image/jpeg" />

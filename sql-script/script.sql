@@ -8,11 +8,15 @@ DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `role`;
 DROP TABLE IF EXISTS `anime`;
 
+--
+-- User can log in only if activation code is null (account activated)
+--
 CREATE TABLE `user` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`username` varchar(50) UNIQUE NOT NULL,
     `password` char(60) NOT NULL,
 	`email` varchar(50) NOT NULL,
+    `activation_code` varchar(80) DEFAULT NULL,
     `image` MEDIUMBLOB DEFAULT NULL,
 	PRIMARY KEY (`id`)
 );

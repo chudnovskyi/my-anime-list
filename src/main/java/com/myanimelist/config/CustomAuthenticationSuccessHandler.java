@@ -32,7 +32,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		logger.info("<<<<<==========>>>>> AuthenticationSuccessHandler");
 
 		User authenticatedUser = userService.findByUsername(authentication.getName());
-
+		
 		request.getSession().setAttribute("authenticatedUser", authenticatedUser);
 
 		response.sendRedirect(request.getContextPath() + "/");

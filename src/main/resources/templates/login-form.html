@@ -48,8 +48,16 @@
 										You have been logged out.
 									</div>
 									
-									<div th:if="${successfullyRegistered}" class="alert alert-success col-xs-offset-1 col-xs-10">
+									<div th:if="${successfullyRegistered}" class="alert alert-info col-xs-offset-1 col-xs-10">
 										<span th:text="${successfullyRegistered}"></span>
+									</div>
+									
+									<div th:if="${accountActivationSuccess}" class="alert alert-success col-xs-offset-1 col-xs-10">
+										<span th:text="${accountActivationSuccess}"></span>
+									</div>
+									
+									<div th:if="${accountActivationFailure}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+										<span th:text="${accountActivationFailure}"></span>
 									</div>
 								</div>
 							</div>

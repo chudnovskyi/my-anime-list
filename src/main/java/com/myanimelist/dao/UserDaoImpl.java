@@ -50,15 +50,38 @@ public class UserDaoImpl implements UserDao {
 
 		return user;
 	}
+	
+	@Override
+	public User findByActivationCode(String code) {
+		Session session = entityManager.unwrap(Session.class);
+
+		Query<User> query = session
+			.createQuery(""
+				+ "FROM User "
+				+ "WHERE activationCode=:theActivationCode"
+				, User.class)
+			.setParameter("theActivationCode", code);
+		
+		User user = null;
+		
+		try {
+			user = query.getSingleResult();
+		} catch (NoResultException e) {
+			logger.info("=====>>> =====>>> USER FOR ACTIVATION CODE NOT FOUND");
+			user = null;
+		}
+
+		return user;
+	}
 
 	@Override
 	public void save(User theUser) {
 		Session currentSession = entityManager.unwrap(Session.class);
 
 		logger.info("=====>>> =====>>> CHECK IF THE USERNAME IS ALREADY REGISTERED");
-		User userToCheck = findByUsername(theUser.getUsername());
-		
-		if (userToCheck != null) {
+		User userWithSameUsername = findByUsername(theUser.getUsername());
+
+		if (userWithSameUsername != null) {
 			logger.info("=====>>> =====>>> THERE'S ALREADY USER WITH SUCH USERNAME");
 			throw new UsernameAlreadyExistsException("username " + theUser.getUsername() + " already registered ...");
 		}
@@ -76,7 +99,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public byte[] getUserImage() {
+	public byte[] getProfilePicture() {
 		Session session = entityManager.unwrap(Session.class);
 
 		Query<User> query = session
@@ -91,7 +114,7 @@ public class UserDaoImpl implements UserDao {
 		try {
 			user = query.getSingleResult();
 		} catch (NoResultException e) {
-			logger.info("???????????????????");
+			logger.info("=====>>> =====>>> USER NOT FOUND");
 			user = null;
 		}
 

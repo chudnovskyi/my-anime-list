@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.myanimelist.service.MyUserDetailsService;
 import com.myanimelist.service.UserService;
 
 @Configuration
@@ -23,6 +24,9 @@ public class SecurityConfig {
 	@Autowired
 	@Lazy
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	
+	@Autowired
+	private MyUserDetailsService myUserDetailsService;
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -40,12 +44,15 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
+			.userDetailsService(myUserDetailsService)
+			
 			.authorizeRequests()
 				.antMatchers("/home**").hasRole("USER")
 				.antMatchers("/anime/**").hasRole("USER")
 				.antMatchers("/list/**").hasRole("USER")
 				.antMatchers("/reviews/**").hasRole("USER")
 				.antMatchers("/admin").hasRole("ADMIN")
+				.antMatchers("/activate/*").permitAll()
 			.and()
 			
 			.formLogin()

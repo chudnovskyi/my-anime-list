@@ -24,10 +24,10 @@ public class HomeController {
 	public String home(
 			Model theModel) {
 		
-		byte[] userImage = userService.getUserImage();
+		byte[] profilePicture = userService.getProfilePicture();
 		
-		if (userImage != null) {
-			theModel.addAttribute("userImage", Base64.getEncoder().encodeToString(userImage));
+		if (profilePicture != null) {
+			theModel.addAttribute("profilePicture", Base64.getEncoder().encodeToString(profilePicture));
 		}
 	
 		theModel.addAttribute("theDate", new java.util.Date());
@@ -49,6 +49,6 @@ public class HomeController {
 	@GetMapping("/github")
 	public String github() {
 
-		return "redirect:https://github.com/lwantPizza";
+		return "redirect:https://github.com/lwantPizza/my-anime-list";
 	}
 }

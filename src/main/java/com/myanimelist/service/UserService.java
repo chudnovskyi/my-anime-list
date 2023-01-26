@@ -11,7 +11,9 @@ public interface UserService extends UserDetailsService {
 
 	public void save(ValidUser user);
 
+	public boolean activeteUser(String code);
+	
 	public void uploadProfilePicture(byte[] bytes);
 
-	public byte[] getUserImage();
+	public byte[] getProfilePicture();
 }
