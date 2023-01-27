@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 	private RoleDao roleDao; 
 	
 	@Autowired
-	private MailSenderService mailSenderService;
+	private MailSenderServiceImpl mailSenderService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
