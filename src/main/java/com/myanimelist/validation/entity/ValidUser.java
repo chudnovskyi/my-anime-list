@@ -18,8 +18,8 @@ import com.myanimelist.validation.FieldMatch;
  * to the "real" User object.
  */
 @FieldMatch.List({
-    @FieldMatch(firstField = "password", secondField = "matchingPassword", message = "{ConfirmPassword.Match}")
-})
+		@FieldMatch(firstField = "password", secondField = "matchingPassword", message = "{ConfirmPassword.Match}")
+	})
 public class ValidUser {
 
 	@NotNull(message = "{Username.NotNull}")
@@ -29,17 +29,16 @@ public class ValidUser {
 	@NotNull(message = "{Password.NotNull}")
 	@Size(min = 3, message = "{Password.Size}")
 	private String password;
-	
+
 	@NotNull(message = "{ConfirmPassword.NotNull}")
 	private String matchingPassword;
 
 	@NotNull(message = "{Email.NotNull}")
-	@Email(domains = {"gmail.com", "karazin.ua"}, 
-			message = "{Email.Domains}")
+	@Email(domains = { "gmail.com", "karazin.ua" }, message = "{Email.Domains}")
 	private String email;
-	
+
 	public ValidUser() {
-		
+
 	}
 
 	public String getUsername() {

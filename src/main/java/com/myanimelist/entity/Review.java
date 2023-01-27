@@ -25,7 +25,7 @@ public class Review {
 
 	@Column(name = "content")
 	private String content;
-	
+
 	@ManyToOne(
 			fetch = FetchType.LAZY,
 			cascade = {
@@ -40,7 +40,7 @@ public class Review {
 	public Review() {
 
 	}
-	
+
 	public Review(int anime_id, String content, User user) {
 		this.anime_id = anime_id;
 		this.content = content;

@@ -1,5 +1,5 @@
 package com.myanimelist.validation;
- 
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -20,9 +20,9 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 
 	@Override
 	public boolean isValid(Object value, ConstraintValidatorContext context) {
-		
+
 		boolean isValid = false;
-		
+
 		Object firstFieldObj = new BeanWrapperImpl(value).getPropertyValue(firstField);
 		Object secondFieldObj = new BeanWrapperImpl(value).getPropertyValue(secondField);
 
@@ -32,7 +32,7 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 			isValid = true;
 		} else {
 			isValid = false;
-		} 
+		}
 
 		if (!isValid) {
 			context
@@ -41,7 +41,7 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 				.addConstraintViolation()
 				.disableDefaultConstraintViolation();
 		}
-		
+
 		return isValid;
 	}
 }

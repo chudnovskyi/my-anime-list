@@ -26,7 +26,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
+
 	@Column(name = "username")
 	private String username;
 
@@ -35,14 +35,14 @@ public class User {
 
 	@Column(name = "email")
 	private String email;
-	
+
 	@Column(name = "activation_code")
 	private String activationCode;
-	
+
 	@Lob
 	@Column(name = "image")
 	private byte[] image;
-	
+
 	@ManyToMany(
 			fetch = FetchType.EAGER,
 			cascade = {
@@ -56,7 +56,7 @@ public class User {
 			joinColumns = @JoinColumn(name = "user_id"), 
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<Role> roles;
-	
+
 	@OneToMany(
 			mappedBy = "user",
 			fetch = FetchType.LAZY,
@@ -67,7 +67,7 @@ public class User {
 					CascadeType.REFRESH
 			})
 	private Collection<Review> reviews;
-	
+
 	@OneToMany(
 			mappedBy = "user",
 			fetch = FetchType.LAZY,
@@ -78,7 +78,7 @@ public class User {
 					CascadeType.REFRESH
 			})
 	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<UserAnimeDetail>();
-	
+
 	public User() {
 
 	}

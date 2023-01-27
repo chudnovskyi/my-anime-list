@@ -24,10 +24,10 @@ import com.myanimelist.validation.entity.ValidReview;
 @Controller
 @RequestMapping("/reviews")
 public class ReviewController {
-	
+
 	@Autowired
 	private ReviewService reviewService;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
@@ -42,14 +42,14 @@ public class ReviewController {
 		
 		if (bindingResult.hasErrors()) {
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.reviewForm", bindingResult);
-		    attr.addFlashAttribute("reviewForm", reviewForm);
+			attr.addFlashAttribute("reviewForm", reviewForm);
 		} else {
 			reviewService.save(reviewForm);
 		}
 		
 		return "redirect:/anime/find/" + reviewForm.getAnimeId();
 	}
-	
+
 	@GetMapping("/remove/{reviewId}")
 	public String remove(
 			@PathVariable(name = "reviewId") int reviewId,

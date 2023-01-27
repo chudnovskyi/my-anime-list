@@ -5,7 +5,7 @@ public class Images {
 	private Jpg jpg;
 
 	public Images() {
-		
+
 	}
 
 	public Jpg getJpg() {

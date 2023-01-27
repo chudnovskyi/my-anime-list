@@ -7,7 +7,7 @@ public class UserErrorResponse {
 	private long timestamp;
 
 	public UserErrorResponse() {
-		
+
 	}
 
 	public UserErrorResponse(int code, String message, long timestamp) {

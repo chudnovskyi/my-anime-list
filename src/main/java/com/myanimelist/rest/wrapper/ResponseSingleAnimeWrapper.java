@@ -7,7 +7,7 @@ public class ResponseSingleAnimeWrapper {
 	private Anime data;
 
 	public ResponseSingleAnimeWrapper() {
-		
+
 	}
 
 	public Anime getData() {

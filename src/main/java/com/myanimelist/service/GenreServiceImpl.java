@@ -18,13 +18,13 @@ public class GenreServiceImpl implements GenreService {
 
 	@Autowired
 	private Environment env;
-	
+
 	private RestTemplate restTemplate = new RestTemplate();
-	
+
 	private Logger logger = Logger.getLogger(getClass().getName());
-	
+
 	private Map<Integer, String> genres;
-	
+
 	/*
 	 * Method will load genre list only once
 	 */
@@ -55,7 +55,7 @@ public class GenreServiceImpl implements GenreService {
 		
 		return genres;
 	}
-	
+
 	public Map<Integer, String> getGenres() {
 		return genres;
 	}

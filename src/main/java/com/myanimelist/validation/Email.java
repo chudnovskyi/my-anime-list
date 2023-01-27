@@ -12,12 +12,12 @@ import javax.validation.Payload;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Email {
-	
-	public String[] domains() default {""};
-	
+
+	public String[] domains() default { "" };
+
 	public String message() default "";
-	
+
 	public Class<?>[] groups() default {};
-	
+
 	public Class<? extends Payload>[] payload() default {};
 }

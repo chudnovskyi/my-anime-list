@@ -44,19 +44,19 @@ public class UserAnimeDetail {
 
 	@Column(name = "favourite")
 	private boolean favourite;
-	
+
 	@Column(name = "watching")
 	private boolean watching;
-	
+
 	@Column(name = "planning")
 	private boolean planning;
-	
+
 	@Column(name = "completed")
 	private boolean completed;
-	
+
 	@Column(name = "on_hold")
 	private boolean onHold;
-	
+
 	@Column(name = "dropped")
 	private boolean dropped;
 
@@ -103,11 +103,11 @@ public class UserAnimeDetail {
 	public void setFavourite(boolean favourite) {
 		this.favourite = favourite;
 	}
-	
+
 	public boolean isWatching() {
 		return watching;
 	}
-	
+
 	public void setWatching(boolean watching) {
 		if (watching == true) {
 			setParamsToFalse();
@@ -162,7 +162,7 @@ public class UserAnimeDetail {
 		}
 		this.dropped = dropped;
 	}
-	
+
 	private void setParamsToFalse() {
 		setCompleted(false);
 		setDropped(false);

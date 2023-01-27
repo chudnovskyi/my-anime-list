@@ -25,16 +25,16 @@ public class AnimeDaoImpl implements AnimeDao {
 
 	@Autowired
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AnimeService animeService;
-	
+
 	@Autowired
 	private JikanApiService jikanApiService;
-	
+
 	@Override
 	public List<UserAnimeDetail> getUserAnimeDetailList() {
 		Session session = entityManager.unwrap(Session.class);
@@ -49,7 +49,7 @@ public class AnimeDaoImpl implements AnimeDao {
 			.sorted((o1, o2) -> o2.getScore() - o1.getScore())
 			.toList();
 	}
-	
+
 	@Override
 	public void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer) {
 		Session session = entityManager.unwrap(Session.class);
@@ -91,7 +91,7 @@ public class AnimeDaoImpl implements AnimeDao {
 			session.remove(userAnimeDetailList.get(0));
 		}
 	}
-	
+
 	private UserAnimeDetail getOrCreateAnimeDetail(int animeId, Session session) {
 		List<AnimeDetail> animeDetailList = session.createQuery(""
 				+ "FROM AnimeDetail "
@@ -121,7 +121,7 @@ public class AnimeDaoImpl implements AnimeDao {
 		
 		return userAnimeDetail;
 	}
-	
+
 	private String getAuthUsername() {
 		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}

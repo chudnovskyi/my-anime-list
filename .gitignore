@@ -1,2 +1,11 @@
-/target/
+target/
+
+.settings
+.classpath
+.DS_Store
+.project
+
+mvnw
+mvnw.cmd
+
 env.properties

@@ -13,13 +13,13 @@ import com.myanimelist.validation.entity.ValidSearchAnime;
 
 @Controller
 public class HomeController {
-	
+
 	@Autowired
 	private GenreService genreService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@GetMapping("/home")
 	public String home(
 			Model theModel) {
@@ -33,22 +33,22 @@ public class HomeController {
 		theModel.addAttribute("theDate", new java.util.Date());
 		theModel.addAttribute("searchAnime", new ValidSearchAnime());
 		theModel.addAttribute("genres", genreService.findAllGenres());
-
+		
 		return "home-page";
 	}
 
 	@GetMapping("/admin")
 	public String admin(
 			Model theModel) {
-
+		
 		theModel.addAttribute("theDate", new java.util.Date());
-
+		
 		return "admin-page";
 	}
 
 	@GetMapping("/github")
 	public String github() {
-
+		
 		return "redirect:https://github.com/lwantPizza/my-anime-list";
 	}
 }

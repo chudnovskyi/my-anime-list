@@ -20,16 +20,16 @@ import com.myanimelist.validation.entity.ValidSearchAnime;
 @Controller
 @RequestMapping("/anime")
 public class AnimeController {
-	
+
 	@Autowired
 	private AnimeService animeService;
-	
+
 	@Autowired
 	private ReviewService reviewService;
-	
+
 	@Autowired
 	private JikanApiService jikanApiService;
-	
+
 	@PostMapping("/{pageId}")
 	public String findByName(
 			@ModelAttribute("searchAnime") ValidSearchAnime searchAnime,
@@ -45,7 +45,7 @@ public class AnimeController {
 		
 		return "anime-search";
 	}
-	
+
 	@GetMapping("/top/{pageId}")
 	public String top(
 			@PathVariable(name = "pageId") int pageId,
@@ -58,12 +58,12 @@ public class AnimeController {
 		
 		return "anime-top";
 	}
-	
+
 	@GetMapping("/find/{animeId}")
 	public String getAnimeById(
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
-
+		
 		Anime anime = jikanApiService.findAnime(animeId);
 		
 		theModel.addAttribute("anime", anime);
@@ -76,11 +76,11 @@ public class AnimeController {
 		 */
 		if (!theModel.containsAttribute("reviewForm")) {
 			theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
-	    }
+		}
 		
 		return "anime-details";
 	}
-	
+
 	@GetMapping("/random")
 	public String random(
 			Model theModel) {
@@ -94,17 +94,17 @@ public class AnimeController {
 		
 		return "anime-details";
 	}
-	
+
 	@GetMapping("/watching/{animeId}")
 	public String setAnimeAsWatching(
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
 		animeService.alterUserAnimeDetail(animeId, x -> x.setWatching(true));
-
+		
 		return "redirect:/anime/find/" + animeId;
 	}
-	
+
 	@GetMapping("/planning/{animeId}")
 	public String setAnimeAsPlanning(
 			@PathVariable(name = "animeId") int animeId,
@@ -114,7 +114,7 @@ public class AnimeController {
 		
 		return "redirect:/anime/find/" + animeId;
 	}
-	
+
 	@GetMapping("/completed/{animeId}")
 	public String setAnimeAsCompleted(
 			@PathVariable(name = "animeId") int animeId,
@@ -124,7 +124,7 @@ public class AnimeController {
 		
 		return "redirect:/anime/find/" + animeId;
 	}
-	
+
 	@GetMapping("/on-hold/{animeId}")
 	public String setAnimeAsOnHold(
 			@PathVariable(name = "animeId") int animeId,
@@ -134,7 +134,7 @@ public class AnimeController {
 		
 		return "redirect:/anime/find/" + animeId;
 	}
-	
+
 	@GetMapping("/dropped/{animeId}")
 	public String setAnimeAsDropped(
 			@PathVariable(name = "animeId") int animeId,
@@ -144,17 +144,17 @@ public class AnimeController {
 		
 		return "redirect:/anime/find/" + animeId;
 	}
-	
+
 	@GetMapping("/favourite/{animeId}")
 	public String setAnimeAsFavourite(
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
 		animeService.alterUserAnimeDetail(animeId, x -> x.setFavourite(true));
-
+		
 		return "redirect:/anime/find/" + animeId;
 	}
-	
+
 	@GetMapping("/score/{score}/{animeId}")
 	public String setAnimeScore(
 			@PathVariable(name = "animeId") int animeId,
@@ -162,27 +162,27 @@ public class AnimeController {
 			Model theModel) {
 		
 		animeService.alterUserAnimeDetail(animeId, x -> x.setScore(score));
-
+		
 		return "redirect:/anime/find/" + animeId;
 	}
-	
+
 	@GetMapping("/score/reset/{animeId}")
 	public String setAnimeScoreToZero(
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
 		animeService.alterUserAnimeDetail(animeId, x -> x.setScore(0));
-
+		
 		return "redirect:/anime/find/" + animeId;
 	}
-	
+
 	@GetMapping("/reset/{animeId}")
 	public String reset(
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
 		animeService.reset(animeId);
-
+		
 		return "redirect:/anime/find/" + animeId;
 	}
 }

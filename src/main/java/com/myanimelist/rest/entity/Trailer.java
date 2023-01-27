@@ -5,7 +5,7 @@ public class Trailer {
 	private String embed_url;
 
 	public Trailer() {
-		
+
 	}
 
 	public String getEmbed_url() {

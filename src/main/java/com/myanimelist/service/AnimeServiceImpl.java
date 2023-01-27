@@ -19,32 +19,32 @@ public class AnimeServiceImpl implements AnimeService {
 	@Lazy
 	@Autowired
 	private AnimeDao animeDao;
-	
+
 	@Autowired
 	private PageableService pageableService;
-	
+
 	@Override
 	public List<UserAnimeDetail> getUserAnimeDetailList() {
 		return animeDao.getUserAnimeDetailList();
 	}
-	
+
 	@Override
 	public UserAnimeDetail getUserAnimeDetail(int animeId) {
 		List<UserAnimeDetail> userAnimeDetailList = getUserAnimeDetailList()
 				.stream()
 				.filter(animeDetailList -> animeDetailList.getAnimeDetail().getMal_id() == animeId)
 				.toList();
-		
+
 		return userAnimeDetailList.isEmpty() ? new UserAnimeDetail() : userAnimeDetailList.get(0);
 	}
-	
+
 	@Override
 	public Page<UserAnimeDetail> getUserAnimeDetailList(Predicate<UserAnimeDetail> predicate, int page, int size) {
 		List<UserAnimeDetail> userAnimeDetailList = getUserAnimeDetailList()
 				.stream()
 				.filter(predicate)
 				.toList();
-		
+
 		return pageableService.getPegable(userAnimeDetailList, page, size);
 	}
 
@@ -53,7 +53,7 @@ public class AnimeServiceImpl implements AnimeService {
 	public void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer) {
 		animeDao.alterUserAnimeDetail(animeId, consumer);
 	}
-	
+
 	@Override
 	@Transactional
 	public void reset(int animeId) {

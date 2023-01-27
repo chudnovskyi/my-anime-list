@@ -14,7 +14,7 @@ public class ResponseGenreWrapper {
 	}
 
 	public ResponseGenreWrapper() {
-		
+
 	}
 
 	public List<Genre> getData() {

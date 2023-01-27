@@ -20,14 +20,14 @@ public class ReviewDaoImpl implements ReviewDao {
 
 	@Autowired
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private UserService userService;
 
 	@Override
 	public List<Review> findReviews(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
-
+		
 		Query<Review> query = session.createQuery(""
 				+ "FROM Review "
 				+ "WHERE anime_id = :theAnimeId", 
@@ -46,7 +46,7 @@ public class ReviewDaoImpl implements ReviewDao {
 				reviewForm.getContent(),
 				userService.find(getAuthUsername())
 			);
-
+		
 		session.save(review);
 	}
 
@@ -67,7 +67,7 @@ public class ReviewDaoImpl implements ReviewDao {
 		
 		return review;
 	}
-	
+
 	private String getAuthUsername() {
 		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}

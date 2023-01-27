@@ -8,14 +8,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserPrincipal implements UserDetails {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private User user;
 
-    public UserPrincipal(User user) {
-        this.user = user;
-    }
+	public UserPrincipal(User user) {
+		this.user = user;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

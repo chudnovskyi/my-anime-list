@@ -22,7 +22,7 @@ import com.myanimelist.validation.entity.ValidUser;
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -31,7 +31,7 @@ public class RegistrationController {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
-	
+
 	@GetMapping
 	public String register(
 			Model theModel) {
@@ -40,7 +40,7 @@ public class RegistrationController {
 		
 		return "register-form";
 	}
-	
+
 	@GetMapping("/activate/{code}")
 	public String activate(
 			@PathVariable(name = "code") String code,
@@ -56,7 +56,7 @@ public class RegistrationController {
 		
 		return "login-form";
 	}
-	
+
 	@PostMapping("/proccess")
 	public String proccess(
 			@Valid @ModelAttribute(name = "user") ValidUser user,

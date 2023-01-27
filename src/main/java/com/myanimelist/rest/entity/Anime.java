@@ -18,7 +18,7 @@ public class Anime {
 	private String background;
 
 	private Images images;
-	
+
 	private Trailer trailer;
 
 	public Anime() {

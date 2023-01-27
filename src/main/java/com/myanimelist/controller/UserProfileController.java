@@ -14,16 +14,16 @@ import com.myanimelist.service.UserService;
 @Controller
 @RequestMapping("/profile")
 public class UserProfileController {
-	
+
 	@Autowired
 	private UserService userService;
 
 	@PostMapping("/save-image")
-    public String saveUser(
-            @RequestParam("image") MultipartFile multipartFile) throws IOException {
+	public String saveUser(
+			@RequestParam("image") MultipartFile multipartFile) throws IOException {
 		
 		userService.uploadProfilePicture(multipartFile.getBytes());
 		
-        return "redirect:/home?profile";
-    }
+		return "redirect:/home?profile";
+	}
 }

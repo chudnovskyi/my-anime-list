@@ -6,7 +6,7 @@ public class Genre {
 	private String name;
 
 	public Genre() {
-		
+
 	}
 
 	public int getMal_id() {

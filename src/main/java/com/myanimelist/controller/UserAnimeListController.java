@@ -15,13 +15,13 @@ import com.myanimelist.service.PageableService;
 @Controller
 @RequestMapping("/list")
 public class UserAnimeListController {
-	
+
 	@Autowired
 	private AnimeService animeService;
-	
+
 	@Autowired
 	private PageableService pageableService;
-	
+
 	@GetMapping("/watching")
 	public String watching(
 			Model theModel,
@@ -36,7 +36,7 @@ public class UserAnimeListController {
 		
 		return "list-viewed";
 	}
-	
+
 	@GetMapping("/planning")
 	public String planning(
 			Model theModel,
@@ -51,7 +51,7 @@ public class UserAnimeListController {
 		
 		return "list-viewed";
 	}
-	
+
 	@GetMapping("/finished")
 	public String finished(
 			Model theModel,
@@ -66,7 +66,7 @@ public class UserAnimeListController {
 		
 		return "list-viewed";
 	}
-	
+
 	@GetMapping("/on-hold")
 	public String onHold(
 			Model theModel,
@@ -81,7 +81,7 @@ public class UserAnimeListController {
 		
 		return "list-viewed";
 	}
-	
+
 	@GetMapping("/dropped")
 	public String dropped(
 			Model theModel,
@@ -96,7 +96,7 @@ public class UserAnimeListController {
 		
 		return "list-viewed";
 	}
-	
+
 	@GetMapping("/favourite")
 	public String favourite(
 			Model theModel,

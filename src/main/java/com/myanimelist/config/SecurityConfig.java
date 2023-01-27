@@ -19,11 +19,11 @@ public class SecurityConfig {
 	@Lazy
 	@Autowired
 	private UserService userService;
-	
+
 	@Lazy
 	@Autowired
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-	
+	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -36,14 +36,14 @@ public class SecurityConfig {
 		auth.setPasswordEncoder(passwordEncoder());
 		return auth;
 	}
-	
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.userDetailsService(userService)
 			
 			.authorizeRequests()
-				.antMatchers("/home**").hasRole("USER")
+				.antMatchers("/home").hasRole("USER")
 				.antMatchers("/anime/**").hasRole("USER")
 				.antMatchers("/list/**").hasRole("USER")
 				.antMatchers("/reviews/**").hasRole("USER")

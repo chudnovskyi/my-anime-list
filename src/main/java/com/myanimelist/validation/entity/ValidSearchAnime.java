@@ -6,7 +6,7 @@ public class ValidSearchAnime {
 	private String genres;
 
 	public ValidSearchAnime() {
-		
+
 	}
 
 	public String getTitle() {

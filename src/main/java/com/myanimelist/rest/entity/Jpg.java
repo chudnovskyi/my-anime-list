@@ -7,7 +7,7 @@ public class Jpg {
 	private String large_image_url;
 
 	public Jpg() {
-		
+
 	}
 
 	public String getImage_url() {

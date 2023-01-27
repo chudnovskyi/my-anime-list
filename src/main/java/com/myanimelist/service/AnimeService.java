@@ -11,7 +11,7 @@ import com.myanimelist.entity.UserAnimeDetail;
 public interface AnimeService {
 
 	public List<UserAnimeDetail> getUserAnimeDetailList();
-	
+
 	public Page<UserAnimeDetail> getUserAnimeDetailList(Predicate<UserAnimeDetail> predicate, int page, int size);
 
 	public UserAnimeDetail getUserAnimeDetail(int animeId);

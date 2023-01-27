@@ -12,14 +12,14 @@ import com.myanimelist.entity.Role;
 
 @Repository
 public class RoleDaoImpl implements RoleDao {
-	
+
 	@Autowired
 	private EntityManager entityManager;
 
 	@Override
 	public Role findRole(String theRole) {
 		Session session = entityManager.unwrap(Session.class);
-
+		
 		Query<Role> query = session.createQuery(""
 				+ "FROM Role "
 				+ "WHERE name = :theRole", 

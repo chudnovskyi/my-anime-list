@@ -15,7 +15,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Autowired
 	private ReviewDao reviewDao;
-	
+
 	@Override
 	@Transactional
 	public List<Review> findReviews(int animeId) {
