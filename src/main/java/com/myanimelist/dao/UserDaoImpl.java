@@ -1,7 +1,5 @@
 package com.myanimelist.dao;
 
-import java.util.logging.Logger;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -19,24 +17,21 @@ import com.myanimelist.service.UserService;
 @Repository
 public class UserDaoImpl implements UserDao {
 	
-	private Logger logger = Logger.getLogger(getClass().getName());
-
 	@Autowired
 	private EntityManager entityManager;
 	
-	@Autowired
 	@Lazy
+	@Autowired
 	private UserService userService;
 
 	@Override
 	public User findByUsername(String theUsername) {
 		Session session = entityManager.unwrap(Session.class);
 
-		Query<User> query = session
-			.createQuery(""
+		Query<User> query = session.createQuery(""
 				+ "FROM User "
-				+ "WHERE username=:theUsername"
-				, User.class)
+				+ "WHERE username = :theUsername", 
+				User.class)
 			.setParameter("theUsername", theUsername);
 		
 		User user = null;
@@ -44,7 +39,6 @@ public class UserDaoImpl implements UserDao {
 		try {
 			user = query.getSingleResult();
 		} catch (NoResultException e) {
-			logger.info("=====>>> =====>>> USER NOT FOUND");
 			user = null;
 		}
 
@@ -55,11 +49,10 @@ public class UserDaoImpl implements UserDao {
 	public User findByActivationCode(String code) {
 		Session session = entityManager.unwrap(Session.class);
 
-		Query<User> query = session
-			.createQuery(""
+		Query<User> query = session.createQuery(""
 				+ "FROM User "
-				+ "WHERE activationCode=:theActivationCode"
-				, User.class)
+				+ "WHERE activationCode = :theActivationCode", 
+				User.class)
 			.setParameter("theActivationCode", code);
 		
 		User user = null;
@@ -67,7 +60,6 @@ public class UserDaoImpl implements UserDao {
 		try {
 			user = query.getSingleResult();
 		} catch (NoResultException e) {
-			logger.info("=====>>> =====>>> USER FOR ACTIVATION CODE NOT FOUND");
 			user = null;
 		}
 
@@ -78,12 +70,10 @@ public class UserDaoImpl implements UserDao {
 	public void save(User theUser) {
 		Session currentSession = entityManager.unwrap(Session.class);
 
-		logger.info("=====>>> =====>>> CHECK IF THE USERNAME IS ALREADY REGISTERED");
-		User userWithSameUsername = findByUsername(theUser.getUsername());
+		User user = findByUsername(theUser.getUsername());
 
-		if (userWithSameUsername != null) {
-			logger.info("=====>>> =====>>> THERE'S ALREADY USER WITH SUCH USERNAME");
-			throw new UsernameAlreadyExistsException("username " + theUser.getUsername() + " already registered ...");
+		if (user != null) {
+			throw new UsernameAlreadyExistsException("Username " + theUser.getUsername() + " already exists!");
 		}
 		
 		currentSession.saveOrUpdate(theUser);
@@ -91,9 +81,7 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public void uploadProfilePicture(byte[] bytes) {
-		logger.info(" ^^^ Uploading profile pictire ^^^");
-		
-		User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+		User user = userService.find(getAuthUsername());
 		
 		user.setImage(bytes);
 	}
@@ -102,22 +90,24 @@ public class UserDaoImpl implements UserDao {
 	public byte[] getProfilePicture() {
 		Session session = entityManager.unwrap(Session.class);
 
-		Query<User> query = session
-			.createQuery(""
+		Query<User> query = session.createQuery(""
 				+ "FROM User "
-				+ "WHERE username=:theUsername"
-				, User.class)
-			.setParameter("theUsername", SecurityContextHolder.getContext().getAuthentication().getName());
+				+ "WHERE username = :theUsername", 
+				User.class)
+			.setParameter("theUsername", getAuthUsername());
 		
 		User user = null;
 		
 		try {
 			user = query.getSingleResult();
 		} catch (NoResultException e) {
-			logger.info("=====>>> =====>>> USER NOT FOUND");
 			user = null;
 		}
 
 		return user.getImage();
+	}
+	
+	private String getAuthUsername() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 }

@@ -1,6 +1,7 @@
 package com.myanimelist.dao;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -14,6 +15,7 @@ import com.myanimelist.entity.AnimeDetail;
 import com.myanimelist.entity.UserAnimeDetail;
 import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.service.AnimeService;
+import com.myanimelist.service.JikanApiService;
 import com.myanimelist.service.UserService;
 
 @Repository
@@ -30,6 +32,9 @@ public class AnimeDaoImpl implements AnimeDao {
 	@Autowired
 	private AnimeService animeService;
 	
+	@Autowired
+	private JikanApiService jikanApiService;
+	
 	@Override
 	public List<UserAnimeDetail> getUserAnimeDetailList() {
 		Session session = entityManager.unwrap(Session.class);
@@ -38,7 +43,7 @@ public class AnimeDaoImpl implements AnimeDao {
 				+ "FROM UserAnimeDetail "
 				+ "WHERE user_id = :theUser", 
 				UserAnimeDetail.class)
-			.setParameter("theUser", userService.findByUsername(getAuthUsername()))
+			.setParameter("theUser", userService.find(getAuthUsername()))
 			.getResultList()
 			.stream()
 			.sorted((o1, o2) -> o2.getScore() - o1.getScore())
@@ -46,77 +51,15 @@ public class AnimeDaoImpl implements AnimeDao {
 	}
 	
 	@Override
-	public void setAnimeAsWatching(int animeId) {
+	public void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer) {
 		Session session = entityManager.unwrap(Session.class);
 		
 		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
-		userAnimeDetail.setWatching(true);
+		consumer.accept(userAnimeDetail);
 		
 		session.save(userAnimeDetail);
 	}
 
-	@Override
-	public void setAnimeAsPlanning(int animeId) {
-		Session session = entityManager.unwrap(Session.class);
-		
-		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
-		userAnimeDetail.setPlanning(true);
-		
-		session.save(userAnimeDetail);
-	}
-
-	@Override
-	public void setAnimeAsCompleted(int animeId) {
-		Session session = entityManager.unwrap(Session.class);
-		
-		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
-		userAnimeDetail.setCompleted(true);
-		
-		session.save(userAnimeDetail);
-	}
-
-	@Override
-	public void setAnimeAsOnHold(int animeId) {
-		Session session = entityManager.unwrap(Session.class);
-		
-		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
-		userAnimeDetail.setOn_hold(true);
-		
-		session.save(userAnimeDetail);
-	}
-
-	@Override
-	public void setAnimeAsDropped(int animeId) {
-		Session session = entityManager.unwrap(Session.class);
-		
-		UserAnimeDetail userAnimeDetail = getOrCreateAnimeDetail(animeId, session);
-		userAnimeDetail.setDropped(true);
-		
-		session.save(userAnimeDetail);
-	}
-	
-	@Override
-	public void setAnimeAsFavourite(int animeId) {
-		UserAnimeDetail userAnimeDetail = animeService.getUserAnimeDetail(animeId);
-		
-		if (userAnimeDetail.getId() != 0) {
-			userAnimeDetail.setFavourite(!userAnimeDetail.isFavourite());
-		} else {
-			logger.info("setAnimeAsFavourite -> impossible to find animeDetails");
-		}
-	}
-	
-	@Override
-	public void setAnimeScore(int animeId, int score) {
-		UserAnimeDetail userAnimeDetail = animeService.getUserAnimeDetail(animeId);
-		
-		if (userAnimeDetail.getId() != 0) {
-			userAnimeDetail.setScore(score);
-		} else {
-			logger.info("setAnimeScore -> impossible to find animeDetails");
-		}
-	}
-	
 	@Override
 	public void reset(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
@@ -139,12 +82,12 @@ public class AnimeDaoImpl implements AnimeDao {
 		if (userAnimeDetailList.size() > 1) {
 			session.remove(
 						userAnimeDetailList.stream()
-							.filter(x -> x.getUser() == userService.findByUsername(getAuthUsername()))
+							.filter(x -> x.getUser() == userService.find(getAuthUsername()))
 							.findFirst()
 							.get()
 						); 
 		} else {
-			logger.info("Onlu user " + getAuthUsername() + " had anime " + animeId + " as selected. Removing it from db");
+			logger.info("Only user " + getAuthUsername() + " had anime with id " + animeId + " as selected -> Removing");
 			session.remove(userAnimeDetailList.get(0));
 		}
 	}
@@ -160,7 +103,7 @@ public class AnimeDaoImpl implements AnimeDao {
 		AnimeDetail animeDetail = null;
 		
 		if (animeDetailList.isEmpty()) {
-			Anime anime = animeService.findAnimeById(animeId);
+			Anime anime = jikanApiService.findAnime(animeId);
 			
 			animeDetail = new AnimeDetail(
 					animeId, 
@@ -173,7 +116,7 @@ public class AnimeDaoImpl implements AnimeDao {
 		
 		UserAnimeDetail userAnimeDetail = animeService.getUserAnimeDetail(animeId);
 		
-		userAnimeDetail.setUser(userService.findByUsername(getAuthUsername()));
+		userAnimeDetail.setUser(userService.find(getAuthUsername()));
 		userAnimeDetail.setAnimeDetail(animeDetail);
 		
 		return userAnimeDetail;

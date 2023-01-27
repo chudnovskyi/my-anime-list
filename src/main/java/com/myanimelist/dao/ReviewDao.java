@@ -7,7 +7,7 @@ import com.myanimelist.validation.entity.ValidReview;
 
 public interface ReviewDao {
 
-	public List<Review> findReviewsByAnimeId(int animeId);
+	public List<Review> findReviews(int animeId);
 
 	public void save(ValidReview reviewForm);
 

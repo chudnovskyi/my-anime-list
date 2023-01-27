@@ -37,6 +37,10 @@ public class ValidUser {
 	@Email(domains = {"gmail.com", "karazin.ua"}, 
 			message = "{Email.Domains}")
 	private String email;
+	
+	public ValidUser() {
+		
+	}
 
 	public String getUsername() {
 		return username;

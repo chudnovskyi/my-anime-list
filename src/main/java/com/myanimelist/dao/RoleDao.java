@@ -4,5 +4,5 @@ import com.myanimelist.entity.Role;
 
 public interface RoleDao {
 
-	public Role findRoleByName(String theRoleName);
+	public Role findRole(String theRoleName);
 }

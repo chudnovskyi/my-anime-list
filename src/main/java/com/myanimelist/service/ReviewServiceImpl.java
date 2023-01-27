@@ -18,8 +18,8 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	@Override
 	@Transactional
-	public List<Review> findReviewsByAnimeId(int animeId) {
-		return reviewDao.findReviewsByAnimeId(animeId);
+	public List<Review> findReviews(int animeId) {
+		return reviewDao.findReviews(animeId);
 	}
 
 	@Override

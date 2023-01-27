@@ -7,7 +7,7 @@ import com.myanimelist.validation.entity.ValidUser;
 
 public interface UserService extends UserDetailsService {
 
-	public User findByUsername(String username);
+	public User find(String username);
 
 	public void save(ValidUser user);
 

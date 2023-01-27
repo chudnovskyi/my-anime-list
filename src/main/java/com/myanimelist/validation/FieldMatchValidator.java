@@ -1,7 +1,5 @@
 package com.myanimelist.validation;
-
-import java.util.logging.Logger;
-
+ 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -9,8 +7,6 @@ import org.springframework.beans.BeanWrapperImpl;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
 
-	private Logger logger = Logger.getLogger(getClass().getName());
-	
 	private String firstField;
 	private String secondField;
 	private String message;
@@ -27,20 +23,16 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 		
 		boolean isValid = false;
 		
-		try {
-			Object firstFieldObj = new BeanWrapperImpl(value).getPropertyValue(firstField);
-			Object secondFieldObj = new BeanWrapperImpl(value).getPropertyValue(secondField);
+		Object firstFieldObj = new BeanWrapperImpl(value).getPropertyValue(firstField);
+		Object secondFieldObj = new BeanWrapperImpl(value).getPropertyValue(secondField);
 
-			if (firstFieldObj == null && secondFieldObj == null) {
-				isValid = true;
-			} else if (firstFieldObj != null && firstFieldObj.equals(secondFieldObj)) {
-				isValid = true;
-			} else {
-				isValid = false;
-			}
-		} catch (Exception e) {
-			logger.info("===>> EXCEPTION IN FieldMatchValidator");
-		}
+		if (firstFieldObj == null && secondFieldObj == null) {
+			isValid = true;
+		} else if (firstFieldObj != null && firstFieldObj.equals(secondFieldObj)) {
+			isValid = true;
+		} else {
+			isValid = false;
+		} 
 
 		if (!isValid) {
 			context

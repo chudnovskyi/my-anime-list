@@ -29,7 +29,7 @@ public class UserAnimeListController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
 		
-		preparePegable(theModel, animeService.getUserAnimeWatchingList(PageRequest.of(page - 1, size)));
+		preparePegable(theModel, animeService.getUserAnimeDetailList(UserAnimeDetail::isWatching, PageRequest.of(page - 1, size)));
 		theModel.addAttribute("tab", "watching");
 		
 		return "list-viewed";
@@ -41,7 +41,7 @@ public class UserAnimeListController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
 		
-		preparePegable(theModel, animeService.getUserAnimePlanningList(PageRequest.of(page - 1, size)));
+		preparePegable(theModel, animeService.getUserAnimeDetailList(UserAnimeDetail::isPlanning, PageRequest.of(page - 1, size)));
 		theModel.addAttribute("tab", "planning");
 		
 		return "list-viewed";
@@ -53,7 +53,7 @@ public class UserAnimeListController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
 		
-		preparePegable(theModel, animeService.getUserAnimeFinishedList(PageRequest.of(page - 1, size)));
+		preparePegable(theModel, animeService.getUserAnimeDetailList(UserAnimeDetail::isCompleted, PageRequest.of(page - 1, size)));
 		theModel.addAttribute("tab", "finished");
 		
 		return "list-viewed";
@@ -65,7 +65,7 @@ public class UserAnimeListController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
 		
-		preparePegable(theModel, animeService.getUserAnimeOnHoldList(PageRequest.of(page - 1, size)));
+		preparePegable(theModel, animeService.getUserAnimeDetailList(UserAnimeDetail::isOnHold, PageRequest.of(page - 1, size)));
 		theModel.addAttribute("tab", "on-hold");
 		
 		return "list-viewed";
@@ -77,7 +77,7 @@ public class UserAnimeListController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
 		
-		preparePegable(theModel, animeService.getUserAnimeDroppedList(PageRequest.of(page - 1, size)));
+		preparePegable(theModel, animeService.getUserAnimeDetailList(UserAnimeDetail::isDropped, PageRequest.of(page - 1, size)));
 		theModel.addAttribute("tab", "dropped");
 		
 		return "list-viewed";
@@ -89,7 +89,7 @@ public class UserAnimeListController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size) {
 		
-		preparePegable(theModel, animeService.getUserAnimeFavouriteList(PageRequest.of(page - 1, size)));
+		preparePegable(theModel, animeService.getUserAnimeDetailList(UserAnimeDetail::isFavourite, PageRequest.of(page - 1, size)));
 		theModel.addAttribute("tab", "favourite");
 		
 		return "list-viewed";

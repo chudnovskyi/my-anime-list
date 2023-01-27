@@ -28,8 +28,8 @@
 				<a th:if="${userAnimeDetail.completed == false}" th:href="@{/anime/completed/{animeId}(animeId = ${anime.mal_id})}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Completed</a>
 				<a th:if="${userAnimeDetail.completed == true}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Completed</a>
 			
-				<a th:if="${userAnimeDetail.on_hold == false}" th:href="@{/anime/on-hold/{animeId}(animeId = ${anime.mal_id})}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">On-hold</a>
-				<a th:if="${userAnimeDetail.on_hold == true}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">On-hold</a>
+				<a th:if="${userAnimeDetail.onHold == false}" th:href="@{/anime/on-hold/{animeId}(animeId = ${anime.mal_id})}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">On-hold</a>
+				<a th:if="${userAnimeDetail.onHold == true}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">On-hold</a>
 			
 				<a th:if="${userAnimeDetail.dropped == false}" th:href="@{/anime/dropped/{animeId}(animeId = ${anime.mal_id})}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Dropped</a>
 				<a th:if="${userAnimeDetail.dropped == true}" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Dropped</a>

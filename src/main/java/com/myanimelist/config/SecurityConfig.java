@@ -10,23 +10,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.myanimelist.service.MyUserDetailsService;
 import com.myanimelist.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Autowired
 	@Lazy
+	@Autowired
 	private UserService userService;
 	
-	@Autowired
 	@Lazy
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-	
 	@Autowired
-	private MyUserDetailsService myUserDetailsService;
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -44,7 +40,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-			.userDetailsService(myUserDetailsService)
+			.userDetailsService(userService)
 			
 			.authorizeRequests()
 				.antMatchers("/home**").hasRole("USER")

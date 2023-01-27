@@ -1,8 +1,7 @@
 package com.myanimelist.entity;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,13 +19,10 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		
-		for (Role role: user.getRoles()) {
-		    authorities.add(new SimpleGrantedAuthority(role.getName()));
-		}
-		
-		return authorities;
+		return user.getRoles()
+				.stream()
+				.map(role -> new SimpleGrantedAuthority(role.getName()))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -55,8 +51,6 @@ public class UserPrincipal implements UserDetails {
 	}
 
 	/*
-	 * The logic is this: 
-	 * 
 	 * When a user registers, a code is sent to his mail, the same 
 	 * code is recorded in the database. When the user clicks on 
 	 * the link in the mail, the code will be deleted from the 

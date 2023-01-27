@@ -17,10 +17,6 @@ public class ResponseGenreWrapper {
 		
 	}
 
-	public ResponseGenreWrapper(List<Genre> data) {
-		this.data = data;
-	}
-
 	public List<Genre> getData() {
 		return data;
 	}

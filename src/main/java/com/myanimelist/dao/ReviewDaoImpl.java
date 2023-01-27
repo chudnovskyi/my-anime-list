@@ -1,15 +1,12 @@
 package com.myanimelist.dao;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
@@ -21,8 +18,6 @@ import com.myanimelist.validation.entity.ValidReview;
 @Repository
 public class ReviewDaoImpl implements ReviewDao {
 
-	private Logger logger = Logger.getLogger(getClass().getName());
-
 	@Autowired
 	private EntityManager entityManager;
 	
@@ -30,66 +25,50 @@ public class ReviewDaoImpl implements ReviewDao {
 	private UserService userService;
 
 	@Override
-	public List<Review> findReviewsByAnimeId(int animeId) {
+	public List<Review> findReviews(int animeId) {
 		Session session = entityManager.unwrap(Session.class);
 
-		Query<Review> query = session
-			.createQuery(""
+		Query<Review> query = session.createQuery(""
 				+ "FROM Review "
-				+ "WHERE anime_id=:theAnimeId", 
+				+ "WHERE anime_id = :theAnimeId", 
 				Review.class)
 			.setParameter("theAnimeId", animeId);
 		
-		List<Review> reviews = null;
-		
-		try {
-			reviews = query.getResultList();
-		} catch (NoResultException e) {
-			logger.info("=====>>> =====>>> !!!!!!!!!! REVIEWS NOT FOUND !!!!!!!!!!");
-			reviews = null;
-		}
-		
-		return reviews;
+		return query.getResultList();
 	}
 
 	@Override
 	public void save(ValidReview reviewForm) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-		
 		Review review = new Review(
 				reviewForm.getAnimeId(),
 				reviewForm.getContent(),
-				userService.findByUsername(currentPrincipalName)
-				);
+				userService.find(getAuthUsername())
+			);
 
 		session.save(review);
-		
-		logger.info("USERNAME: " + review.getUser().getUsername() + " added review " + review.getContent());
 	}
 
 	@Override
 	public Review remove(int reviewId) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
+		Review review = session.get(Review.class, reviewId);
 		
-		Review review = session
-				.get(Review.class, reviewId);
-		
-		if (review.getUser().getUsername().equals(currentPrincipalName)) {
+		if (review.getUser().getUsername().equals(getAuthUsername())) {
 			session.remove(review);
-			logger.info("USERNAME: " + review.getUser().getUsername() + " DELETED REVIEW WITH ID " + reviewId);
 		} else {
 			throw new UserHasNoAccessException(""
-					+ "User with username " + currentPrincipalName + " "
-					+ "cannot remove review " + review + " "
-					+ "belonging to " + review.getUser().getUsername());
+					+ "User " + getAuthUsername()
+					+ " can't remove " + review
+					+ " belonging to " + review.getUser().getUsername());
 		}
 		
 		return review;
+	}
+	
+	private String getAuthUsername() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 }

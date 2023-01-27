@@ -1,7 +1,5 @@
 package com.myanimelist.dao;
 
-import java.util.logging.Logger;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -15,19 +13,16 @@ import com.myanimelist.entity.Role;
 @Repository
 public class RoleDaoImpl implements RoleDao {
 	
-	private Logger logger = Logger.getLogger(getClass().getName());
-	
 	@Autowired
 	private EntityManager entityManager;
 
 	@Override
-	public Role findRoleByName(String theRole) {
+	public Role findRole(String theRole) {
 		Session session = entityManager.unwrap(Session.class);
 
-		Query<Role> query = session
-			.createQuery(""
+		Query<Role> query = session.createQuery(""
 				+ "FROM Role "
-				+ "WHERE name=:theRole", 
+				+ "WHERE name = :theRole", 
 				Role.class)
 			.setParameter("theRole", theRole);
 		
@@ -36,7 +31,6 @@ public class RoleDaoImpl implements RoleDao {
 		try {
 			role = query.getSingleResult();
 		} catch (NoResultException e) {
-			logger.info("=====>>> =====>>> ROLE NOT FOUND");
 			role = null;
 		}
 		

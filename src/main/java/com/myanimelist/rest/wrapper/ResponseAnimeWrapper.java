@@ -19,15 +19,6 @@ public class ResponseAnimeWrapper {
 
 	}
 
-	public ResponseAnimeWrapper(List<Anime> data) {
-		this.data = data;
-	}
-
-	public ResponseAnimeWrapper(Pagination pagination, List<Anime> data) {
-		this.pagination = pagination;
-		this.data = data;
-	}
-
 	public Pagination getPagination() {
 		return pagination;
 	}

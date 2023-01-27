@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * 
  * Answer: A new feature - adding anime to the tab `viewed`, `favorites` etc. 
  * Because the application should have a separate tab where you can see all the 
- * anime by some parameter eg `favourite`, then you will need lot of requests 
+ * anime by some parameter eg `dropped`, then you will need lot of requests 
  * to the JikanAPI in order to display information for each anime using it's id.
  * 
  * BUT, the JikanAPI server provides only 3 requests per second. I decided to create 

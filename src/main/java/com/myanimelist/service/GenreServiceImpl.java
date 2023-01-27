@@ -25,14 +25,16 @@ public class GenreServiceImpl implements GenreService {
 	
 	private Map<Integer, String> genres;
 	
+	/*
+	 * Method will load genre list only once
+	 */
 	@Override
 	public Map<Integer, String> findAllGenres() {
-		// not sure if this is the best approach ... 
 		if (genres == null) {
 			String url = 
 					env.getProperty("find.genres");
 			
-			logUrl(url);
+			logger.info(url);
 			
 			ResponseGenreWrapper wrapper = restTemplate.getForObject(url, ResponseGenreWrapper.class);
 			
@@ -56,9 +58,5 @@ public class GenreServiceImpl implements GenreService {
 	
 	public Map<Integer, String> getGenres() {
 		return genres;
-	}
-
-	private void logUrl(String url) {
-		logger.info("------------------------>> " + url);
 	}
 }

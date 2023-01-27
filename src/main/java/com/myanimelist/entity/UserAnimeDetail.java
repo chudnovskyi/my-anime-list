@@ -31,7 +31,10 @@ public class UserAnimeDetail {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	// why after changing CascadeType there's an exceptions?
+	/* 
+	 * Why after manually selecting all 5 or 4 (except remove) 
+	 * cascade types there's an exceptions when adding anime in any tab?
+	 */
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "mal_id")
 	private AnimeDetail animeDetail;
@@ -52,7 +55,7 @@ public class UserAnimeDetail {
 	private boolean completed;
 	
 	@Column(name = "on_hold")
-	private boolean on_hold;
+	private boolean onHold;
 	
 	@Column(name = "dropped")
 	private boolean dropped;
@@ -136,16 +139,16 @@ public class UserAnimeDetail {
 		this.completed = completed;
 	}
 
-	public boolean isOn_hold() {
-		return on_hold;
+	public boolean isOnHold() {
+		return onHold;
 	}
 
-	public void setOn_hold(boolean on_hold) {
-		if (on_hold == true) {
+	public void setOnHold(boolean onHold) {
+		if (onHold == true) {
 			setParamsToFalse();
 			setFavourite(false);
 		}
-		this.on_hold = on_hold;
+		this.onHold = onHold;
 	}
 
 	public boolean isDropped() {
@@ -163,15 +166,15 @@ public class UserAnimeDetail {
 	private void setParamsToFalse() {
 		setCompleted(false);
 		setDropped(false);
-		setOn_hold(false);
+		setOnHold(false);
 		setWatching(false);
 		setPlanning(false);
 	}
 
 	@Override
 	public String toString() {
-		return "UserAnimeDetail [id=" + id + ", score=" + score + ", favourite=" + favourite + ", watching=" + watching
-				+ ", planning=" + planning + ", completed=" + completed + ", on_hold=" + on_hold + ", dropped="
-				+ dropped + "]";
+		return "UserAnimeDetail [id=" + id + ", user=" + user + ", animeDetail=" + animeDetail + ", score=" + score
+				+ ", favourite=" + favourite + ", watching=" + watching + ", planning=" + planning + ", completed="
+				+ completed + ", onHold=" + onHold + ", dropped=" + dropped + "]";
 	}
 }

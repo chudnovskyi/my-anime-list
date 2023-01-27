@@ -1,7 +1,5 @@
 package com.myanimelist.controller;
 
-import java.util.logging.Logger;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +28,6 @@ public class ReviewController {
 	@Autowired
 	private ReviewService reviewService;
 	
-	private Logger logger = Logger.getLogger(getClass().getName());
-	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
@@ -47,7 +43,6 @@ public class ReviewController {
 		if (bindingResult.hasErrors()) {
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.reviewForm", bindingResult);
 		    attr.addFlashAttribute("reviewForm", reviewForm);
-		    logger.info("<<-- bindingResult error creating review -->>");
 		} else {
 			reviewService.save(reviewForm);
 		}
@@ -60,13 +55,15 @@ public class ReviewController {
 			@PathVariable(name = "reviewId") int reviewId,
 			Model theModel) {
 		
+		Review removedReview = null;
+		
 		try {
-			Review removedReview = reviewService.remove(reviewId);
-			return "redirect:/anime/find/" + removedReview.getAnime_id();
+			removedReview = reviewService.remove(reviewId);
 		} catch (UserHasNoAccessException e) {
-			logger.info(e.getMessage());
 			theModel.addAttribute("userHasNoAccess", "You cannot delete someone else's review!!");
 			return "home-page";
 		}
+		
+		return "redirect:/anime/find/" + removedReview.getAnime_id();
 	}
 }

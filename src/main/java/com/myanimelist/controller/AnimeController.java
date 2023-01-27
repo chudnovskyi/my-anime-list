@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
 import com.myanimelist.service.AnimeService;
+import com.myanimelist.service.JikanApiService;
 import com.myanimelist.service.ReviewService;
 import com.myanimelist.validation.entity.ValidReview;
 import com.myanimelist.validation.entity.ValidSearchAnime;
@@ -26,6 +27,9 @@ public class AnimeController {
 	@Autowired
 	private ReviewService reviewService;
 	
+	@Autowired
+	private JikanApiService jikanApiService;
+	
 	@PostMapping("/{pageId}")
 	public String findByName(
 			@ModelAttribute("searchAnime") ValidSearchAnime searchAnime,
@@ -33,7 +37,7 @@ public class AnimeController {
 			Model theModel) {
 		
 		ResponseAnimeWrapper wrapper = 
-				animeService.findSearched(searchAnime.getTitle(), searchAnime.getGenres(), pageId);
+				jikanApiService.findSearched(searchAnime.getTitle(), searchAnime.getGenres(), pageId);
 		
 		theModel.addAttribute("searchAnime", searchAnime);
 		theModel.addAttribute("animeList", wrapper.getData());
@@ -47,7 +51,7 @@ public class AnimeController {
 			@PathVariable(name = "pageId") int pageId,
 			Model theModel) {
 		
-		ResponseAnimeWrapper wrapper = animeService.findTop(pageId);
+		ResponseAnimeWrapper wrapper = jikanApiService.findTop(pageId);
 		
 		theModel.addAttribute("animeList", wrapper.getData());
 		theModel.addAttribute("pagination", wrapper.getPagination());
@@ -60,10 +64,10 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 
-		Anime anime = animeService.findAnimeById(animeId);
+		Anime anime = jikanApiService.findAnime(animeId);
 		
 		theModel.addAttribute("anime", anime);
-		theModel.addAttribute("reviews", reviewService.findReviewsByAnimeId(animeId));
+		theModel.addAttribute("reviews", reviewService.findReviews(animeId));
 		theModel.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMal_id()));
 		
 		/*
@@ -81,11 +85,11 @@ public class AnimeController {
 	public String random(
 			Model theModel) {
 		
-		Anime anime = animeService.findRandomAnime();
+		Anime anime = jikanApiService.findRandomAnime();
 		
 		theModel.addAttribute("anime", anime);
 		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
-		theModel.addAttribute("reviews", reviewService.findReviewsByAnimeId(anime.getMal_id()));
+		theModel.addAttribute("reviews", reviewService.findReviews(anime.getMal_id()));
 		theModel.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMal_id()));
 		
 		return "anime-details";
@@ -96,7 +100,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.setAnimeAsWatching(animeId);
+		animeService.alterUserAnimeDetail(animeId, x -> x.setWatching(true));
 
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -106,7 +110,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.setAnimeAsPlanning(animeId);
+		animeService.alterUserAnimeDetail(animeId, x -> x.setPlanning(true));
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -116,7 +120,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.setAnimeAsCompleted(animeId);
+		animeService.alterUserAnimeDetail(animeId, x -> x.setCompleted(true));
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -126,7 +130,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.setAnimeAsOnHold(animeId);
+		animeService.alterUserAnimeDetail(animeId, x -> x.setOnHold(true));
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -136,7 +140,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.setAnimeAsDropped(animeId);
+		animeService.alterUserAnimeDetail(animeId, x -> x.setDropped(true));
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -146,17 +150,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.setAnimeAsFavourite(animeId);
-
-		return "redirect:/anime/find/" + animeId;
-	}
-	
-	@GetMapping("/reset/{animeId}")
-	public String reset(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		animeService.reset(animeId);
+		animeService.alterUserAnimeDetail(animeId, x -> x.setFavourite(true));
 
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -167,7 +161,7 @@ public class AnimeController {
 			@PathVariable(name = "score") int score,
 			Model theModel) {
 		
-		animeService.setAnimeScore(animeId, score);
+		animeService.alterUserAnimeDetail(animeId, x -> x.setScore(score));
 
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -177,7 +171,17 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.setAnimeScore(animeId, 0);
+		animeService.alterUserAnimeDetail(animeId, x -> x.setScore(0));
+
+		return "redirect:/anime/find/" + animeId;
+	}
+	
+	@GetMapping("/reset/{animeId}")
+	public String reset(
+			@PathVariable(name = "animeId") int animeId,
+			Model theModel) {
+		
+		animeService.reset(animeId);
 
 		return "redirect:/anime/find/" + animeId;
 	}
