@@ -1,42 +1,15 @@
 package com.myanimelist.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserErrorResponse {
 
 	private int code;
 	private String message;
 	private long timestamp;
-
-	public UserErrorResponse() {
-
-	}
-
-	public UserErrorResponse(int code, String message, long timestamp) {
-		this.code = code;
-		this.message = message;
-		this.timestamp = timestamp;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
-	}
 }

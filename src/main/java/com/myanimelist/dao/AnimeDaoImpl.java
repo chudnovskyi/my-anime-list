@@ -2,7 +2,6 @@ package com.myanimelist.dao;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
@@ -18,10 +17,11 @@ import com.myanimelist.service.AnimeService;
 import com.myanimelist.service.JikanApiService;
 import com.myanimelist.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class AnimeDaoImpl implements AnimeDao {
-
-	private Logger logger = Logger.getLogger(getClass().getName());
 
 	@Autowired
 	private EntityManager entityManager;
@@ -87,7 +87,7 @@ public class AnimeDaoImpl implements AnimeDao {
 							.get()
 						); 
 		} else {
-			logger.info("Only user " + getAuthUsername() + " had anime with id " + animeId + " as selected -> Removing");
+			log.info("Only user " + getAuthUsername() + " had anime with id " + animeId + " as selected -> Removing");
 			session.remove(userAnimeDetailList.get(0));
 		}
 	}

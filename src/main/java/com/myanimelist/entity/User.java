@@ -18,6 +18,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
@@ -78,85 +85,4 @@ public class User {
 					CascadeType.REFRESH
 			})
 	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<UserAnimeDetail>();
-
-	public User() {
-
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getActivationCode() {
-		return activationCode;
-	}
-
-	public void setActivationCode(String activationCode) {
-		this.activationCode = activationCode;
-	}
-
-	public byte[] getImage() {
-		return image;
-	}
-
-	public void setImage(byte[] image) {
-		this.image = image;
-	}
-
-	public Collection<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Collection<Role> roles) {
-		this.roles = roles;
-	}
-
-	public Collection<Review> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(Collection<Review> reviews) {
-		this.reviews = reviews;
-	}
-
-	public Set<UserAnimeDetail> getUserAnimeDetails() {
-		return userAnimeDetails;
-	}
-
-	public void setUserAnimeDetails(Set<UserAnimeDetail> userAnimeDetails) {
-		this.userAnimeDetails = userAnimeDetails;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", email=" + email + ", roles=" + roles + "]";
-	}
 }

@@ -6,6 +6,9 @@ import javax.validation.constraints.Size;
 import com.myanimelist.validation.Email;
 import com.myanimelist.validation.FieldMatch;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /* 
  * I use a separate entity class for 
  * validation to avoid annotation buildup 
@@ -17,6 +20,8 @@ import com.myanimelist.validation.FieldMatch;
  * layer, all fields will be transferred 
  * to the "real" User object.
  */
+@Data
+@NoArgsConstructor
 @FieldMatch.List({
 		@FieldMatch(firstField = "password", secondField = "matchingPassword", message = "{ConfirmPassword.Match}")
 	})
@@ -36,40 +41,4 @@ public class ValidUser {
 	@NotNull(message = "{Email.NotNull}")
 	@Email(domains = { "gmail.com", "karazin.ua" }, message = "{Email.Domains}")
 	private String email;
-
-	public ValidUser() {
-
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getMatchingPassword() {
-		return matchingPassword;
-	}
-
-	public void setMatchingPassword(String matchingPassword) {
-		this.matchingPassword = matchingPassword;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
 }

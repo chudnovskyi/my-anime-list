@@ -2,7 +2,6 @@ package com.myanimelist.service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,9 @@ import org.springframework.web.client.RestTemplate;
 import com.myanimelist.rest.entity.Genre;
 import com.myanimelist.rest.wrapper.ResponseGenreWrapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class GenreServiceImpl implements GenreService {
 
@@ -20,8 +22,6 @@ public class GenreServiceImpl implements GenreService {
 	private Environment env;
 
 	private RestTemplate restTemplate = new RestTemplate();
-
-	private Logger logger = Logger.getLogger(getClass().getName());
 
 	private Map<Integer, String> genres;
 
@@ -34,7 +34,7 @@ public class GenreServiceImpl implements GenreService {
 			String url = 
 					env.getProperty("find.genres");
 			
-			logger.info(url);
+			log.info(url);
 			
 			ResponseGenreWrapper wrapper = restTemplate.getForObject(url, ResponseGenreWrapper.class);
 			

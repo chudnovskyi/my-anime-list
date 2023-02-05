@@ -58,8 +58,8 @@ public class UserServiceImpl implements UserService {
 				"Hello, %s! \n" + 
 				"Welcome to MyAnimeList. Please, follow link to verify your account: \n" +
 				"%s/register/activate/%s",
-				env.getProperty("host.domain"),
 				user.getUsername(), 
+				env.getProperty("host.domain"),
 				user.getActivationCode());
 
 		mailSenderService.send(user.getEmail(), "Activation code", message);

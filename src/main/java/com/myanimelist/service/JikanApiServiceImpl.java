@@ -1,7 +1,5 @@
 package com.myanimelist.service;
 
-import java.util.logging.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -11,6 +9,9 @@ import com.myanimelist.rest.entity.Anime;
 import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
 import com.myanimelist.rest.wrapper.ResponseSingleAnimeWrapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class JikanApiServiceImpl implements JikanApiService {
 
@@ -18,8 +19,6 @@ public class JikanApiServiceImpl implements JikanApiService {
 	private Environment env;
 
 	private RestTemplate restTemplate = new RestTemplate();
-
-	private Logger logger = Logger.getLogger(getClass().getName());
 
 	@Override
 	public ResponseAnimeWrapper findSearched(String title, String genres, int pageId) {
@@ -38,7 +37,7 @@ public class JikanApiServiceImpl implements JikanApiService {
 			url += env.getProperty("param.genres") + genres;
 		}
 
-		logger.info(url);
+		log.info(url);
 
 		ResponseAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseAnimeWrapper.class);
 
@@ -52,7 +51,7 @@ public class JikanApiServiceImpl implements JikanApiService {
 				env.getProperty("param.page") + pageId + 
 				env.getProperty("param.limit");
 
-		logger.info(url);
+		log.info(url);
 
 		ResponseAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseAnimeWrapper.class);
 
@@ -64,7 +63,7 @@ public class JikanApiServiceImpl implements JikanApiService {
 		String url = 
 				env.getProperty("find.id") + animeId;
 
-		logger.info(url);
+		log.info(url);
 
 		ResponseSingleAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseSingleAnimeWrapper.class);
 
@@ -76,7 +75,7 @@ public class JikanApiServiceImpl implements JikanApiService {
 		String url = 
 				env.getProperty("find.rand");
 
-		logger.info(url);
+		log.info(url);
 
 		ResponseSingleAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseSingleAnimeWrapper.class);
 

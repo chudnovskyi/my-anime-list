@@ -11,6 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "users_anime")
 public class UserAnimeDetail {
@@ -60,107 +67,33 @@ public class UserAnimeDetail {
 	@Column(name = "dropped")
 	private boolean dropped;
 
-	public UserAnimeDetail() {
-
+	public void setAsWatching() {
+		setParamsToFalse();
+		watching = true;
 	}
 
-	public int getId() {
-		return id;
+	public void setAsPlanning() {
+		setParamsToFalse();
+		setFavourite(false);
+		setScore(0);
+		planning = true;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setAsCompleted() {
+		setParamsToFalse();
+		completed = true;
 	}
 
-	public User getUser() {
-		return user;
+	public void setAsOnHold() {
+		setParamsToFalse();
+		setFavourite(false);
+		onHold = true;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public AnimeDetail getAnimeDetail() {
-		return animeDetail;
-	}
-
-	public void setAnimeDetail(AnimeDetail animeDetail) {
-		this.animeDetail = animeDetail;
-	}
-
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public boolean isFavourite() {
-		return favourite;
-	}
-
-	public void setFavourite(boolean favourite) {
-		this.favourite = favourite;
-	}
-
-	public boolean isWatching() {
-		return watching;
-	}
-
-	public void setWatching(boolean watching) {
-		if (watching == true) {
-			setParamsToFalse();
-		}
-		this.watching = watching;
-	}
-	
-	public boolean isPlanning() {
-		return planning;
-	}
-
-	public void setPlanning(boolean planning) {
-		if (planning == true) {
-			setParamsToFalse();
-			setFavourite(false);
-			setScore(0);
-		}
-		this.planning = planning;
-	}
-
-	public boolean isCompleted() {
-		return completed;
-	}
-
-	public void setCompleted(boolean completed) {
-		if (completed == true) {
-			setParamsToFalse();
-		}
-		this.completed = completed;
-	}
-
-	public boolean isOnHold() {
-		return onHold;
-	}
-
-	public void setOnHold(boolean onHold) {
-		if (onHold == true) {
-			setParamsToFalse();
-			setFavourite(false);
-		}
-		this.onHold = onHold;
-	}
-
-	public boolean isDropped() {
-		return dropped;
-	}
-
-	public void setDropped(boolean dropped) {
-		if (dropped == true) {
-			setParamsToFalse();
-			setFavourite(false);
-		}
-		this.dropped = dropped;
+	public void setAsDropped() {
+		setParamsToFalse();
+		setFavourite(false);
+		dropped = true;
 	}
 
 	private void setParamsToFalse() {
@@ -169,12 +102,5 @@ public class UserAnimeDetail {
 		setOnHold(false);
 		setWatching(false);
 		setPlanning(false);
-	}
-
-	@Override
-	public String toString() {
-		return "UserAnimeDetail [id=" + id + ", user=" + user + ", animeDetail=" + animeDetail + ", score=" + score
-				+ ", favourite=" + favourite + ", watching=" + watching + ", planning=" + planning + ", completed="
-				+ completed + ", onHold=" + onHold + ", dropped=" + dropped + "]";
 	}
 }

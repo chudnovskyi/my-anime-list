@@ -100,7 +100,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setWatching(true));
+		animeService.alterUserAnimeDetail(animeId, x -> x.setAsWatching());
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -110,7 +110,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setPlanning(true));
+		animeService.alterUserAnimeDetail(animeId, x -> x.setAsPlanning());
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -120,7 +120,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setCompleted(true));
+		animeService.alterUserAnimeDetail(animeId, x -> x.setAsCompleted());
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -130,7 +130,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setOnHold(true));
+		animeService.alterUserAnimeDetail(animeId, x -> x.setAsOnHold());
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -140,7 +140,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setDropped(true));
+		animeService.alterUserAnimeDetail(animeId, x -> x.setAsDropped());
 		
 		return "redirect:/anime/find/" + animeId;
 	}
@@ -150,7 +150,7 @@ public class AnimeController {
 			@PathVariable(name = "animeId") int animeId,
 			Model theModel) {
 		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setFavourite(true));
+		animeService.alterUserAnimeDetail(animeId, x -> x.setFavourite(!x.isFavourite()));
 		
 		return "redirect:/anime/find/" + animeId;
 	}

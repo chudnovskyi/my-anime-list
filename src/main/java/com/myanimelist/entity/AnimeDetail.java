@@ -11,6 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 /*
  * You can extract anime by sending a request to the JikanAPI, 
  * why did you create a new table in the database?
@@ -28,20 +34,28 @@ import javax.persistence.Table;
  * while the database will not store anything extra, except for the id and 
  * name of the anime, and additional details will be taken according to the user's request.
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "anime")
 public class AnimeDetail {
 
 	@Id
+	@NonNull
 	@Column(name = "mal_id")
-	private int mal_id;
+	private Integer mal_id;
 
+	@NonNull
 	@Column(name = "title")
 	private String title;
 
+	@NonNull
 	@Column(name = "image")
 	private String image;
 
+	@NonNull
 	@OneToMany(
 			mappedBy = "animeDetail",
 			fetch = FetchType.LAZY,
@@ -52,51 +66,4 @@ public class AnimeDetail {
 					CascadeType.REFRESH
 			})
 	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<UserAnimeDetail>();
-
-	public AnimeDetail() {
-
-	}
-
-	public AnimeDetail(int mal_id, String title, String image) {
-		this.mal_id = mal_id;
-		this.title = title;
-		this.image = image;
-	}
-
-	public int getMal_id() {
-		return mal_id;
-	}
-
-	public void setMal_id(int mal_id) {
-		this.mal_id = mal_id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public Set<UserAnimeDetail> getUserAnimeDetails() {
-		return userAnimeDetails;
-	}
-
-	public void setUserAnimeDetails(Set<UserAnimeDetail> userAnimeDetails) {
-		this.userAnimeDetails = userAnimeDetails;
-	}
-
-	@Override
-	public String toString() {
-		return "AnimeDetails [mal_id=" + mal_id + ", title=" + title + "]";
-	}
 }
