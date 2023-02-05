@@ -49,6 +49,7 @@ public class SecurityConfig {
 				.antMatchers("/reviews/**").hasRole("USER")
 				.antMatchers("/admin").hasRole("ADMIN")
 				.antMatchers("/activate/*").permitAll()
+				.antMatchers("/swagger*/**").permitAll()
 			.and()
 			
 			.formLogin()

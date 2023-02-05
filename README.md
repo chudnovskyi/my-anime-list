@@ -1,27 +1,22 @@
-# MyAnimeList
-> A WebApp using Spring Boot and MVC architectural pattern to surf [_anime base_](https://myanimelist.net/) via [_Jikan API_](https://docs.api.jikan.moe/).
-> The application allows the user to manage a personal list of favorite anime and add them to different categories.
-> With a third party API, the database will never be out of date.
+# My Anime List
+> A web application built using Spring Boot to provide users with a platform to manage their favorite anime.
+> The app uses the [_Jikan API_](https://docs.api.jikan.moe/) to provide up-to-date information about anime and includes features such as login/registration, anime search, top anime ratings, and more.
 
 
 ## Table of Contents
-* [Demo](#demo)
-* [General Info](#general-information)
-* [Technologies Used](#technologies-used)
+* [Overview](#overview)
+* [Technology Stack](#technology-stack)
+* [Additional Tools](#additional-tools)
 * [Features](#features)
 * [SQL Schema](#sql-schema)
 * [Contact](#contact)
 
 
-## Demo
-Here is a working live demo: (soon...)
+## Overview
+> My Anime List is my first web development project, designed to reinforce my newly acquired knowledge after completing a Spring Boot [_course_](https://www.udemy.com/certificate/UC-f22b858d-784d-436d-be89-1c1ae1fc5835/).
+> This project allowed me to apply my skills and gain hands-on experience working with Java, Spring Boot, and database development.
 
-
-## General Information
-> A training web project to reinforce the newly acquired knowledge after completing the [_Spring Boot course_](https://www.udemy.com/course/spring-hibernate-tutorial/).
-
-
-## Technologies Used
+## Technology Stack
 - Java 17
 
 - Spring Boot 2.7.7
@@ -35,19 +30,23 @@ Here is a working live demo: (soon...)
 - Thymeleaf
 
 
+## Additional Tools
+- Lombok: A library used to reduce boilerplate code in Java.
+- Swagger: An API documentation and testing tool.
+
+
 ## Features
-- Login/Registration (including validation and required email verification).
-- Filtered anime search by title and genres. (pagination)
-- Top anime by it's rating. (pagination)
-- Random anime generation.
-- Access to detailed information about each anime, including its trailer (if available).
-- Write and delete comments under any anime with validation for at least of 5 characters length.
-- Ability to add anime to sections: watching, planning, completed, on hold, dropped.
-- Mark anime as favourite, rate it in score of 1 to 10.
-- View a list of selected anime in any section, sorted by user personal rating. (pagination)
-- Profile page where users can upload a profile photo and see available roles.
-- Page only available to users with admin role (at the moment without much functionality).
-- Encrypted user passwords with the Bcrypt algorithm
+- Login/Registration: Users can create an account and log in, with email verification required.
+- Filtered anime search: Users can search for anime by title and genres, with pagination support.
+- Top anime: A list of the top rated anime, with pagination support.
+- Random anime generation: Users can generate a random anime to watch.
+- Detailed anime information: Users can access information about each anime, including its trailer (if available).
+- Reviews: Users can write and delete reviews about any anime, with validation for at least 5 characters.
+- Anime sections: Users can add anime to sections (watching, planning, completed, on-hold, dropped) and view a list of selected anime in each section, sorted by user personal rating.
+- Favourites: Users can mark anime as favourites and rate them on a scale of 1 to 10.
+- Profile page: Users can upload a profile photo and view available roles.
+- Admin page: A page only available to users with the admin role (currently with limited functionality).
+- Encrypted passwords: User passwords are encrypted using the Bcrypt algorithm for enhanced security.
 
 
 # SQL Schema
