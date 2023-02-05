@@ -1,17 +1,17 @@
-CREATE DATABASE  IF NOT EXISTS `my-anime-list`;
-USE `my-anime-list`;
+CREATE DATABASE  IF NOT EXISTS `my_anime_list`;
+USE `my_anime_list`;
 
 DROP TABLE IF EXISTS `users_roles`;
 DROP TABLE IF EXISTS `users_anime`;
-DROP TABLE IF EXISTS `review`;
-DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS `role`;
+DROP TABLE IF EXISTS `reviews`;
+DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `roles`;
 DROP TABLE IF EXISTS `anime`;
 
 --
 -- User can log in only if activation code is null (account activated)
 --
-CREATE TABLE `user` (
+CREATE TABLE `users` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`username` varchar(50) UNIQUE NOT NULL,
 	`password` char(60) NOT NULL,
@@ -28,18 +28,18 @@ CREATE TABLE `user` (
 -- admin: 123
 -- bob:   1111
 --
-INSERT INTO `user` (`username`, `password`, `email`)
+INSERT INTO `users` (`username`, `password`, `email`)
 	VALUES 
 		('admin', '$2a$12$kUawd9Xz7u5lTd.9mrEvQ.Wyg3ft/Z1lyNaw..XZkjZbjcpyXrglC', 'oldman@gmail.com'),
 		('bob', '$2a$12$22u3/szAs.3aq1/gkyVUfem929OOxqmPTX9S10aOVQKtWh4sp3TR6', 'bob@gmail.com');
 
-CREATE TABLE `role` (
+CREATE TABLE `roles` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` varchar(50) NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
-INSERT INTO `role` (name)
+INSERT INTO `roles` (name)
 	VALUES
 		('ROLE_USER'),
 		('ROLE_MANAGER'),
@@ -51,11 +51,11 @@ CREATE TABLE `users_roles` (
     
 	PRIMARY KEY (`user_id`, `role_id`),
     
-	CONSTRAINT `FK_USER_01` FOREIGN KEY (`user_id`) 
-		REFERENCES `user`(`id`)
+	CONSTRAINT `fk_users_roles_user_id` FOREIGN KEY (`user_id`) 
+		REFERENCES `users`(`id`)
 			ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT `FK_ROLE` FOREIGN KEY (`role_id`) 
-		REFERENCES `role`(`id`)
+	CONSTRAINT `fk_users_roles_role_id` FOREIGN KEY (`role_id`) 
+		REFERENCES `roles`(`id`)
 			ON DELETE NO ACTION ON UPDATE NO ACTION
 );
         
@@ -66,14 +66,14 @@ INSERT INTO `users_roles` (`user_id`, `role_id`)
 		('1', '3'),
 		('2', '1');
         
-CREATE TABLE `review` (
+CREATE TABLE `reviews` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`user_id` int NOT NULL,
 	`anime_id` int NOT NULL,
 	`content` text NOT NULL,
 	PRIMARY KEY (`id`),
-	CONSTRAINT `FK_USER_02` FOREIGN KEY (`user_id`) 
-		REFERENCES `user`(`id`)
+	CONSTRAINT `fk_reviews_user_id` FOREIGN KEY (`user_id`) 
+		REFERENCES `users`(`id`)
 			ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
@@ -82,7 +82,7 @@ CREATE TABLE `review` (
 -- 1     -> Cowboy Bebop
 --
 
-INSERT INTO `review` (`user_id`, `anime_id`, `content`)
+INSERT INTO `reviews` (`user_id`, `anime_id`, `content`)
 	VALUES
 		('2', '41467', 'amazing'),
 		('1', '41467', 'nice'),
@@ -124,7 +124,7 @@ CREATE TABLE `users_anime` (
 	UNIQUE (`user_id`, `mal_id`),
     
 	CONSTRAINT `FK_USER_03` FOREIGN KEY (`user_id`) 
-		REFERENCES `user`(`id`)
+		REFERENCES `users`(`id`)
 			ON DELETE NO ACTION ON UPDATE NO ACTION,
 	CONSTRAINT `FK_ANIME` FOREIGN KEY (`mal_id`) 
 		REFERENCES `anime`(`mal_id`)
@@ -143,30 +143,30 @@ INSERT INTO `users_anime`
 		('2', '41467', 	'8', 	TRUE,		FALSE,		FALSE,		FALSE,		FALSE,		TRUE),
 		('2', '9999', 	'3', 	TRUE,		FALSE,		FALSE,		FALSE,		FALSE,		FALSE);
 
-SELECT * FROM user;
-SELECT * FROM role;
-SELECT * FROM review;
+SELECT * FROM users;
+SELECT * FROM roles;
+SELECT * FROM reviews;
 SELECT * FROM users_roles
 	ORDER BY user_id;
 SELECT * FROM users_anime;
 SELECT * FROM anime;
 
 SELECT u.id, u.username, u.password, u.email, GROUP_CONCAT(r.name SEPARATOR ', ') AS `roles`
-FROM user AS u
+FROM users AS u
 	LEFT OUTER JOIN users_roles AS ur
 		ON u.id = ur.user_id
-	LEFT OUTER JOIN role AS r
+	LEFT OUTER JOIN roles AS r
 		ON r.id = ur.role_id
 GROUP BY u.id;
 
 SELECT r.id, u.id AS `user id`, u.username, r.anime_id AS `anime id`, r.content
-FROM review AS r
-	INNER JOIN user AS u
+FROM reviews AS r
+	INNER JOIN users AS u
 		ON r.user_id = u.id
 ORDER BY 2;
 
 SELECT u.username, a.mal_id, a.title, ua.score, ua.favourite, ua.watching, ua.planning, ua.completed, ua.on_hold, ua.dropped
-FROM user AS u
+FROM users AS u
 	INNER JOIN users_anime AS ua
 		ON u.id = ua.user_id
 	INNER JOIN anime AS a

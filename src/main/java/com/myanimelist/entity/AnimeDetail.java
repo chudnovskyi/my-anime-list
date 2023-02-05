@@ -18,22 +18,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /*
- * You can extract anime by sending a request to the JikanAPI, 
- * why did you create a new table in the database?
+ * A new feature has been added - the ability to add anime to tabs like `viewed`, `favorites`, etc. 
+ * The reason for this is that the application should have a separate tab to view all anime 
+ * by certain parameters such as `dropped`. To display information for each anime, 
+ * multiple requests to the JikanAPI would be required. 
  * 
- * Answer: A new feature - adding anime to the tab `viewed`, `favorites` etc. 
- * Because the application should have a separate tab where you can see all the 
- * anime by some parameter eg `dropped`, then you will need lot of requests 
- * to the JikanAPI in order to display information for each anime using it's id.
+ * However, the JikanAPI server only allows for three requests per second. To mitigate this issue, 
+ * a new entity has been created in the database to store minimal information about each anime 
+ * (id and title) that has been added to tabs like `viewed`, etc. 
  * 
- * BUT, the JikanAPI server provides only 3 requests per second. I decided to create 
- * a new entity in my database that will store the minimum information about each
- * anime (id, title) that only been added to the tab `viewed` and so on.
- * 
- * Then, the entire list of favorite anime will be taken from the database, 
- * while the database will not store anything extra, except for the id and 
- * name of the anime, and additional details will be taken according to the user's request.
+ * The list of favorite anime will be retrieved from the database, but additional details will be 
+ * obtained from the JikanAPI based on user requests. The database will only store the id and name of 
+ * the anime and will not store any extra information.
  */
+
 @Getter
 @Setter
 @NoArgsConstructor

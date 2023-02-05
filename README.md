@@ -8,6 +8,8 @@
 * [Technology Stack](#technology-stack)
 * [Additional Tools](#additional-tools)
 * [Features](#features)
+* [Usage Example](#usage-example)
+* [Endpoints](#endpoints)
 * [SQL Schema](#sql-schema)
 * [Contact](#contact)
 
@@ -49,8 +51,29 @@
 - Encrypted passwords: User passwords are encrypted using the Bcrypt algorithm for enhanced security.
 
 
+# Usage Example
+**Registration:**
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/registration.gif?raw=true)
+**Search with filters:**
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/search.gif?raw=true)
+**Add to section, favourite, rate:**
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/section.gif?raw=true)
+**Section pagination:**
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/pagination.gif?raw=true)
+
+
+# Endpoints
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/anime-controller.png?raw=true)
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/login-controller.png?raw=true)
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/registration-controller.png?raw=true)
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/review-controller.png?raw=true)
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/user-anime-list-controller.png?raw=true)
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/user-profile-controller.png?raw=true)
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/home-controller.png?raw=true)
+
+
 # SQL Schema
-![](https://github.com/lwantPizza/my-anime-list/blob/main/sql-script/schema.png?raw=true)
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/sql-schema.png?raw=true)
 
 
 ## Contact
