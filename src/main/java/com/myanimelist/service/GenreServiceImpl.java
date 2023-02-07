@@ -9,8 +9,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.myanimelist.rest.entity.Genre;
-import com.myanimelist.rest.wrapper.ResponseGenreWrapper;
+import com.myanimelist.rest.dto.GenresResponse;
+import com.myanimelist.rest.dto.GenresResponse.Genre;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,15 +36,15 @@ public class GenreServiceImpl implements GenreService {
 			
 			log.info(url);
 			
-			ResponseGenreWrapper wrapper = restTemplate.getForObject(url, ResponseGenreWrapper.class);
+			GenresResponse genresResponse = restTemplate.getForObject(url, GenresResponse.class);
 			
 			genres = new LinkedHashMap<>();
 			
-			genres = wrapper.getData()
+			genres = genresResponse.getGenres()
 					.stream()
 					.sorted((o1, o2) -> o1.getName().compareTo(o2.getName()))
 					.collect(Collectors.toMap(
-								Genre::getMal_id, 
+								Genre::getMalId, 
 								Genre::getName,
 								(v1, v2) -> { 
 									throw new RuntimeException(String.format("Duplicate key for values %s and %s", v1, v2));

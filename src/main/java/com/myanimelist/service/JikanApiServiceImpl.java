@@ -5,9 +5,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.myanimelist.rest.entity.Anime;
-import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
-import com.myanimelist.rest.wrapper.ResponseSingleAnimeWrapper;
+import com.myanimelist.rest.dto.AnimeListResponse;
+import com.myanimelist.rest.dto.AnimeResponse;
+import com.myanimelist.rest.dto.AnimeResponse.Anime;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ public class JikanApiServiceImpl implements JikanApiService {
 	private RestTemplate restTemplate = new RestTemplate();
 
 	@Override
-	public ResponseAnimeWrapper findSearched(String title, String genres, int pageId) {
+	public AnimeListResponse findSearched(String title, String genres, int pageId) {
 		String url = 
 				env.getProperty("find.all") + 
 				env.getProperty("param.page") + pageId + 
@@ -39,13 +39,13 @@ public class JikanApiServiceImpl implements JikanApiService {
 
 		log.info(url);
 
-		ResponseAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseAnimeWrapper.class);
+		AnimeListResponse animeListResponse = restTemplate.getForObject(url, AnimeListResponse.class);
 
-		return wrapper;
+		return animeListResponse;
 	}
 
 	@Override
-	public ResponseAnimeWrapper findTop(int pageId) {
+	public AnimeListResponse findTop(int pageId) {
 		String url = 
 				env.getProperty("find.top") + 
 				env.getProperty("param.page") + pageId + 
@@ -53,9 +53,9 @@ public class JikanApiServiceImpl implements JikanApiService {
 
 		log.info(url);
 
-		ResponseAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseAnimeWrapper.class);
+		AnimeListResponse animeListResponse = restTemplate.getForObject(url, AnimeListResponse.class);
 
-		return wrapper;
+		return animeListResponse;
 	}
 
 	@Override
@@ -65,9 +65,9 @@ public class JikanApiServiceImpl implements JikanApiService {
 
 		log.info(url);
 
-		ResponseSingleAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseSingleAnimeWrapper.class);
+		AnimeResponse animeResponse = restTemplate.getForObject(url, AnimeResponse.class);
 
-		return wrapper.getData();
+		return animeResponse.getAnime();
 	}
 
 	@Override
@@ -77,8 +77,8 @@ public class JikanApiServiceImpl implements JikanApiService {
 
 		log.info(url);
 
-		ResponseSingleAnimeWrapper wrapper = restTemplate.getForObject(url, ResponseSingleAnimeWrapper.class);
+		AnimeResponse animeResponse = restTemplate.getForObject(url, AnimeResponse.class);
 
-		return wrapper.getData();
+		return animeResponse.getAnime();
 	}
 }

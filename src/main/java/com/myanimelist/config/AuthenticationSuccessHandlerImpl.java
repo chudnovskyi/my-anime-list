@@ -15,11 +15,11 @@ import com.myanimelist.entity.User;
 import com.myanimelist.service.UserService;
 
 @Component
-public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
 	@Autowired
 	private UserService userService;
-
+	
 	@Override
 	public void onAuthenticationSuccess(
 			HttpServletRequest request,
@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		User authenticatedUser = userService.find(authentication.getName());
 
 		request.getSession().setAttribute("authenticatedUser", authenticatedUser);
-
-		response.sendRedirect(request.getContextPath() + "/");
+		
+		response.sendRedirect(request.getContextPath() + "/home?profile");
 	}
 }

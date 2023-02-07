@@ -23,12 +23,12 @@
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/anime/top/1}">Top</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/anime/random}">Random</a>
                     <br>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list/favourite?size=5&page=1}">Favourite</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list/watching?size=5&page=1}">Watching</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list/planning?size=5&page=1}">Planning</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list/finished?size=5&page=1}">Completed</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list/on-hold?size=5&page=1}">On-hold</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list/dropped?size=5&page=1}">Dropped</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=favourite, page=1, size=5)}">Favourite</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=watching, page=1, size=5)}">Watching</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=planning, page=1, size=5)}">Planning</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=finished, page=1, size=5)}">Completed</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=on-hold, page=1, size=5)}">On-hold</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=dropped, page=1, size=5)}">Dropped</a>
                 </div>
             </div>
             <!-- Page content wrapper-->
@@ -42,6 +42,7 @@
                             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                                 <li class="nav-item active"><a class="nav-link" th:href="@{/home?profile}">Profile</a></li>
                                 <li class="nav-item"><a class="nav-link" th:href="@{/github}">GitHub</a></li>
+                                <li class="nav-item"><a class="nav-link" th:href="@{/swagger-ui/}">Swagger</a></li>
                                 <li class="nav-item">
                                 	<form th:action="@{/logout}" method="POST" style="text-align: center;">
                                 		<input type="submit" value="Logout" class="nav-link" />
@@ -66,7 +67,7 @@
                 <!-- Page content-->
                 <div class="container-fluid">
 			        <div th:if="${param.search}">
-		                <form th:action="@{/anime/1}" 
+		                <form th:action="@{/anime/search/{pageId}(pageId = 1)}" 
 		                	th:object="${searchAnime}" method="POST" class="form-control-plaintext">
 					        <label>
 					        	Enter anime name:

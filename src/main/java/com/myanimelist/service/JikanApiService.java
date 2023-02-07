@@ -1,13 +1,13 @@
 package com.myanimelist.service;
 
-import com.myanimelist.rest.entity.Anime;
-import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
+import com.myanimelist.rest.dto.AnimeListResponse;
+import com.myanimelist.rest.dto.AnimeResponse.Anime;
 
 public interface JikanApiService {
 
-	public ResponseAnimeWrapper findSearched(String title, String genres, int pageId);
+	public AnimeListResponse findSearched(String title, String genres, int pageId);
 
-	public ResponseAnimeWrapper findTop(int pageId);
+	public AnimeListResponse findTop(int pageId);
 
 	public Anime findAnime(int animeId);
 

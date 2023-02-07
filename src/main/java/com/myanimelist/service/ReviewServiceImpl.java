@@ -6,31 +6,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.myanimelist.dao.ReviewDao;
+import com.myanimelist.authentication.AuthenticationFacade;
 import com.myanimelist.entity.Review;
+import com.myanimelist.exception.UserHasNoAccessException;
+import com.myanimelist.repository.ReviewRepository;
+import com.myanimelist.repository.UserRepository;
 import com.myanimelist.validation.entity.ValidReview;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
 	@Autowired
-	private ReviewDao reviewDao;
+	private ReviewRepository reviewRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private AuthenticationFacade authenticationFacade;
 
 	@Override
 	@Transactional
 	public List<Review> findReviews(int animeId) {
-		return reviewDao.findReviews(animeId);
+		return reviewRepository.findAllByAnimeId(animeId);
 	}
 
 	@Override
 	@Transactional
 	public void save(ValidReview reviewForm) {
-		reviewDao.save(reviewForm);
+		Review review = new Review();
+		
+		review.setAnimeId(reviewForm.getAnimeId());
+		review.setContent(reviewForm.getContent());
+		review.setUser(userRepository.findByUsername(authenticationFacade.getUsername()));
+		
+		reviewRepository.save(review);
 	}
 
 	@Override
 	@Transactional
-	public Review remove(int reviewId) {
-		return reviewDao.remove(reviewId);
+	public void remove(int reviewId) {
+		Review review = reviewRepository.getReferenceById(reviewId);
+		
+		if (!review.getUser().getUsername().equals(authenticationFacade.getUsername())) {
+			throw new UserHasNoAccessException("User " + authenticationFacade.getUsername() + " can't remove " + review + " belonging to " + review.getUser().getUsername());
+		}
+		
+		reviewRepository.deleteById(reviewId);
 	}
 }

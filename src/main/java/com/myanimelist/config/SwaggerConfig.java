@@ -33,8 +33,6 @@ public class SwaggerConfig {
 				"1.00",
 				"https://github.com/lwantPizza",
 				new Contact("Viacheslav", "https://www.linkedin.com/in/chudnovskyi/", "chudnovskiy0@gmail.com"),
-				"None licence",
-				"none",
-				Collections.emptyList());
+				"", "", Collections.emptyList());
 	}
 }

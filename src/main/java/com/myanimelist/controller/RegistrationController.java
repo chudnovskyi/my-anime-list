@@ -3,7 +3,6 @@ package com.myanimelist.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.myanimelist.exception.UsernameAlreadyExistsException;
 import com.myanimelist.service.UserService;
+import com.myanimelist.utils.WebBindingUtils;
 import com.myanimelist.validation.entity.ValidUser;
 
 @Controller
@@ -28,15 +28,14 @@ public class RegistrationController {
 
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
-		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+		WebBindingUtils.initBinder(dataBinder);
 	}
 
 	@GetMapping
 	public String register(
-			Model theModel) {
+			Model model) {
 		
-		theModel.addAttribute("user", new ValidUser());
+		model.addAttribute("user", new ValidUser());
 		
 		return "register-form";
 	}
@@ -44,14 +43,14 @@ public class RegistrationController {
 	@GetMapping("/activate/{code}")
 	public String activate(
 			@PathVariable(name = "code") String code,
-			Model theModel) {
+			Model model) {
 		
 		boolean isActivated = userService.activeteUser(code);
 		
 		if (isActivated) {
-			theModel.addAttribute("accountActivationSuccess", "User successfully activated");
+			model.addAttribute("accountActivationSuccess", "User successfully activated");
 		} else {
-			theModel.addAttribute("accountActivationFailure", "Activation code not found ...");
+			model.addAttribute("accountActivationFailure", "Activation code not found ...");
 		}
 		
 		return "login-form";
@@ -61,7 +60,7 @@ public class RegistrationController {
 	public String proccess(
 			@Valid @ModelAttribute(name = "user") ValidUser user,
 			BindingResult bindingResult,
-			Model theModel) {
+			Model model) {
 		
 		if (bindingResult.hasErrors()) {
 			return "register-form";
@@ -70,11 +69,11 @@ public class RegistrationController {
 		try {
 			userService.save(user);
 		} catch (UsernameAlreadyExistsException e) {
- 			theModel.addAttribute("alreadyRegistered", "Username already registered!");
+ 			model.addAttribute("alreadyRegistered", "Username already registered!");
 			return "register-form";
 		}
 		
-		theModel.addAttribute("successfullyRegistered", "A verification email has been sent to: \n" + user.getEmail());
+		model.addAttribute("successfullyRegistered", "A verification email has been sent to: \n" + user.getEmail());
 		return "login-form";
 	}
 }

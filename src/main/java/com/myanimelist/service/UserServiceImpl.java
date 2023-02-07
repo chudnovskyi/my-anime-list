@@ -5,26 +5,28 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.myanimelist.dao.RoleDao;
-import com.myanimelist.dao.UserDao;
+import com.myanimelist.authentication.UserPrincipal;
 import com.myanimelist.entity.User;
-import com.myanimelist.entity.UserPrincipal;
+import com.myanimelist.exception.UsernameAlreadyExistsException;
+import com.myanimelist.repository.RoleRepository;
+import com.myanimelist.repository.UserRepository;
 import com.myanimelist.validation.entity.ValidUser;
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserDao userDao;
+	private UserRepository userRepository;
 
 	@Autowired
-	private RoleDao roleDao;
+	private RoleRepository roleRepository;
 
 	@Autowired
 	private MailSenderServiceImpl mailSenderService;
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User find(String username) {
-		return userDao.findByUsername(username);
+		return userRepository.findByUsername(username);
 	}
 
 	@Override
@@ -49,10 +51,14 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(validUser.getUsername());
 		user.setPassword(passwordEncoder.encode(validUser.getPassword()));
 		user.setEmail(validUser.getEmail());
-		user.setRoles(Arrays.asList(roleDao.findRole("ROLE_USER")));
+		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
 		user.setActivationCode(UUID.randomUUID().toString());
 
-		userDao.save(user);
+		try {
+			userRepository.save(user);
+		} catch (Exception e) {
+			throw new UsernameAlreadyExistsException("Username " + user.getUsername() + " already exists!");
+		}
 
 		String message = String.format("" +
 				"Hello, %s! \n" + 
@@ -68,7 +74,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public boolean activeteUser(String code) {
-		User user = userDao.findByActivationCode(code);
+		User user = userRepository.findByActivationCode(code);
 
 		if (user != null) {
 			user.setActivationCode(null);
@@ -81,23 +87,28 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void uploadProfilePicture(byte[] bytes) {
-		userDao.uploadProfilePicture(bytes);
+		User user = userRepository.findByUsername(getAuthUsername());
+		user.setImage(bytes);
 	}
 
 	@Override
 	@Transactional
 	public byte[] getProfilePicture() {
-		return userDao.getProfilePicture();
+		return userRepository.findByUsername(getAuthUsername()).getImage();
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userDao.findByUsername(username);
+		User user = userRepository.findByUsername(username);
 
 		if (user == null) {
 			throw new UsernameNotFoundException(username);
 		}
 
 		return new UserPrincipal(user);
+	}
+	
+	private String getAuthUsername() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 }

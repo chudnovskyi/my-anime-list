@@ -1,5 +1,8 @@
 package com.myanimelist.controller;
 
+import java.util.Map;
+import java.util.function.Consumer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,9 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.myanimelist.rest.entity.Anime;
-import com.myanimelist.rest.wrapper.ResponseAnimeWrapper;
+import com.myanimelist.entity.UserAnimeDetail;
+import com.myanimelist.rest.dto.AnimeListResponse;
+import com.myanimelist.rest.dto.AnimeResponse.Anime;
 import com.myanimelist.service.AnimeService;
 import com.myanimelist.service.JikanApiService;
 import com.myanimelist.service.ReviewService;
@@ -29,160 +34,109 @@ public class AnimeController {
 
 	@Autowired
 	private JikanApiService jikanApiService;
+	
+	private static final Map<String, Consumer<UserAnimeDetail>> STATUS_CONSUMER = Map.of(
+			"watching", x -> x.setAsWatching(),
+			"planning", x -> x.setAsPlanning(),
+			"finished", x -> x.setAsCompleted(),
+			"on-hold", x -> x.setAsOnHold(),
+			"dropped", x -> x.setAsDropped(),
+			"favourite", x -> x.setFavourite(!x.isFavourite())
+		);
+	
+	@GetMapping("/{animeId}")
+	public String getAnimeById(
+			@PathVariable(name = "animeId") int animeId,
+			Model model) {
+		
+		Anime anime = jikanApiService.findAnime(animeId);
+		
+		model.addAttribute("anime", anime);
+		model.addAttribute("reviews", reviewService.findReviews(animeId));
+		model.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMalId()));
+		
+		if (!model.containsAttribute("reviewForm")) {
+			model.addAttribute("reviewForm", new ValidReview(anime.getMalId()));
+		}
+		
+		return "anime-details";
+	}
+	
+	@GetMapping("/random")
+	public String getRandomAnime(
+			Model model) {
+		
+		Anime anime = jikanApiService.findRandomAnime();
+		
+		model.addAttribute("anime", anime);
+		model.addAttribute("reviewForm", new ValidReview(anime.getMalId()));
+		model.addAttribute("reviews", reviewService.findReviews(anime.getMalId()));
+		model.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMalId()));
+		
+		return "anime-details";
+	}
 
-	@PostMapping("/{pageId}")
-	public String findByName(
+	@PostMapping("/search/{pageId}")
+	public String filteredSearch(
 			@ModelAttribute("searchAnime") ValidSearchAnime searchAnime,
 			@PathVariable(name = "pageId") int pageId,
-			Model theModel) {
+			Model model) {
 		
-		ResponseAnimeWrapper wrapper = 
+		AnimeListResponse animeListResponse = 
 				jikanApiService.findSearched(searchAnime.getTitle(), searchAnime.getGenres(), pageId);
 		
-		theModel.addAttribute("searchAnime", searchAnime);
-		theModel.addAttribute("animeList", wrapper.getData());
-		theModel.addAttribute("pagination", wrapper.getPagination());
+		model.addAttribute("searchAnime", searchAnime);
+		model.addAttribute("animeList", animeListResponse.getAnimeList());
+		model.addAttribute("pagination", animeListResponse.getPagination());
 		
 		return "anime-search";
 	}
 
 	@GetMapping("/top/{pageId}")
-	public String top(
+	public String getTopRatedAnime(
 			@PathVariable(name = "pageId") int pageId,
-			Model theModel) {
+			Model model) {
 		
-		ResponseAnimeWrapper wrapper = jikanApiService.findTop(pageId);
+		AnimeListResponse animeListResponse = jikanApiService.findTop(pageId);
 		
-		theModel.addAttribute("animeList", wrapper.getData());
-		theModel.addAttribute("pagination", wrapper.getPagination());
+		model.addAttribute("animeList", animeListResponse.getAnimeList());
+		model.addAttribute("pagination", animeListResponse.getPagination());
 		
 		return "anime-top";
 	}
-
-	@GetMapping("/find/{animeId}")
-	public String getAnimeById(
+	
+	@GetMapping("/set/{animeId}")
+	public String consumer(
 			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		Anime anime = jikanApiService.findAnime(animeId);
-		
-		theModel.addAttribute("anime", anime);
-		theModel.addAttribute("reviews", reviewService.findReviews(animeId));
-		theModel.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMal_id()));
-		
-		/*
-		 * for correct working of validation in the reviewForm 
-		 * field after redirect due to bindingResult error
-		 */
-		if (!theModel.containsAttribute("reviewForm")) {
-			theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
+			@RequestParam(name = "status", required = true) String status) {
+
+		Consumer<UserAnimeDetail> consumer = STATUS_CONSUMER.get(status);
+
+		if (consumer == null) {
+			throw new IllegalArgumentException("Invalid status ... " + status);
 		}
-		
-		return "anime-details";
+
+		animeService.alterUserAnimeDetail(animeId, consumer);
+
+		return "redirect:/anime/" + animeId;
 	}
 
-	@GetMapping("/random")
-	public String random(
-			Model theModel) {
-		
-		Anime anime = jikanApiService.findRandomAnime();
-		
-		theModel.addAttribute("anime", anime);
-		theModel.addAttribute("reviewForm", new ValidReview(anime.getMal_id()));
-		theModel.addAttribute("reviews", reviewService.findReviews(anime.getMal_id()));
-		theModel.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMal_id()));
-		
-		return "anime-details";
-	}
-
-	@GetMapping("/watching/{animeId}")
-	public String setAnimeAsWatching(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setAsWatching());
-		
-		return "redirect:/anime/find/" + animeId;
-	}
-
-	@GetMapping("/planning/{animeId}")
-	public String setAnimeAsPlanning(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setAsPlanning());
-		
-		return "redirect:/anime/find/" + animeId;
-	}
-
-	@GetMapping("/completed/{animeId}")
-	public String setAnimeAsCompleted(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setAsCompleted());
-		
-		return "redirect:/anime/find/" + animeId;
-	}
-
-	@GetMapping("/on-hold/{animeId}")
-	public String setAnimeAsOnHold(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setAsOnHold());
-		
-		return "redirect:/anime/find/" + animeId;
-	}
-
-	@GetMapping("/dropped/{animeId}")
-	public String setAnimeAsDropped(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setAsDropped());
-		
-		return "redirect:/anime/find/" + animeId;
-	}
-
-	@GetMapping("/favourite/{animeId}")
-	public String setAnimeAsFavourite(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setFavourite(!x.isFavourite()));
-		
-		return "redirect:/anime/find/" + animeId;
-	}
-
-	@GetMapping("/score/{score}/{animeId}")
+	@GetMapping("/score/{animeId}/{score}")
 	public String setAnimeScore(
 			@PathVariable(name = "animeId") int animeId,
-			@PathVariable(name = "score") int score,
-			Model theModel) {
+			@PathVariable(name = "score") int score) {
 		
 		animeService.alterUserAnimeDetail(animeId, x -> x.setScore(score));
 		
-		return "redirect:/anime/find/" + animeId;
-	}
-
-	@GetMapping("/score/reset/{animeId}")
-	public String setAnimeScoreToZero(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
-		
-		animeService.alterUserAnimeDetail(animeId, x -> x.setScore(0));
-		
-		return "redirect:/anime/find/" + animeId;
+		return "redirect:/anime/" + animeId;
 	}
 
 	@GetMapping("/reset/{animeId}")
-	public String reset(
-			@PathVariable(name = "animeId") int animeId,
-			Model theModel) {
+	public String resetAnime(
+			@PathVariable(name = "animeId") int animeId) {
 		
 		animeService.reset(animeId);
 		
-		return "redirect:/anime/find/" + animeId;
+		return "redirect:/anime/" + animeId;
 	}
 }

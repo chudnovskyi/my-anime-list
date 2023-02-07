@@ -22,26 +22,26 @@ public class HomeController {
 
 	@GetMapping("/home")
 	public String home(
-			Model theModel) {
+			Model model) {
 		
 		byte[] profilePicture = userService.getProfilePicture();
 		
 		if (profilePicture != null) {
-			theModel.addAttribute("profilePicture", Base64.getEncoder().encodeToString(profilePicture));
+			model.addAttribute("profilePicture", Base64.getEncoder().encodeToString(profilePicture));
 		}
 	
-		theModel.addAttribute("theDate", new java.util.Date());
-		theModel.addAttribute("searchAnime", new ValidSearchAnime());
-		theModel.addAttribute("genres", genreService.findAllGenres());
+		model.addAttribute("theDate", new java.util.Date());
+		model.addAttribute("searchAnime", new ValidSearchAnime());
+		model.addAttribute("genres", genreService.findAllGenres());
 		
 		return "home-page";
 	}
 
 	@GetMapping("/admin")
 	public String admin(
-			Model theModel) {
+			Model model) {
 		
-		theModel.addAttribute("theDate", new java.util.Date());
+		model.addAttribute("theDate", new java.util.Date());
 		
 		return "admin-page";
 	}

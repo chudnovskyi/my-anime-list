@@ -47,7 +47,7 @@
 				    <td style=font-size:28px align="center"><p th:if="${anime.animeDetail.title}" th:text="${anime.animeDetail.title}"/></td>
 				    <td style=font-size:28px align="center"><p th:if="${anime.score}" th:text="${anime.score}"/></td>
 				    <td style=font-size:28px align="center"><p th:if="${anime.favourite}" th:text="${anime.favourite}"/></td>
-				    <td align="center"><a th:href="@{/anime/find/{id}(id=${anime.animeDetail.mal_id})}">Details</a></td>
+				    <td align="center"><a th:href="@{/anime/{id}(id=${anime.animeDetail.malId})}">Details</a></td>
 		        </tr>
 		    </tbody>
 		</table>
@@ -55,7 +55,7 @@
 		<div class="pagination">
 			<div th:if="${page.totalPages > 0}" 
 			    th:each="pageNumber : ${pageNumbers}">
-			    <a th:href="@{/list/__${tab}__(size=${page.size}, page=${pageNumber})}" 
+			    <a th:href="@{/list(status=__${tab}__, size=${page.size}, page=${pageNumber})}" 
 			    th:text=${pageNumber} 
 			    th:class="${pageNumber==page.number + 1} ? active"></a>
 			</div>

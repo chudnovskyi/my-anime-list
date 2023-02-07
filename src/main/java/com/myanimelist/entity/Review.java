@@ -32,7 +32,7 @@ public class Review {
 
 	@NonNull
 	@Column(name = "anime_id")
-	private Integer anime_id;
+	private Integer animeId;
 
 	@NonNull
 	@Column(name = "content")

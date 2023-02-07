@@ -43,7 +43,7 @@ public class AnimeDetail {
 	@Id
 	@NonNull
 	@Column(name = "mal_id")
-	private Integer mal_id;
+	private Integer malId;
 
 	@NonNull
 	@Column(name = "title")

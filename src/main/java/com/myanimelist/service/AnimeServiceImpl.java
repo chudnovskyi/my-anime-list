@@ -5,58 +5,81 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.myanimelist.dao.AnimeDao;
+import com.myanimelist.authentication.AuthenticationFacade;
+import com.myanimelist.entity.AnimeDetail;
 import com.myanimelist.entity.UserAnimeDetail;
+import com.myanimelist.repository.AnimeDetailRepository;
+import com.myanimelist.repository.UserAnimeDetailRepository;
+import com.myanimelist.rest.dto.AnimeResponse.Anime;
 
 @Service
 public class AnimeServiceImpl implements AnimeService {
 
-	@Lazy
-	@Autowired
-	private AnimeDao animeDao;
+	private UserAnimeDetailRepository userAnimeDetailRepository;
+	private AnimeDetailRepository animeDetailRepository;
+	
+	private JikanApiService jikanApiService;
+	private UserService userService;
+	
+	private AuthenticationFacade authenticationFacade;
 
 	@Autowired
-	private PageableService pageableService;
-
-	@Override
-	public List<UserAnimeDetail> getUserAnimeDetailList() {
-		return animeDao.getUserAnimeDetailList();
+	public AnimeServiceImpl(UserAnimeDetailRepository userAnimeDetailRepository, AnimeDetailRepository animeDetailRepository, 
+			JikanApiService jikanApiService, UserService userService, AuthenticationFacade authenticationFacade) {
+		this.userAnimeDetailRepository = userAnimeDetailRepository;
+		this.animeDetailRepository = animeDetailRepository;
+		this.jikanApiService = jikanApiService;
+		this.userService = userService;
+		this.authenticationFacade = authenticationFacade;
 	}
-
+	
 	@Override
 	public UserAnimeDetail getUserAnimeDetail(int animeId) {
-		List<UserAnimeDetail> userAnimeDetailList = getUserAnimeDetailList()
-				.stream()
-				.filter(animeDetailList -> animeDetailList.getAnimeDetail().getMal_id() == animeId)
-				.toList();
-
-		return userAnimeDetailList.isEmpty() ? new UserAnimeDetail() : userAnimeDetailList.get(0);
+		return userAnimeDetailRepository.findByAnimeDetail_MalIdAndUser_Username(animeId, authenticationFacade.getUsername())
+				.orElse(new UserAnimeDetail());
 	}
 
 	@Override
-	public Page<UserAnimeDetail> getUserAnimeDetailList(Predicate<UserAnimeDetail> predicate, int page, int size) {
-		List<UserAnimeDetail> userAnimeDetailList = getUserAnimeDetailList()
-				.stream()
-				.filter(predicate)
-				.toList();
-
-		return pageableService.getPegable(userAnimeDetailList, page, size);
+	public List<UserAnimeDetail> getUserAnimeDetailList(Predicate<UserAnimeDetail> predicate) {
+		return userAnimeDetailRepository.findAllByUser_UsernameOrderByScoreDesc(authenticationFacade.getUsername())
+					.stream()
+					.filter(predicate)
+					.toList();
 	}
 
 	@Override
 	@Transactional
 	public void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer) {
-		animeDao.alterUserAnimeDetail(animeId, consumer);
+		AnimeDetail animeDetail = animeDetailRepository.findById(animeId)
+				.orElseGet(() -> {
+					Anime anime = jikanApiService.findAnime(animeId);
+					return new AnimeDetail(
+							animeId, 
+							anime.getTitle(), 
+							anime.getImages().getJpg().getImageUrl()
+						);
+				});
+			
+		UserAnimeDetail userAnimeDetail = getUserAnimeDetail(animeId);
+		
+		userAnimeDetail.setUser(userService.find(authenticationFacade.getUsername()));
+		userAnimeDetail.setAnimeDetail(animeDetail);
+		
+		consumer.accept(userAnimeDetail);
+		
+		userAnimeDetailRepository.save(userAnimeDetail);
 	}
-
+	
 	@Override
 	@Transactional
 	public void reset(int animeId) {
-		animeDao.reset(animeId);
+		userAnimeDetailRepository.findAllByAnimeDetail_MalId(animeId)
+				.stream()
+				.filter(x -> x.getUser().getUsername().equals(authenticationFacade.getUsername()))
+				.findFirst()
+				.ifPresent(userAnimeDetailRepository::delete);
 	}
 }

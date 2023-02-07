@@ -22,7 +22,7 @@ public class SecurityConfig {
 
 	@Lazy
 	@Autowired
-	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	private AuthenticationSuccessHandlerImpl authenticationSuccessHandlerImpl;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -38,24 +38,23 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		http
 			.userDetailsService(userService)
 			
 			.authorizeRequests()
 				.antMatchers("/home").hasRole("USER")
+				.antMatchers("/admin").hasRole("ADMIN")
 				.antMatchers("/anime/**").hasRole("USER")
 				.antMatchers("/list/**").hasRole("USER")
 				.antMatchers("/reviews/**").hasRole("USER")
-				.antMatchers("/admin").hasRole("ADMIN")
-				.antMatchers("/activate/*").permitAll()
 				.antMatchers("/swagger*/**").permitAll()
 			.and()
 			
 			.formLogin()
 				.loginPage("/login")
 				.loginProcessingUrl("/authenticate")
-				.successHandler(customAuthenticationSuccessHandler)
+				.successHandler(authenticationSuccessHandlerImpl)
 				.permitAll()
 			.and()
 			

@@ -25,31 +25,31 @@
 		    </thead>
 		    <tbody>
 		        <tr th:each="anime: ${animeList}">
-				    <td><img th:src="${anime.images.jpg.image_url}"></td>
+				    <td><img th:src="${anime.images.jpg.imageUrl}"></td>
 				    <td style=font-size:22px align="center"><p th:if="${anime.title}"		th:text="${anime.title}"/></td>
 				    <td style=font-size:30px align="center"><p th:if="${anime.year}"		th:text="${anime.year}"/></td>
 				    <td style=font-size:30px align="center"><p th:if="${anime.episodes}"	th:text="${anime.episodes}"/></td>
 				    <td style=font-size:30px align="center"><p th:if="${anime.score}"		th:text="${anime.score}"/></p></td>
-				    <td align="center"><a th:href="@{/anime/find/{id}(id=${anime.mal_id})}">Details</a></td>
+				    <td align="center"><a th:href="@{/anime/{id}(id=${anime.malId})}">Details</a></td>
 		        </tr>
 		    </tbody>
 		</table>
 		
 		<div th:if="${pagination}" >
-			<p th:text="'Current page: ' + ${pagination.current_page}"></p>
-			<p th:text="'Total pages: ' + ${pagination.last_visible_page}"></p>
+			<p th:text="'Current page: ' + ${pagination.currentPage}"></p>
+			<p th:text="'Total pages: ' + ${pagination.lastVisiblePage}"></p>
 		</div>
 		
-		<div th:if="${pagination.current_page > 1}" class="inline">
-			<form method="get" th:action="@{/anime/top/__${pagination.current_page - 1}__}">
+		<div th:if="${pagination.currentPage > 1}" class="inline">
+			<form method="get" th:action="@{/anime/top/__${pagination.currentPage - 1}__}">
 			    <button class="link-button">
 			    	<-
 			    </button>
 			</form> 
 		</div>
 		
-		<div th:if="${pagination.has_next_page == true}" class="inline">
-			<form method="get" th:action="@{/anime/top/__${pagination.current_page + 1}__}">
+		<div th:if="${pagination.hasNextPage == true}" class="inline">
+			<form method="get" th:action="@{/anime/top/__${pagination.currentPage + 1}__}">
 			    <button class="link-button">
 			    	->
 			    </button>
