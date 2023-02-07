@@ -14,6 +14,7 @@ import com.myanimelist.repository.UserRepository;
 import com.myanimelist.validation.entity.ValidReview;
 
 @Service
+@Transactional
 public class ReviewServiceImpl implements ReviewService {
 
 	@Autowired
@@ -26,13 +27,11 @@ public class ReviewServiceImpl implements ReviewService {
 	private AuthenticationFacade authenticationFacade;
 
 	@Override
-	@Transactional
 	public List<Review> findReviews(int animeId) {
 		return reviewRepository.findAllByAnimeId(animeId);
 	}
 
 	@Override
-	@Transactional
 	public void save(ValidReview reviewForm) {
 		Review review = new Review();
 		
@@ -44,7 +43,6 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	@Transactional
 	public void remove(int reviewId) {
 		Review review = reviewRepository.getReferenceById(reviewId);
 		

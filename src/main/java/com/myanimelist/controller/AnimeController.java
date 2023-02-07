@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.myanimelist.dto.AnimeListResponse;
+import com.myanimelist.dto.AnimeResponse.Anime;
 import com.myanimelist.entity.UserAnimeDetail;
-import com.myanimelist.rest.dto.AnimeListResponse;
-import com.myanimelist.rest.dto.AnimeResponse.Anime;
 import com.myanimelist.service.AnimeService;
 import com.myanimelist.service.JikanApiService;
 import com.myanimelist.service.ReviewService;

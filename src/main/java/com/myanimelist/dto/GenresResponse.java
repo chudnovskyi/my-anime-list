@@ -1,4 +1,4 @@
-package com.myanimelist.rest.dto;
+package com.myanimelist.dto;
 
 import java.util.List;
 

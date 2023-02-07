@@ -5,9 +5,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.myanimelist.rest.dto.AnimeListResponse;
-import com.myanimelist.rest.dto.AnimeResponse;
-import com.myanimelist.rest.dto.AnimeResponse.Anime;
+import com.myanimelist.dto.AnimeListResponse;
+import com.myanimelist.dto.AnimeResponse;
+import com.myanimelist.dto.AnimeResponse.Anime;
 
 import lombok.extern.slf4j.Slf4j;
 

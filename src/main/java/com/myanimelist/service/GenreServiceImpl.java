@@ -9,8 +9,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.myanimelist.rest.dto.GenresResponse;
-import com.myanimelist.rest.dto.GenresResponse.Genre;
+import com.myanimelist.dto.GenresResponse;
+import com.myanimelist.dto.GenresResponse.Genre;
 
 import lombok.extern.slf4j.Slf4j;
 

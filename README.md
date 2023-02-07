@@ -3,14 +3,17 @@
 > The app uses the [_Jikan API_](https://docs.api.jikan.moe/) to provide up-to-date information about anime and includes features such as login/registration, anime search, top anime ratings, and more.
 
 
+## Demo
+Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](https://my-anime-listt.herokuapp.com/)
+
+
 ## Table of Contents
 * [Overview](#overview)
 * [Technology Stack](#technology-stack)
 * [Additional Tools](#additional-tools)
 * [Features](#features)
-* [Usage Example](#usage-example)
-* [Endpoints](#endpoints)
 * [SQL Schema](#sql-schema)
+* [MVC Endpoints](#mvc-endpoints)
 * [Contact](#contact)
 
 
@@ -18,19 +21,21 @@
 > My Anime List is my first web development project, designed to reinforce my newly acquired knowledge after completing a Spring Boot [_course_](https://www.udemy.com/certificate/UC-f22b858d-784d-436d-be89-1c1ae1fc5835/).
 > This project allowed me to apply my skills and gain hands-on experience working with Java, Spring Boot, and database development.
 
+
 ## Technology Stack
 - Java 17
 
 - Spring Boot 2.7.7
 - Spring MVC
+- Spring Data JPA
 - Spring Security
-- Spring Validation
-- Spring Mail
 
-- Hibernate Core
+- Hibernate
 - MySQL database
 - Thymeleaf
 
+- Javax Validation API
+- Spring Mail
 
 ## Additional Tools
 - Lombok: A library used to reduce boilerplate code in Java.
@@ -51,29 +56,12 @@
 - Encrypted passwords: User passwords are encrypted using the Bcrypt algorithm for enhanced security.
 
 
-# Usage Example
-**Registration:**
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/registration.gif?raw=true)
-**Search with filters:**
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/search.gif?raw=true)
-**Add to section, favourite, rate:**
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/section.gif?raw=true)
-**Section pagination:**
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/pagination.gif?raw=true)
-
-
-# Endpoints
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/anime-controller.png?raw=true)
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/login-controller.png?raw=true)
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/registration-controller.png?raw=true)
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/review-controller.png?raw=true)
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/user-anime-list-controller.png?raw=true)
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/user-profile-controller.png?raw=true)
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/home-controller.png?raw=true)
-
-
 # SQL Schema
 ![](https://github.com/lwantPizza/my-anime-list/blob/main/images/sql-schema.png?raw=true)
+
+
+# MVC Endpoints
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/mvc-endpoints.png?raw=true)
 
 
 ## Contact

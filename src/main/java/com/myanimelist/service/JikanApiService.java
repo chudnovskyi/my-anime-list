@@ -1,7 +1,7 @@
 package com.myanimelist.service;
 
-import com.myanimelist.rest.dto.AnimeListResponse;
-import com.myanimelist.rest.dto.AnimeResponse.Anime;
+import com.myanimelist.dto.AnimeListResponse;
+import com.myanimelist.dto.AnimeResponse.Anime;
 
 public interface JikanApiService {
 

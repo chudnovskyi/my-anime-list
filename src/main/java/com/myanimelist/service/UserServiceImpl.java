@@ -20,6 +20,7 @@ import com.myanimelist.repository.UserRepository;
 import com.myanimelist.validation.entity.ValidUser;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -38,13 +39,11 @@ public class UserServiceImpl implements UserService {
 	private Environment env;
 
 	@Override
-	@Transactional
 	public User find(String username) {
 		return userRepository.findByUsername(username);
 	}
 
 	@Override
-	@Transactional
 	public void save(ValidUser validUser) {
 		User user = new User();
 
@@ -60,19 +59,16 @@ public class UserServiceImpl implements UserService {
 			throw new UsernameAlreadyExistsException("Username " + user.getUsername() + " already exists!");
 		}
 
-		String message = String.format("" +
-				"Hello, %s! \n" + 
-				"Welcome to MyAnimeList. Please, follow link to verify your account: \n" +
-				"%s/register/activate/%s",
-				user.getUsername(), 
-				env.getProperty("host.domain"),
-				user.getActivationCode());
+		String message = """
+				Hello, %s!
+				Welcome to MyAnimeList. Please, follow link to verify your account:
+				%s/register/activate/%s,
+				""".formatted(user.getUsername(), env.getProperty("host.domain"), user.getActivationCode());
 
 		mailSenderService.send(user.getEmail(), "Activation code", message);
 	}
 
 	@Override
-	@Transactional
 	public boolean activeteUser(String code) {
 		User user = userRepository.findByActivationCode(code);
 
@@ -85,14 +81,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional
 	public void uploadProfilePicture(byte[] bytes) {
 		User user = userRepository.findByUsername(getAuthUsername());
 		user.setImage(bytes);
 	}
 
 	@Override
-	@Transactional
 	public byte[] getProfilePicture() {
 		return userRepository.findByUsername(getAuthUsername()).getImage();
 	}

@@ -1,4 +1,4 @@
-package com.myanimelist.rest.dto;
+package com.myanimelist.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

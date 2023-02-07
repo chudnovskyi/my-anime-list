@@ -1,9 +1,9 @@
-package com.myanimelist.rest.dto;
+package com.myanimelist.dto;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.myanimelist.rest.dto.AnimeResponse.Anime;
+import com.myanimelist.dto.AnimeResponse.Anime;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

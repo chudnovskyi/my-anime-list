@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.myanimelist.authentication.AuthenticationFacade;
+import com.myanimelist.dto.AnimeResponse.Anime;
 import com.myanimelist.entity.AnimeDetail;
 import com.myanimelist.entity.UserAnimeDetail;
 import com.myanimelist.repository.AnimeDetailRepository;
 import com.myanimelist.repository.UserAnimeDetailRepository;
-import com.myanimelist.rest.dto.AnimeResponse.Anime;
 
 @Service
+@Transactional
 public class AnimeServiceImpl implements AnimeService {
 
 	private UserAnimeDetailRepository userAnimeDetailRepository;
@@ -51,7 +52,6 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 
 	@Override
-	@Transactional
 	public void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer) {
 		AnimeDetail animeDetail = animeDetailRepository.findById(animeId)
 				.orElseGet(() -> {
@@ -74,7 +74,6 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 	
 	@Override
-	@Transactional
 	public void reset(int animeId) {
 		userAnimeDetailRepository.findAllByAnimeDetail_MalId(animeId)
 				.stream()
