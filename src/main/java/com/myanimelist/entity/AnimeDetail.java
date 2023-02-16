@@ -63,5 +63,5 @@ public class AnimeDetail {
 					CascadeType.PERSIST,
 					CascadeType.REFRESH
 			})
-	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<UserAnimeDetail>();
+	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<>();
 }

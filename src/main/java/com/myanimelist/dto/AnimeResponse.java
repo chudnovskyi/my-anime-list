@@ -39,13 +39,13 @@ public class AnimeResponse {
 
 		@Data
 		@NoArgsConstructor
-		public class Images {
+		public static class Images {
 
 			private Jpg jpg;
 
 			@Data
 			@NoArgsConstructor
-			public class Jpg {
+			public static class Jpg {
 
 				@JsonProperty("image_url")
 				private String imageUrl;
@@ -60,7 +60,7 @@ public class AnimeResponse {
 
 		@Data
 		@NoArgsConstructor
-		public class Trailer {
+		public static class Trailer {
 
 			@JsonProperty("embed_url")
 			private String embedUrl;

@@ -13,11 +13,11 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Email {
 
-	public String[] domains() default { "" };
+	String[] domains() default { "" };
 
-	public String message() default "";
+	String message() default "";
 
-	public Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-	public Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 }

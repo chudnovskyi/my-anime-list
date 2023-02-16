@@ -7,6 +7,5 @@ import com.myanimelist.entity.AnimeDetail;
 
 @Repository
 public interface AnimeDetailRepository extends JpaRepository<AnimeDetail, Integer> {
-
-	AnimeDetail findByMalId(int malId);
+	
 }

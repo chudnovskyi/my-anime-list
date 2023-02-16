@@ -14,11 +14,15 @@ import com.myanimelist.validation.entity.ValidSearchAnime;
 @Controller
 public class HomeController {
 
-	@Autowired
-	private GenreService genreService;
+	private final GenreService genreService;
+
+	private final UserService userService;
 
 	@Autowired
-	private UserService userService;
+	public HomeController(GenreService genreService, UserService userService) {
+		this.genreService = genreService;
+		this.userService = userService;
+	}
 
 	@GetMapping("/home")
 	public String home(

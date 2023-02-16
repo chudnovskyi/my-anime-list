@@ -19,11 +19,15 @@ import com.myanimelist.service.PageableService;
 @RequestMapping("/list")
 public class AnimeListController {
 
-	@Autowired
-	private AnimeService animeService;
+	private final AnimeService animeService;
+
+	private final PageableService pageableService;
 
 	@Autowired
-	private PageableService pageableService;
+	public AnimeListController(AnimeService animeService, PageableService pageableService) {
+		this.animeService = animeService;
+		this.pageableService = pageableService;
+	}
 
 	private static final Map<String, Predicate<UserAnimeDetail>> STATUS_PREDICATES = Map.of(
 			"watching", UserAnimeDetail::isWatching,
@@ -36,7 +40,7 @@ public class AnimeListController {
 
 	@GetMapping
 	public String list(
-			@RequestParam(name = "status", required = true) String status,
+			@RequestParam(name = "status") String status,
 			@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
 			@RequestParam(name = "size", required = false, defaultValue = "5") Integer size, Model model) {
 
@@ -46,13 +50,13 @@ public class AnimeListController {
 			throw new IllegalArgumentException("Invalid status ... " + status);
 		}
 
-		Page<UserAnimeDetail> pageable = pageableService.getPegable(
+		Page<UserAnimeDetail> pageable = pageableService.getPageable(
 				animeService.getUserAnimeDetailList(predicate),
 				page,
 				size
 			);
 
-		pageableService.preparePegableModel(model, pageable);
+		pageableService.preparePageableModel(model, pageable);
 
 		model.addAttribute("tab", status);
 

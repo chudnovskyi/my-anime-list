@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 
 public interface PageableService {
 
-	public <E> void preparePegableModel(Model theModel, Page<E> animePage);
+	<E> void preparePageableModel(Model theModel, Page<E> animePage);
 
-	public <E> PageImpl<E> getPegable(List<E> animeList, int page, int size);
+	<E> PageImpl<E> getPageable(List<E> animeList, int page, int size);
 }

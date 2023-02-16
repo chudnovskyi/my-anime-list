@@ -2,7 +2,6 @@ package com.myanimelist.config;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,14 +16,18 @@ import com.myanimelist.service.UserService;
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
+	private final UserService userService;
+
 	@Autowired
-	private UserService userService;
+	public AuthenticationSuccessHandlerImpl(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@Override
 	public void onAuthenticationSuccess(
 			HttpServletRequest request,
 			HttpServletResponse response,
-			Authentication authentication) throws IOException, ServletException {
+			Authentication authentication) throws IOException {
 
 		User authenticatedUser = userService.find(authentication.getName());
 

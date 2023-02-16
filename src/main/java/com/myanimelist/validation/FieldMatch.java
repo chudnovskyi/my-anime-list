@@ -13,19 +13,19 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldMatch {
 
-	public String firstField();
+	String firstField();
 
-	public String secondField();
+	String secondField();
 
-	public String message() default "";
+	String message() default "";
 
-	public Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-	public Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
 	@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 	@Retention(RetentionPolicy.RUNTIME)
 	@interface List {
-		public FieldMatch[] value();
+		FieldMatch[] value();
 	}
 }

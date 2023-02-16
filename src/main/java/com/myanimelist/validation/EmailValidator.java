@@ -7,9 +7,9 @@ import javax.validation.ConstraintValidatorContext;
 
 public class EmailValidator implements ConstraintValidator<Email, String> {
 
-	private String domains[];
+	private String[] domains;
 
-	private static Pattern emailRegexPatter;
+	private static final Pattern EMAIL_REGEX_PATTERN;
 
 	private static final String EMAIL_REGEX = ""
 			+ "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`"
@@ -23,7 +23,7 @@ public class EmailValidator implements ConstraintValidator<Email, String> {
 			+ "+)\\])";
 
 	static {
-		emailRegexPatter = Pattern.compile(EMAIL_REGEX);
+		EMAIL_REGEX_PATTERN = Pattern.compile(EMAIL_REGEX);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class EmailValidator implements ConstraintValidator<Email, String> {
 
 		if (value != null) {
 			for (String domain : domains) {
-				isValid = emailRegexPatter.matcher(value).matches() && value.endsWith(domain);
+				isValid = EMAIL_REGEX_PATTERN.matcher(value).matches() && value.endsWith(domain);
 
 				if (isValid) {
 					break;

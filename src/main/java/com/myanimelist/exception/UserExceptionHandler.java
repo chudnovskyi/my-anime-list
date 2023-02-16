@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 public class UserExceptionHandler {
 
 	@ExceptionHandler(TooManyRequests.class)
-	public ResponseEntity<UserErrorResponse> handleTooManyRequestsException(TooManyRequests exc) {
+	public ResponseEntity<UserErrorResponse> handleTooManyRequestsException() {
 
 		UserErrorResponse error = new UserErrorResponse();
 
@@ -23,7 +23,7 @@ public class UserExceptionHandler {
 	}
 
 	@ExceptionHandler(MaxUploadSizeExceededException.class)
-	public ResponseEntity<UserErrorResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException exc) {
+	public ResponseEntity<UserErrorResponse> handleMaxUploadSizeExceededException() {
 
 		UserErrorResponse error = new UserErrorResponse();
 

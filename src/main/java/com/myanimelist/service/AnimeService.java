@@ -8,11 +8,11 @@ import com.myanimelist.entity.UserAnimeDetail;
 
 public interface AnimeService {
 
-	public UserAnimeDetail getUserAnimeDetail(int animeId);
+	UserAnimeDetail getUserAnimeDetail(int animeId);
 
-	public List<UserAnimeDetail> getUserAnimeDetailList(Predicate<UserAnimeDetail> predicate);
+	List<UserAnimeDetail> getUserAnimeDetailList(Predicate<UserAnimeDetail> predicate);
 
-	public void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer);
+	void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer);
 
-	public void reset(int animeId);
+	void reset(int animeId);
 }

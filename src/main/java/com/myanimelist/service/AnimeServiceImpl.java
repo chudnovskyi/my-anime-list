@@ -19,13 +19,13 @@ import com.myanimelist.repository.UserAnimeDetailRepository;
 @Transactional
 public class AnimeServiceImpl implements AnimeService {
 
-	private UserAnimeDetailRepository userAnimeDetailRepository;
-	private AnimeDetailRepository animeDetailRepository;
+	private final UserAnimeDetailRepository userAnimeDetailRepository;
+	private final AnimeDetailRepository animeDetailRepository;
 	
-	private JikanApiService jikanApiService;
-	private UserService userService;
+	private final JikanApiService jikanApiService;
+	private final UserService userService;
 	
-	private AuthenticationFacade authenticationFacade;
+	private final AuthenticationFacade authenticationFacade;
 
 	@Autowired
 	public AnimeServiceImpl(UserAnimeDetailRepository userAnimeDetailRepository, AnimeDetailRepository animeDetailRepository, 

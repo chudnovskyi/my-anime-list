@@ -15,7 +15,7 @@ import org.springframework.ui.Model;
 public class PageableServiceImpl implements PageableService {
 
 	@Override
-	public <E> void preparePegableModel(Model theModel, Page<E> page) {
+	public <E> void preparePageableModel(Model theModel, Page<E> page) {
 		theModel.addAttribute("page", page);
 
 		int totalPages = page.getTotalPages();
@@ -28,7 +28,7 @@ public class PageableServiceImpl implements PageableService {
 	}
 
 	@Override
-	public <E> PageImpl<E> getPegable(List<E> list, int pageNumber, int pageSize) {
+	public <E> PageImpl<E> getPageable(List<E> list, int pageNumber, int pageSize) {
 		PageRequest pageable = PageRequest.of(pageNumber - 1, pageSize);
 
 		int currentPage = pageable.getPageNumber();
@@ -42,6 +42,6 @@ public class PageableServiceImpl implements PageableService {
 			list = list.subList(startItem, toIndex);
 		}
 
-		return new PageImpl<E>(list, PageRequest.of(currentPage, pageSize), listSize);
+		return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), listSize);
 	}
 }

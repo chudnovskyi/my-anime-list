@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface GenreService {
 
-	public Map<Integer, String> findAllGenres();
+	Map<Integer, String> findAllGenres();
 }

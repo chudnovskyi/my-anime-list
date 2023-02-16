@@ -7,9 +7,9 @@ import com.myanimelist.validation.entity.ValidReview;
 
 public interface ReviewService {
 
-	public List<Review> findReviews(int animeId);
+	List<Review> findReviews(int animeId);
 
-	public void save(ValidReview reviewForm);
+	void save(ValidReview reviewForm);
 
-	public void remove(int reviewId);
+	void remove(int reviewId);
 }

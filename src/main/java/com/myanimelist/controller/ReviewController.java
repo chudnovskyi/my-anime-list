@@ -24,8 +24,12 @@ import com.myanimelist.validation.entity.ValidReview;
 @RequestMapping("/reviews")
 public class ReviewController {
 
+	private final ReviewService reviewService;
+
 	@Autowired
-	private ReviewService reviewService;
+	public ReviewController(ReviewService reviewService) {
+		this.reviewService = reviewService;
+	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {

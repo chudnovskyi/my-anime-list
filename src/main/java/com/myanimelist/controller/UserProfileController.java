@@ -15,8 +15,12 @@ import com.myanimelist.service.UserService;
 @RequestMapping("/profile")
 public class UserProfileController {
 
+	private final UserService userService;
+
 	@Autowired
-	private UserService userService;
+	public UserProfileController(UserService userService) {
+		this.userService = userService;
+	}
 
 	@PostMapping("/save-image")
 	public String saveUser(

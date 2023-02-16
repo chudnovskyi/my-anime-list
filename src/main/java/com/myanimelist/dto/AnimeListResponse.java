@@ -19,7 +19,7 @@ public class AnimeListResponse {
 
 	@Data
 	@NoArgsConstructor
-	public class Pagination {
+	public static class Pagination {
 
 		@JsonProperty("last_visible_page")
 		private int lastVisiblePage;

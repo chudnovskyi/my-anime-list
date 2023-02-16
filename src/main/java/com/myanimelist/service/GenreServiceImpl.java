@@ -21,7 +21,7 @@ public class GenreServiceImpl implements GenreService {
 	@Autowired
 	private Environment env;
 
-	private RestTemplate restTemplate = new RestTemplate();
+	private final RestTemplate restTemplate = new RestTemplate();
 
 	private Map<Integer, String> genres;
 
@@ -53,10 +53,6 @@ public class GenreServiceImpl implements GenreService {
 							);
 		}
 		
-		return genres;
-	}
-
-	public Map<Integer, String> getGenres() {
 		return genres;
 	}
 }

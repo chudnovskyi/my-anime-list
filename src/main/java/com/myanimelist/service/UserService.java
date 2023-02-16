@@ -7,13 +7,13 @@ import com.myanimelist.validation.entity.ValidUser;
 
 public interface UserService extends UserDetailsService {
 
-	public User find(String username);
+	User find(String username);
 
-	public void save(ValidUser user);
+	void save(ValidUser user);
 
-	public boolean activeteUser(String code);
+	boolean activateUser(String code);
 
-	public void uploadProfilePicture(byte[] bytes);
+	void uploadProfilePicture(byte[] bytes);
 
-	public byte[] getProfilePicture();
+	byte[] getProfilePicture();
 }

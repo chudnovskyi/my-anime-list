@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,20 +24,27 @@ import com.myanimelist.validation.entity.ValidUser;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private RoleRepository roleRepository;
+	private final RoleRepository roleRepository;
 
-	@Autowired
-	private MailSenderServiceImpl mailSenderService;
+	private final MailSenderServiceImpl mailSenderService;
 
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	private final BCryptPasswordEncoder passwordEncoder;
 	
+	private final Environment env;
+
+	@Lazy
 	@Autowired
-	private Environment env;
+	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
+						   MailSenderServiceImpl mailSenderService, BCryptPasswordEncoder passwordEncoder,
+						   Environment env) {
+		this.userRepository = userRepository;
+		this.roleRepository = roleRepository;
+		this.mailSenderService = mailSenderService;
+		this.passwordEncoder = passwordEncoder;
+		this.env = env;
+	}
 
 	@Override
 	public User find(String username) {
@@ -69,7 +77,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean activeteUser(String code) {
+	public boolean activateUser(String code) {
 		User user = userRepository.findByActivationCode(code);
 
 		if (user != null) {

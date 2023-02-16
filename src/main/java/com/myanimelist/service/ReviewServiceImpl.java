@@ -17,14 +17,18 @@ import com.myanimelist.validation.entity.ValidReview;
 @Transactional
 public class ReviewServiceImpl implements ReviewService {
 
-	@Autowired
-	private ReviewRepository reviewRepository;
+	private final ReviewRepository reviewRepository;
 	
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 	
+	private final AuthenticationFacade authenticationFacade;
+
 	@Autowired
-	private AuthenticationFacade authenticationFacade;
+	public ReviewServiceImpl(ReviewRepository reviewRepository, UserRepository userRepository, AuthenticationFacade authenticationFacade) {
+		this.reviewRepository = reviewRepository;
+		this.userRepository = userRepository;
+		this.authenticationFacade = authenticationFacade;
+	}
 
 	@Override
 	public List<Review> findReviews(int animeId) {

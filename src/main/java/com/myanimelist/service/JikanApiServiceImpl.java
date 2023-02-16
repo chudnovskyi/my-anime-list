@@ -18,7 +18,7 @@ public class JikanApiServiceImpl implements JikanApiService {
 	@Autowired
 	private Environment env;
 
-	private RestTemplate restTemplate = new RestTemplate();
+	private final RestTemplate restTemplate = new RestTemplate();
 
 	@Override
 	public AnimeListResponse findSearched(String title, String genres, int pageId) {
@@ -39,9 +39,7 @@ public class JikanApiServiceImpl implements JikanApiService {
 
 		log.info(url);
 
-		AnimeListResponse animeListResponse = restTemplate.getForObject(url, AnimeListResponse.class);
-
-		return animeListResponse;
+		return restTemplate.getForObject(url, AnimeListResponse.class);
 	}
 
 	@Override
@@ -53,9 +51,7 @@ public class JikanApiServiceImpl implements JikanApiService {
 
 		log.info(url);
 
-		AnimeListResponse animeListResponse = restTemplate.getForObject(url, AnimeListResponse.class);
-
-		return animeListResponse;
+		return restTemplate.getForObject(url, AnimeListResponse.class);
 	}
 
 	@Override

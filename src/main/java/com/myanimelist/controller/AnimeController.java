@@ -26,21 +26,25 @@ import com.myanimelist.validation.entity.ValidSearchAnime;
 @RequestMapping("/anime")
 public class AnimeController {
 
-	@Autowired
-	private AnimeService animeService;
+	private final AnimeService animeService;
+
+	private final ReviewService reviewService;
+
+	private final JikanApiService jikanApiService;
 
 	@Autowired
-	private ReviewService reviewService;
-
-	@Autowired
-	private JikanApiService jikanApiService;
+	public AnimeController(AnimeService animeService, ReviewService reviewService, JikanApiService jikanApiService) {
+		this.animeService = animeService;
+		this.reviewService = reviewService;
+		this.jikanApiService = jikanApiService;
+	}
 	
 	private static final Map<String, Consumer<UserAnimeDetail>> STATUS_CONSUMER = Map.of(
-			"watching", x -> x.setAsWatching(),
-			"planning", x -> x.setAsPlanning(),
-			"finished", x -> x.setAsCompleted(),
-			"on-hold", x -> x.setAsOnHold(),
-			"dropped", x -> x.setAsDropped(),
+			"watching", UserAnimeDetail::setAsWatching,
+			"planning", UserAnimeDetail::setAsPlanning,
+			"finished", UserAnimeDetail::setAsCompleted,
+			"on-hold", UserAnimeDetail::setAsOnHold,
+			"dropped", UserAnimeDetail::setAsDropped,
 			"favourite", x -> x.setFavourite(!x.isFavourite())
 		);
 	
@@ -108,7 +112,7 @@ public class AnimeController {
 	@GetMapping("/set/{animeId}")
 	public String consumer(
 			@PathVariable(name = "animeId") int animeId,
-			@RequestParam(name = "status", required = true) String status) {
+			@RequestParam(name = "status") String status) {
 
 		Consumer<UserAnimeDetail> consumer = STATUS_CONSUMER.get(status);
 

@@ -23,8 +23,12 @@ import com.myanimelist.validation.entity.ValidUser;
 @RequestMapping("/register")
 public class RegistrationController {
 
+	private final UserService userService;
+
 	@Autowired
-	private UserService userService;
+	public RegistrationController(UserService userService) {
+		this.userService = userService;
+	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
@@ -45,7 +49,7 @@ public class RegistrationController {
 			@PathVariable(name = "code") String code,
 			Model model) {
 		
-		boolean isActivated = userService.activeteUser(code);
+		boolean isActivated = userService.activateUser(code);
 		
 		if (isActivated) {
 			model.addAttribute("accountActivationSuccess", "User successfully activated");
