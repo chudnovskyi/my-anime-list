@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Payload;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -84,6 +85,11 @@ public class EmailValidatorTest {
 			Arguments.of("user@karazin", domains, false),
 			Arguments.of("user@razin.ua", domains, false)
 		);
+	}
+	
+	@Test
+	void passIfValueIsNull() {
+		assertThat(emailValidator.isValid(null, null)).isTrue();
 	}
 
 	record EmailImpl(String[] domains) implements Email {

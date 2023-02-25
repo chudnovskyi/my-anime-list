@@ -35,7 +35,8 @@ public class FieldMatchValidatorTest {
 			Arguments.of("", ""),
 			Arguments.of(" ", " "),
 			Arguments.of(" 11", " 11"),
-			Arguments.of(" 11 ", " 11 ")
+			Arguments.of(" 11 ", " 11 "),
+			Arguments.of(null, null) // null is true because filds ain't necessary
 		);
 	}
 	
@@ -53,6 +54,8 @@ public class FieldMatchValidatorTest {
 			Arguments.of("", " "),
 			Arguments.of("   ", "login"),
 			Arguments.of("password", "пароль"),
+			Arguments.of(null, "dummy"),
+			Arguments.of("dummy", null),
 			Arguments.of("i", "і") // english - ukrainian
 		);
 	}
