@@ -23,6 +23,7 @@ public class PageableServiceImpl implements PageableService {
 			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
 					.boxed()
 					.collect(Collectors.toList());
+
 			theModel.addAttribute("pageNumbers", pageNumbers);
 		}
 	}

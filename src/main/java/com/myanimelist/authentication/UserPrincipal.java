@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.myanimelist.entity.User;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class UserPrincipal implements UserDetails {
 
 	private final User user;

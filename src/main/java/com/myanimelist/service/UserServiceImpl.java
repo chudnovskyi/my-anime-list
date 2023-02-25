@@ -1,7 +1,10 @@
 package com.myanimelist.service;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -48,7 +51,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User find(String username) {
-		return userRepository.findByUsername(username);
+		return userRepository.findByUsername(username).
+				orElseThrow(() -> new EntityNotFoundException("User with username " + username + " does not exist"));
 	}
 
 	@Override
@@ -58,7 +62,7 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(validUser.getUsername());
 		user.setPassword(passwordEncoder.encode(validUser.getPassword()));
 		user.setEmail(validUser.getEmail());
-		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER").get()));
 		user.setActivationCode(UUID.randomUUID().toString());
 
 		try {
@@ -78,35 +82,38 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean activateUser(String code) {
-		User user = userRepository.findByActivationCode(code);
-
-		if (user != null) {
-			user.setActivationCode(null);
-			return true;
+		Optional<User> optionalUser = userRepository.findByActivationCode(code);
+		
+		if (optionalUser.isPresent()) {
+	    	User user = optionalUser.get();
+	    	userRepository.save(user);
+	    	return true;
 		}
-
+	    
 		return false;
 	}
 
 	@Override
 	public void uploadProfilePicture(byte[] bytes) {
-		User user = userRepository.findByUsername(getAuthUsername());
-		user.setImage(bytes);
+		userRepository.findByUsername(getAuthUsername())
+				.ifPresent(user -> user.setImage(bytes));
 	}
 
 	@Override
 	public byte[] getProfilePicture() {
-		return userRepository.findByUsername(getAuthUsername()).getImage();
+		Optional<User> optionalUser = userRepository.findByUsername(getAuthUsername());
+		
+		if (optionalUser.isPresent()) {
+			return optionalUser.get().getImage();
+		} else {
+			throw new EntityNotFoundException("User with username " + getAuthUsername() + " does not exist");
+		}
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(username);
-
-		if (user == null) {
-			throw new UsernameNotFoundException(username);
-		}
-
+		Optional<User> optionalUser = userRepository.findByUsername(username);
+		User user = optionalUser.orElseThrow(() -> new UsernameNotFoundException(username));
 		return new UserPrincipal(user);
 	}
 	

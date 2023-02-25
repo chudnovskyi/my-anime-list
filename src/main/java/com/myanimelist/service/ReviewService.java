@@ -11,5 +11,5 @@ public interface ReviewService {
 
 	void save(ValidReview reviewForm);
 
-	void remove(int reviewId);
+	void remove(Integer reviewId);
 }
