@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
@@ -25,29 +26,14 @@ import com.myanimelist.validation.entity.ValidUser;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
-
 	private final RoleRepository roleRepository;
-
 	private final MailSenderServiceImpl mailSenderService;
-
 	private final BCryptPasswordEncoder passwordEncoder;
-	
 	private final Environment env;
-
-	@Lazy
-	@Autowired
-	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-						   MailSenderServiceImpl mailSenderService, BCryptPasswordEncoder passwordEncoder,
-						   Environment env) {
-		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
-		this.mailSenderService = mailSenderService;
-		this.passwordEncoder = passwordEncoder;
-		this.env = env;
-	}
 
 	@Override
 	public User find(String username) {

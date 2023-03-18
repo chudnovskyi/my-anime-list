@@ -2,6 +2,7 @@ package com.myanimelist.controller;
 
 import java.util.Base64;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,17 +13,11 @@ import com.myanimelist.service.UserService;
 import com.myanimelist.validation.entity.ValidSearchAnime;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
 	private final GenreService genreService;
-
 	private final UserService userService;
-
-	@Autowired
-	public HomeController(GenreService genreService, UserService userService) {
-		this.genreService = genreService;
-		this.userService = userService;
-	}
 
 	@GetMapping("/home")
 	public String home(

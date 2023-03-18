@@ -5,7 +5,9 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -14,15 +16,11 @@ import com.myanimelist.entity.User;
 import com.myanimelist.service.UserService;
 
 @Component
+@RequiredArgsConstructor
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
 	private final UserService userService;
 
-	@Autowired
-	public AuthenticationSuccessHandlerImpl(UserService userService) {
-		this.userService = userService;
-	}
-	
 	@Override
 	public void onAuthenticationSuccess(
 			HttpServletRequest request,

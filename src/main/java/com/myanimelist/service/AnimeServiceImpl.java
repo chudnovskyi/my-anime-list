@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,26 +18,15 @@ import com.myanimelist.repository.UserAnimeDetailRepository;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AnimeServiceImpl implements AnimeService {
 
 	private final UserAnimeDetailRepository userAnimeDetailRepository;
 	private final AnimeDetailRepository animeDetailRepository;
-	
 	private final JikanApiService jikanApiService;
 	private final UserService userService;
-	
 	private final AuthenticationFacade authenticationFacade;
 
-	@Autowired
-	public AnimeServiceImpl(UserAnimeDetailRepository userAnimeDetailRepository, AnimeDetailRepository animeDetailRepository, 
-			JikanApiService jikanApiService, UserService userService, AuthenticationFacade authenticationFacade) {
-		this.userAnimeDetailRepository = userAnimeDetailRepository;
-		this.animeDetailRepository = animeDetailRepository;
-		this.jikanApiService = jikanApiService;
-		this.userService = userService;
-		this.authenticationFacade = authenticationFacade;
-	}
-	
 	@Override
 	public UserAnimeDetail getUserAnimeDetail(int animeId) {
 		return userAnimeDetailRepository.findByAnimeDetail_MalIdAndUser_Username(animeId, authenticationFacade.getUsername())

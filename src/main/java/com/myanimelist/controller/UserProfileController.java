@@ -2,6 +2,7 @@ package com.myanimelist.controller;
 
 import java.io.IOException;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,15 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.myanimelist.service.UserService;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/profile")
 public class UserProfileController {
 
 	private final UserService userService;
-
-	@Autowired
-	public UserProfileController(UserService userService) {
-		this.userService = userService;
-	}
 
 	@PostMapping("/save-image")
 	public String saveUser(

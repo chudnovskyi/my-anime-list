@@ -2,6 +2,7 @@ package com.myanimelist.controller;
 
 import javax.validation.Valid;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,15 +22,11 @@ import com.myanimelist.utils.WebBindingUtils;
 import com.myanimelist.validation.entity.ValidReview;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/reviews")
 public class ReviewController {
 
 	private final ReviewService reviewService;
-
-	@Autowired
-	public ReviewController(ReviewService reviewService) {
-		this.reviewService = reviewService;
-	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {

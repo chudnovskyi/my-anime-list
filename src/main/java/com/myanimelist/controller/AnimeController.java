@@ -3,6 +3,7 @@ package com.myanimelist.controller;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,22 +24,14 @@ import com.myanimelist.validation.entity.ValidReview;
 import com.myanimelist.validation.entity.ValidSearchAnime;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/anime")
 public class AnimeController {
 
 	private final AnimeService animeService;
-
 	private final ReviewService reviewService;
-
 	private final JikanApiService jikanApiService;
 
-	@Autowired
-	public AnimeController(AnimeService animeService, ReviewService reviewService, JikanApiService jikanApiService) {
-		this.animeService = animeService;
-		this.reviewService = reviewService;
-		this.jikanApiService = jikanApiService;
-	}
-	
 	private static final Map<String, Consumer<UserAnimeDetail>> STATUS_CONSUMER = Map.of(
 			"watching", UserAnimeDetail::setAsWatching,
 			"planning", UserAnimeDetail::setAsPlanning,

@@ -3,6 +3,7 @@ package com.myanimelist.controller;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,18 +17,12 @@ import com.myanimelist.service.AnimeService;
 import com.myanimelist.service.PageableService;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/list")
 public class AnimeListController {
 
 	private final AnimeService animeService;
-
 	private final PageableService pageableService;
-
-	@Autowired
-	public AnimeListController(AnimeService animeService, PageableService pageableService) {
-		this.animeService = animeService;
-		this.pageableService = pageableService;
-	}
 
 	private static final Map<String, Predicate<UserAnimeDetail>> STATUS_PREDICATES = Map.of(
 			"watching", UserAnimeDetail::isWatching,

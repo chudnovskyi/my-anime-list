@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
-	@Autowired
-	private Environment env;
-
+	private final Environment env;
 	private final RestTemplate restTemplate = new RestTemplate();
 
 	private Map<Integer, String> genres;

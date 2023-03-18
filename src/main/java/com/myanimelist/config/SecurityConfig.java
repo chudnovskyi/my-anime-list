@@ -1,8 +1,10 @@
 package com.myanimelist.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,17 +15,11 @@ import com.myanimelist.service.UserService;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor(onConstructor_ = {@Lazy})
 public class SecurityConfig {
 
 	private final UserService userService;
-
     private final AuthenticationSuccessHandlerImpl authenticationSuccessHandlerImpl;
-
-    @Autowired
-    public SecurityConfig(UserService userService, AuthenticationSuccessHandlerImpl authenticationSuccessHandlerImpl) {
-        this.userService = userService;
-        this.authenticationSuccessHandlerImpl = authenticationSuccessHandlerImpl;
-    }
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -44,12 +40,9 @@ public class SecurityConfig {
 			.userDetailsService(userService)
 			
 			.authorizeRequests()
-				.antMatchers("/home").hasRole("USER")
+				.antMatchers("/login/**", "/register/**", "/swagger*/**").permitAll()
 				.antMatchers("/admin").hasRole("ADMIN")
-				.antMatchers("/anime/**").hasRole("USER")
-				.antMatchers("/list/**").hasRole("USER")
-				.antMatchers("/reviews/**").hasRole("USER")
-				.antMatchers("/swagger*/**").permitAll()
+				.antMatchers("/**").hasRole("USER")
 			.and()
 			
 			.formLogin()

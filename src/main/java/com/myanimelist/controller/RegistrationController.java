@@ -2,6 +2,7 @@ package com.myanimelist.controller;
 
 import javax.validation.Valid;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,15 +21,11 @@ import com.myanimelist.utils.WebBindingUtils;
 import com.myanimelist.validation.entity.ValidUser;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/register")
 public class RegistrationController {
 
 	private final UserService userService;
-
-	@Autowired
-	public RegistrationController(UserService userService) {
-		this.userService = userService;
-	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
