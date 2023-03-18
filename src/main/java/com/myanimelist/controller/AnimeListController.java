@@ -1,10 +1,9 @@
 package com.myanimelist.controller;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
+import com.myanimelist.entity.UserAnimeDetail;
+import com.myanimelist.service.AnimeService;
+import com.myanimelist.service.PageableService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.myanimelist.entity.UserAnimeDetail;
-import com.myanimelist.service.AnimeService;
-import com.myanimelist.service.PageableService;
+import java.util.Map;
+import java.util.function.Predicate;
 
 @Controller
 @RequiredArgsConstructor

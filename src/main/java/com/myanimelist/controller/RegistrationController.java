@@ -1,24 +1,17 @@
 package com.myanimelist.controller;
 
-import javax.validation.Valid;
-
+import com.myanimelist.exception.UsernameAlreadyExistsException;
+import com.myanimelist.service.UserService;
+import com.myanimelist.util.WebBindingUtils;
+import com.myanimelist.view.UserView;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import com.myanimelist.exception.UsernameAlreadyExistsException;
-import com.myanimelist.service.UserService;
-import com.myanimelist.utils.WebBindingUtils;
-import com.myanimelist.validation.entity.ValidUser;
+import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,7 +29,7 @@ public class RegistrationController {
 	public String register(
 			Model model) {
 		
-		model.addAttribute("user", new ValidUser());
+		model.addAttribute("user", new UserView());
 		
 		return "register-form";
 	}
@@ -59,7 +52,7 @@ public class RegistrationController {
 
 	@PostMapping("/proccess")
 	public String proccess(
-			@Valid @ModelAttribute(name = "user") ValidUser user,
+			@Valid @ModelAttribute(name = "user") UserView user,
 			BindingResult bindingResult,
 			Model model) {
 		

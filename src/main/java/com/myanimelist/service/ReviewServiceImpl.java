@@ -1,19 +1,16 @@
 package com.myanimelist.service;
 
-import java.util.List;
-
-import javax.persistence.EntityNotFoundException;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.myanimelist.authentication.AuthenticationFacade;
 import com.myanimelist.entity.Review;
 import com.myanimelist.exception.UserHasNoAccessException;
 import com.myanimelist.repository.ReviewRepository;
-import com.myanimelist.validation.entity.ValidReview;
+import com.myanimelist.security.AuthenticationFacade;
+import com.myanimelist.view.ReviewView;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @Transactional
@@ -30,11 +27,11 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void save(ValidReview validReview) {
+	public void save(ReviewView reviewView) {
 		Review review = new Review();
 		
-		review.setAnimeId(validReview.getAnimeId());
-		review.setContent(validReview.getContent());
+		review.setAnimeId(reviewView.getAnimeId());
+		review.setContent(reviewView.getContent());
 		review.setUser(userService.find(authenticationFacade.getUsername()));
 		
 		reviewRepository.save(review);

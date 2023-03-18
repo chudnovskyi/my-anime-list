@@ -1,20 +1,18 @@
 package com.myanimelist.service;
 
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.myanimelist.authentication.AuthenticationFacade;
-import com.myanimelist.dto.AnimeResponse.Anime;
 import com.myanimelist.entity.AnimeDetail;
 import com.myanimelist.entity.UserAnimeDetail;
 import com.myanimelist.repository.AnimeDetailRepository;
 import com.myanimelist.repository.UserAnimeDetailRepository;
+import com.myanimelist.response.AnimeResponse.Anime;
+import com.myanimelist.security.AuthenticationFacade;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Service
 @Transactional

@@ -1,16 +1,14 @@
 package com.myanimelist.controller;
 
-import java.util.Base64;
-
+import com.myanimelist.service.GenreService;
+import com.myanimelist.service.UserService;
+import com.myanimelist.view.AnimeView;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.myanimelist.service.GenreService;
-import com.myanimelist.service.UserService;
-import com.myanimelist.validation.entity.ValidSearchAnime;
+import java.util.Base64;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class HomeController {
 		}
 	
 		model.addAttribute("theDate", new java.util.Date());
-		model.addAttribute("searchAnime", new ValidSearchAnime());
+		model.addAttribute("searchAnime", new AnimeView());
 		model.addAttribute("genres", genreService.findAllGenres());
 		
 		return "home-page";

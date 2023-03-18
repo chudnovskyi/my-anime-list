@@ -1,27 +1,20 @@
 package com.myanimelist.controller;
 
-import java.util.Map;
-import java.util.function.Consumer;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.myanimelist.dto.AnimeListResponse;
-import com.myanimelist.dto.AnimeResponse.Anime;
 import com.myanimelist.entity.UserAnimeDetail;
+import com.myanimelist.response.AnimeListResponse;
+import com.myanimelist.response.AnimeResponse.Anime;
 import com.myanimelist.service.AnimeService;
 import com.myanimelist.service.JikanApiService;
 import com.myanimelist.service.ReviewService;
-import com.myanimelist.validation.entity.ValidReview;
-import com.myanimelist.validation.entity.ValidSearchAnime;
+import com.myanimelist.view.AnimeView;
+import com.myanimelist.view.ReviewView;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.function.Consumer;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,7 +46,7 @@ public class AnimeController {
 		model.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMalId()));
 		
 		if (!model.containsAttribute("reviewForm")) {
-			model.addAttribute("reviewForm", new ValidReview(anime.getMalId()));
+			model.addAttribute("reviewForm", new ReviewView(anime.getMalId()));
 		}
 		
 		return "anime-details";
@@ -66,7 +59,7 @@ public class AnimeController {
 		Anime anime = jikanApiService.findRandomAnime();
 		
 		model.addAttribute("anime", anime);
-		model.addAttribute("reviewForm", new ValidReview(anime.getMalId()));
+		model.addAttribute("reviewForm", new ReviewView(anime.getMalId()));
 		model.addAttribute("reviews", reviewService.findReviews(anime.getMalId()));
 		model.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMalId()));
 		
@@ -75,7 +68,7 @@ public class AnimeController {
 
 	@PostMapping("/search/{pageId}")
 	public String filteredSearch(
-			@ModelAttribute("searchAnime") ValidSearchAnime searchAnime,
+			@ModelAttribute("searchAnime") AnimeView searchAnime,
 			@PathVariable(name = "pageId") int pageId,
 			Model model) {
 		

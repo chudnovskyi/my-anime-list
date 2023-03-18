@@ -1,11 +1,10 @@
 package com.myanimelist.repository;
 
-import java.util.List;
-
+import com.myanimelist.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.myanimelist.entity.Review;
+import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer>  {

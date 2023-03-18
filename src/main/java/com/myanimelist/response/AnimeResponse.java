@@ -1,7 +1,6 @@
-package com.myanimelist.dto;
+package com.myanimelist.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,13 +1,12 @@
-package com.myanimelist.validation.entity;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+package com.myanimelist.view;
 
 import com.myanimelist.validation.Email;
 import com.myanimelist.validation.FieldMatch;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /* 
  * I use a separate entity class for 
@@ -25,7 +24,7 @@ import lombok.NoArgsConstructor;
 @FieldMatch.List({
 		@FieldMatch(firstField = "password", secondField = "matchingPassword", message = "{ConfirmPassword.Match}")
 	})
-public class ValidUser {
+public class UserView {
 
 	@NotNull(message = "{Username.NotNull}")
 	@Size(min = 3, message = "{Username.Size}")

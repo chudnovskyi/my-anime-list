@@ -1,4 +1,4 @@
-package com.myanimelist.utils;
+package com.myanimelist.util;
 
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;

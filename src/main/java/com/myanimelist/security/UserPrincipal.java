@@ -1,16 +1,14 @@
-package com.myanimelist.authentication;
+package com.myanimelist.security;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
+import com.myanimelist.entity.User;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.myanimelist.entity.User;
-
-import lombok.EqualsAndHashCode;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 @RequiredArgsConstructor

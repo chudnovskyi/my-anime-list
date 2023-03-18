@@ -1,11 +1,11 @@
-package com.myanimelist.validation.entity;
+package com.myanimelist.view;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ValidSearchAnime {
+public class AnimeView {
 
 	private String title;
 	private String genres;

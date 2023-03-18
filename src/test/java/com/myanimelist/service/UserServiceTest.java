@@ -30,13 +30,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.myanimelist.authentication.UserPrincipal;
+import com.myanimelist.security.UserPrincipal;
 import com.myanimelist.entity.Role;
 import com.myanimelist.entity.User;
 import com.myanimelist.exception.UsernameAlreadyExistsException;
 import com.myanimelist.repository.RoleRepository;
 import com.myanimelist.repository.UserRepository;
-import com.myanimelist.validation.entity.ValidUser;
+import com.myanimelist.view.UserView;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -83,12 +83,12 @@ public class UserServiceTest {
 
 	@Test
 	void saveSuccess() {
-		ValidUser validUser = getValidUser();
+		UserView userView = getValidUser();
 
 		when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(getRole()));
 		when(passwordEncoder.encode(user.getPassword())).thenReturn(user.getPassword() + "_encoded");
 
-		userService.save(validUser);
+		userService.save(userView);
 
 		verify(roleRepository).findByName("ROLE_USER");
 		verify(passwordEncoder).encode(user.getPassword());
@@ -96,12 +96,12 @@ public class UserServiceTest {
 
 	@Test
 	void saveFail() {
-		ValidUser validUser = getValidUser();
+		UserView userView = getValidUser();
 
 		when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(getRole()));
 		when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("Username already exists"));
 
-		var exception = assertThrows(UsernameAlreadyExistsException.class, () -> userService.save(validUser));
+		var exception = assertThrows(UsernameAlreadyExistsException.class, () -> userService.save(userView));
 		String expectedMessage = String.format("Username %s already exists!", user.getUsername());
 		assertThat(exception.getMessage()).isEqualTo(expectedMessage);
 	}
@@ -178,12 +178,12 @@ public class UserServiceTest {
 		SecurityContextHolder.setContext(securityContext);
 	}
 	
-	private ValidUser getValidUser() {
-		ValidUser validUser = new ValidUser();
-		validUser.setUsername(user.getUsername());
-		validUser.setPassword(user.getPassword());
-		validUser.setEmail(user.getEmail());
-		return validUser;
+	private UserView getValidUser() {
+		UserView userView = new UserView();
+		userView.setUsername(user.getUsername());
+		userView.setPassword(user.getPassword());
+		userView.setEmail(user.getEmail());
+		return userView;
 	}
 
 	public User getUser() {

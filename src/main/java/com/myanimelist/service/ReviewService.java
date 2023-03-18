@@ -1,15 +1,15 @@
 package com.myanimelist.service;
 
-import java.util.List;
-
 import com.myanimelist.entity.Review;
-import com.myanimelist.validation.entity.ValidReview;
+import com.myanimelist.view.ReviewView;
+
+import java.util.List;
 
 public interface ReviewService {
 
 	List<Review> findReviews(int animeId);
 
-	void save(ValidReview reviewForm);
+	void save(ReviewView reviewForm);
 
 	void remove(Integer reviewId);
 }

@@ -1,19 +1,16 @@
 package com.myanimelist.service;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import com.myanimelist.response.GenresResponse;
+import com.myanimelist.response.GenresResponse.Genre;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.myanimelist.dto.GenresResponse;
-import com.myanimelist.dto.GenresResponse.Genre;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service

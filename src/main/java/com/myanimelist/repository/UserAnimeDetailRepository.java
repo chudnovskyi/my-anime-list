@@ -1,12 +1,11 @@
 package com.myanimelist.repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.myanimelist.entity.UserAnimeDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.myanimelist.entity.UserAnimeDetail;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserAnimeDetailRepository extends JpaRepository<UserAnimeDetail, Integer> {

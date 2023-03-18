@@ -1,4 +1,4 @@
-package com.myanimelist.authentication;
+package com.myanimelist.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

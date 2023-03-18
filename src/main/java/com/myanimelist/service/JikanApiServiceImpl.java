@@ -1,16 +1,13 @@
 package com.myanimelist.service;
 
+import com.myanimelist.response.AnimeListResponse;
+import com.myanimelist.response.AnimeResponse;
+import com.myanimelist.response.AnimeResponse.Anime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import com.myanimelist.dto.AnimeListResponse;
-import com.myanimelist.dto.AnimeResponse;
-import com.myanimelist.dto.AnimeResponse.Anime;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

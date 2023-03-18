@@ -21,12 +21,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.myanimelist.authentication.AuthenticationFacade;
+import com.myanimelist.security.AuthenticationFacade;
 import com.myanimelist.entity.Review;
 import com.myanimelist.entity.User;
 import com.myanimelist.exception.UserHasNoAccessException;
 import com.myanimelist.repository.ReviewRepository;
-import com.myanimelist.validation.entity.ValidReview;
+import com.myanimelist.view.ReviewView;
 
 @ExtendWith(MockitoExtension.class)
 public class ReviewServiceTest {
@@ -67,14 +67,14 @@ public class ReviewServiceTest {
     public void saveTest() {
     	Review review = getReview();
     
-		ValidReview validReview = new ValidReview();
-		validReview.setAnimeId(review.getAnimeId());
-		validReview.setContent(review.getContent());
+		ReviewView reviewView = new ReviewView();
+		reviewView.setAnimeId(review.getAnimeId());
+		reviewView.setContent(review.getContent());
 		
 		doReturn(review.getUser().getUsername()).when(authenticationFacade).getUsername();
 		doReturn(review.getUser()).when(userService).find(review.getUser().getUsername());
 		
-		reviewService.save(validReview);
+		reviewService.save(reviewView);
 		
 		verify(reviewRepository, times(1)).save(review);
 		verify(authenticationFacade, times(1)).getUsername();

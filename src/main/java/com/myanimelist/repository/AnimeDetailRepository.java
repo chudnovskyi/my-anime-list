@@ -1,9 +1,8 @@
 package com.myanimelist.repository;
 
+import com.myanimelist.entity.AnimeDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.myanimelist.entity.AnimeDetail;
 
 @Repository
 public interface AnimeDetailRepository extends JpaRepository<AnimeDetail, Integer> {

@@ -1,10 +1,10 @@
 package com.myanimelist.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.ui.Model;
+
+import java.util.List;
 
 public interface PageableService {
 

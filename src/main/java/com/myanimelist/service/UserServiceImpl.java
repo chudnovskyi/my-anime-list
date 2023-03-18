@@ -1,14 +1,12 @@
 package com.myanimelist.service;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.persistence.EntityNotFoundException;
-
+import com.myanimelist.entity.User;
+import com.myanimelist.exception.UsernameAlreadyExistsException;
+import com.myanimelist.repository.RoleRepository;
+import com.myanimelist.repository.UserRepository;
+import com.myanimelist.security.UserPrincipal;
+import com.myanimelist.view.UserView;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.myanimelist.authentication.UserPrincipal;
-import com.myanimelist.entity.User;
-import com.myanimelist.exception.UsernameAlreadyExistsException;
-import com.myanimelist.repository.RoleRepository;
-import com.myanimelist.repository.UserRepository;
-import com.myanimelist.validation.entity.ValidUser;
+import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -42,12 +38,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void save(ValidUser validUser) {
+	public void save(UserView userView) {
 		User user = new User();
 
-		user.setUsername(validUser.getUsername());
-		user.setPassword(passwordEncoder.encode(validUser.getPassword()));
-		user.setEmail(validUser.getEmail());
+		user.setUsername(userView.getUsername());
+		user.setPassword(passwordEncoder.encode(userView.getPassword()));
+		user.setEmail(userView.getEmail());
 		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER").get()));
 		user.setActivationCode(UUID.randomUUID().toString());
 

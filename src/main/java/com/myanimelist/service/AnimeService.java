@@ -1,10 +1,10 @@
 package com.myanimelist.service;
 
+import com.myanimelist.entity.UserAnimeDetail;
+
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-
-import com.myanimelist.entity.UserAnimeDetail;
 
 public interface AnimeService {
 
