@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
 		
 		if (optionalUser.isPresent()) {
 	    	User user = optionalUser.get();
+			user.setActivationCode(null);
 	    	userRepository.save(user);
 	    	return true;
 		}

@@ -1,5 +1,6 @@
 package com.myanimelist.config;
 
+import com.myanimelist.security.AuthenticationSuccessHandlerImpl;
 import com.myanimelist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +39,7 @@ public class SecurityConfig {
                 .userDetailsService(userService)
 
                 .authorizeRequests()
-                    .antMatchers("/login/**", "/register/**", "/swagger*/**").permitAll()
+                    .antMatchers("/login*/**", "/register*/**", "/swagger*/**").permitAll()
                     .antMatchers("/admin").hasRole("ADMIN")
                     .antMatchers("/**").hasRole("USER")
                 .and()

@@ -1,12 +1,13 @@
 package com.myanimelist.entity;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
@@ -15,15 +16,12 @@ public class Review {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
 	private int id;
 
 	@NonNull
-	@Column(name = "anime_id")
 	private Integer animeId;
 
 	@NonNull
-	@Column(name = "content")
 	private String content;
 
 	@NonNull

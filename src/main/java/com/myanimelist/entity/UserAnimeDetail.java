@@ -1,13 +1,11 @@
 package com.myanimelist.entity;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "users_anime")
@@ -37,25 +35,13 @@ public class UserAnimeDetail {
 	@JoinColumn(name = "mal_id")
 	private AnimeDetail animeDetail;
 
-	@Column(name = "score")
 	private int score;
 
-	@Column(name = "favourite")
 	private boolean favourite;
-
-	@Column(name = "watching")
 	private boolean watching;
-
-	@Column(name = "planning")
 	private boolean planning;
-
-	@Column(name = "completed")
 	private boolean completed;
-
-	@Column(name = "on_hold")
 	private boolean onHold;
-
-	@Column(name = "dropped")
 	private boolean dropped;
 
 	public void setAsWatching() {

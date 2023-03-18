@@ -50,8 +50,8 @@ public class RegistrationController {
 		return "login-form";
 	}
 
-	@PostMapping("/proccess")
-	public String proccess(
+	@PostMapping("/process")
+	public String process(
 			@Valid @ModelAttribute(name = "user") UserView user,
 			BindingResult bindingResult,
 			Model model) {

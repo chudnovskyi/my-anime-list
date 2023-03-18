@@ -1,4 +1,4 @@
-package com.myanimelist.config;
+package com.myanimelist.security;
 
 import com.myanimelist.entity.User;
 import com.myanimelist.service.UserService;
