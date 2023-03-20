@@ -9,6 +9,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.EntityNotFoundException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -60,6 +62,10 @@ public class JikanApiServiceImpl implements JikanApiService {
 
 		AnimeResponse animeResponse = restTemplate.getForObject(url, AnimeResponse.class);
 
+		if (animeResponse == null) {
+			throw new EntityNotFoundException("anime with id " + animeId + " not found");
+		}
+
 		return animeResponse.getAnime();
 	}
 
@@ -71,6 +77,10 @@ public class JikanApiServiceImpl implements JikanApiService {
 		log.info(url);
 
 		AnimeResponse animeResponse = restTemplate.getForObject(url, AnimeResponse.class);
+
+		if (animeResponse == null) {
+			throw new EntityNotFoundException("random anime not found");
+		}
 
 		return animeResponse.getAnime();
 	}

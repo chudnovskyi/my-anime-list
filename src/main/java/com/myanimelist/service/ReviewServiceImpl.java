@@ -39,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public void remove(Integer reviewId) {
-		Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new EntityNotFoundException());
+		Review review = reviewRepository.findById(reviewId).orElseThrow(EntityNotFoundException::new);
 		
 		if (!review.getUser().getUsername().equals(authenticationFacade.getUsername())) {
 			throw new UserHasNoAccessException("User " + authenticationFacade.getUsername() + " can't remove " + review + " belonging to " + review.getUser().getUsername());

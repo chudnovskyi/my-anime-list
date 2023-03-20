@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(userView.getUsername());
 		user.setPassword(passwordEncoder.encode(userView.getPassword()));
 		user.setEmail(userView.getEmail());
-		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER").get()));
+		user.setRoles(List.of(roleRepository.findByName("ROLE_USER").orElseThrow()));
 		user.setActivationCode(UUID.randomUUID().toString());
 
 		try {

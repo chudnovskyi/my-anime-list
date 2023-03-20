@@ -8,6 +8,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,12 +36,16 @@ public class GenreServiceImpl implements GenreService {
 			log.info(url);
 			
 			GenresResponse genresResponse = restTemplate.getForObject(url, GenresResponse.class);
+
+			if (genresResponse == null) {
+				throw new EntityNotFoundException("genres not found");
+			}
 			
 			genres = new LinkedHashMap<>();
 			
 			genres = genresResponse.getGenres()
 					.stream()
-					.sorted((o1, o2) -> o1.getName().compareTo(o2.getName()))
+					.sorted(Comparator.comparing(Genre::getName))
 					.collect(Collectors.toMap(
 								Genre::getMalId, 
 								Genre::getName,
