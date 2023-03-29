@@ -2,14 +2,15 @@ package com.myanimelist.service;
 
 import com.myanimelist.response.AnimeListResponse;
 import com.myanimelist.response.AnimeResponse.Anime;
+import reactor.core.publisher.Mono;
 
 public interface JikanApiService {
 
-	AnimeListResponse findSearched(String title, String genres, int pageId);
+	Mono<AnimeListResponse> search(String title, String genres, int pageId);
 
-	AnimeListResponse findTop(int pageId);
+	Mono<AnimeListResponse> searchByRating(int pageId);
 
-	Anime findAnime(int animeId);
+	Anime searchById(int animeId);
 
-	Anime findRandomAnime();
+	Mono<Anime> searchRandom();
 }

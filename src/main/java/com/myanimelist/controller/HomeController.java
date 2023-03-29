@@ -29,7 +29,7 @@ public class HomeController {
 	
 		model.addAttribute("theDate", new java.util.Date());
 		model.addAttribute("searchAnime", new AnimeView());
-		model.addAttribute("genres", genreService.findAllGenres());
+		model.addAttribute("genres", genreService.retrieveGenres());
 		
 		return "home-page";
 	}

@@ -52,15 +52,15 @@ public class ReviewServiceTest {
 	void findReviewsTest() {
 		doReturn(List.of(review)).when(reviewRepository).findAllByAnimeId(review.getAnimeId());
 		
-		assertThat(reviewService.findReviews(review.getAnimeId())).hasSize(1);
-		assertThat(reviewService.findReviews(review.getAnimeId()).get(0)).isEqualTo(review);
+		assertThat(reviewService.retrieveList(review.getAnimeId())).hasSize(1);
+		assertThat(reviewService.retrieveList(review.getAnimeId()).get(0)).isEqualTo(review);
 	}
 	
 	@Test
 	void findNoReviewsTest() {
 		doReturn(List.of()).when(reviewRepository).findAllByAnimeId(anyInt());
 		
-		assertThat(reviewService.findReviews(anyInt())).isEmpty();
+		assertThat(reviewService.retrieveList(anyInt())).isEmpty();
 	}
 	
     @Test

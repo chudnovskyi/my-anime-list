@@ -12,7 +12,7 @@ public interface AnimeService {
 
 	List<UserAnimeDetail> getUserAnimeDetailList(Predicate<UserAnimeDetail> predicate);
 
-	void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer);
+	void setUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer);
 
 	void reset(int animeId);
 }

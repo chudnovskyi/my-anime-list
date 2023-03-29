@@ -40,10 +40,10 @@ public class AnimeServiceImpl implements AnimeService {
 	}
 
 	@Override
-	public void alterUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer) {
+	public void setUserAnimeDetail(int animeId, Consumer<UserAnimeDetail> consumer) {
 		AnimeDetail animeDetail = animeDetailRepository.findById(animeId)
 				.orElseGet(() -> {
-					Anime anime = jikanApiService.findAnime(animeId);
+					Anime anime = jikanApiService.searchById(animeId);
 					return new AnimeDetail(
 							animeId, 
 							anime.getTitle(), 

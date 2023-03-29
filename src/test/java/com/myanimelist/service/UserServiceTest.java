@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -141,7 +142,7 @@ public class UserServiceTest {
 
 		doReturn(Optional.of(user)).when(userRepository).findByUsername(user.getUsername());
 
-		assertThat(userService).returns(user.getImage(), t -> t.getProfilePicture());
+		assertThat(userService).returns(user.getImage(), UserServiceImpl::getProfilePicture);
 	}
 
 	@Test
@@ -194,7 +195,7 @@ public class UserServiceTest {
 		user.setPassword("$2a$12$kUawd9Xz7u5lTd.9mrEvQ.Wyg3ft/Z1lyNaw..XZkjZbjcpyXrglC");
 		user.setActivationCode("activate");
 		user.setReviews(Collections.emptyList());
-		user.setRoles(Arrays.asList(getRole()));
+		user.setRoles(List.of(getRole()));
 		return user;
 	}
 

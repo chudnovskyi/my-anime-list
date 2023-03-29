@@ -1,87 +1,90 @@
 package com.myanimelist.service;
 
+import com.myanimelist.config.JikanApiConfig;
 import com.myanimelist.response.AnimeListResponse;
 import com.myanimelist.response.AnimeResponse;
 import com.myanimelist.response.AnimeResponse.Anime;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import javax.persistence.EntityNotFoundException;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class JikanApiServiceImpl implements JikanApiService {
 
-	private final Environment env;
-	private final RestTemplate restTemplate = new RestTemplate();
+	private final WebClient webClient;
+	private final JikanApiConfig config;
+
+	public JikanApiServiceImpl(WebClient.Builder webClientBuilder, JikanApiConfig config) {
+		this.webClient = webClientBuilder.baseUrl(config.getBaseUrl()).build();
+		this.config = config;
+	}
 
 	@Override
-	public AnimeListResponse findSearched(String title, String genres, int pageId) {
-		String url = 
-				env.getProperty("find.all") + 
-				env.getProperty("param.page") + pageId + 
-				env.getProperty("param.limit") + 
-				env.getProperty("param.order_by.score") + 
-				env.getProperty("param.sort.desc");
+	public Mono<AnimeListResponse> search(String title, String genres, int pageId) {
+		StringBuilder urlBuilder = new StringBuilder(config.getPaths().get("anime"));
+		urlBuilder.append(config.getParams().get("page")).append(pageId)
+				.append(config.getParams().get("limit"))
+				.append(config.getParams().get("orderBy.score"))
+				.append(config.getParams().get("sort.desc"));
 
 		if (title != null && !title.isBlank()) {
-			url += env.getProperty("param.title") + title;
+			urlBuilder.append(config.getParams().get("title")).append(title);
 		}
 
 		if (genres != null && !genres.isBlank()) {
-			url += env.getProperty("param.genres") + genres;
+			urlBuilder.append(config.getParams().get("genres")).append(genres);
 		}
+
+        String url = urlBuilder.toString();
 
 		log.info(url);
 
-		return restTemplate.getForObject(url, AnimeListResponse.class);
+		return webClient.get().uri(url)
+                .retrieve()
+                .bodyToMono(AnimeListResponse.class)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("Anime list not found")));
+	}
+
+	public Mono<AnimeListResponse> searchByRating(int pageId) {
+		String url = config.getPaths().get("top") +
+				config.getParams().get("page") + pageId +
+				config.getParams().get("limit");
+
+		log.info(url);
+
+		return webClient.get().uri(url)
+                .retrieve()
+                .bodyToMono(AnimeListResponse.class)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("Top anime list not found")));
+	}
+
+	public Anime searchById(int animeId) {
+		String url = config.getPaths().get("anime.id") + animeId;
+
+		log.info(url);
+
+        return webClient.get().uri(url)
+                .retrieve()
+                .bodyToMono(AnimeResponse.class)
+                .map(AnimeResponse::getAnime)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("Anime with id " + animeId + " not found")))
+                .block();
 	}
 
 	@Override
-	public AnimeListResponse findTop(int pageId) {
-		String url = 
-				env.getProperty("find.top") + 
-				env.getProperty("param.page") + pageId + 
-				env.getProperty("param.limit");
+	public Mono<Anime> searchRandom() {
+		String url = config.getPaths().get("random");
 
 		log.info(url);
 
-		return restTemplate.getForObject(url, AnimeListResponse.class);
-	}
-
-	@Override
-	public Anime findAnime(int animeId) {
-		String url = 
-				env.getProperty("find.id") + animeId;
-
-		log.info(url);
-
-		AnimeResponse animeResponse = restTemplate.getForObject(url, AnimeResponse.class);
-
-		if (animeResponse == null) {
-			throw new EntityNotFoundException("anime with id " + animeId + " not found");
-		}
-
-		return animeResponse.getAnime();
-	}
-
-	@Override
-	public Anime findRandomAnime() {
-		String url = 
-				env.getProperty("find.rand");
-
-		log.info(url);
-
-		AnimeResponse animeResponse = restTemplate.getForObject(url, AnimeResponse.class);
-
-		if (animeResponse == null) {
-			throw new EntityNotFoundException("random anime not found");
-		}
-
-		return animeResponse.getAnime();
+        return webClient.get().uri(url)
+                .retrieve()
+                .bodyToMono(AnimeResponse.class)
+                .map(AnimeResponse::getAnime)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("Random anime not found")));
 	}
 }

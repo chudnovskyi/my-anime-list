@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 
 public class PageableServiceTest {
 
-	private PageableServiceImpl pageableService = new PageableServiceImpl();
+	private final PageableServiceImpl pageableService = new PageableServiceImpl();
 
 	@Test
 	public void preparePageableModelTest() {
@@ -26,7 +26,7 @@ public class PageableServiceTest {
 		pageableService.preparePageableModel(theModel, page);
 
 		verify(theModel, times(1)).addAttribute("page", page);
-		verify(theModel, times(1)).addAttribute("pageNumbers", Arrays.asList(1));
+		verify(theModel, times(1)).addAttribute("pageNumbers", List.of(1));
 	}
 
 	@Test
@@ -45,12 +45,12 @@ public class PageableServiceTest {
 	
 	@Test
 	public void getPageableEmptyTest() {
-		List<String> list = Arrays.asList();
+		List<String> list = List.of();
 		int pageNumber = 2;
 		int pageSize = 2;
 
-		PageImpl<String> expectedPage = new PageImpl<>(Arrays.asList(),
-				PageRequest.of(pageNumber - 1, pageSize), list.size());
+		PageImpl<String> expectedPage = new PageImpl<>(List.of(),
+				PageRequest.of(pageNumber - 1, pageSize), 0);
 
 		PageImpl<String> actualPage = pageableService.getPageable(list, pageNumber, pageSize);
 

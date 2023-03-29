@@ -22,7 +22,7 @@ public class ReviewServiceImpl implements ReviewService {
 	private final AuthenticationFacade authenticationFacade;
 
 	@Override
-	public List<Review> findReviews(int animeId) {
+	public List<Review> retrieveList(int animeId) {
 		return reviewRepository.findAllByAnimeId(animeId);
 	}
 

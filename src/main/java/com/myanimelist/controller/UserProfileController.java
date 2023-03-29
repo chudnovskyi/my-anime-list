@@ -18,7 +18,7 @@ public class UserProfileController {
 	private final UserService userService;
 
 	@PostMapping("/save-image")
-	public String saveUser(
+	public String save(
 			@RequestParam("image") MultipartFile multipartFile) throws IOException {
 		
 		userService.uploadProfilePicture(multipartFile.getBytes());
