@@ -4,10 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource({ 
-		"classpath:${envTarget:jikan.api}.properties",
-		"classpath:${envTarget:host}.properties"
-	})
+@PropertySource({
+        "classpath:${envTarget:jikan.api}.properties",
+        "classpath:${envTarget:host}.properties"
+})
 public class PropertiesConfig {
 
 }

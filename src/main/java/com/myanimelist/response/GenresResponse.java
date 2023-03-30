@@ -10,15 +10,15 @@ import java.util.List;
 @NoArgsConstructor
 public class GenresResponse {
 
-	@JsonProperty("data")
-	private List<Genre> genres;
+    @JsonProperty("data")
+    private List<Genre> genres;
 
-	@Data
-	@NoArgsConstructor
-	public static class Genre {
+    @Data
+    @NoArgsConstructor
+    public static class Genre {
 
-		@JsonProperty("mal_id")
-		private int malId;
-		private String name;
-	}
+        @JsonProperty("mal_id")
+        private int malId;
+        private String name;
+    }
 }

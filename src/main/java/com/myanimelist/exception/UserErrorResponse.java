@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserErrorResponse {
 
-	private int code;
-	private String message;
-	private long timestamp;
+    private int code;
+    private String message;
+    private long timestamp;
 }

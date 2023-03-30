@@ -10,13 +10,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.myanimelist.service.impl.MailSenderServiceImpl;
+import com.myanimelist.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -201,7 +202,7 @@ public class UserServiceTest {
 
 	private Role getRole() {
 		Role role = new Role();
-		role.setId(1L);
+		role.setId(1);
 		role.setName("ROLE_USER");
 		return role;
 	}

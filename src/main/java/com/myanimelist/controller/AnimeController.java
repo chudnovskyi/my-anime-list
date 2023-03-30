@@ -1,6 +1,7 @@
 package com.myanimelist.controller;
 
-import com.myanimelist.entity.UserAnimeDetail;
+import com.myanimelist.entity.UserAnime;
+import com.myanimelist.model.AnimeStatus;
 import com.myanimelist.response.AnimeListResponse;
 import com.myanimelist.response.AnimeResponse.Anime;
 import com.myanimelist.service.AnimeService;
@@ -18,6 +19,8 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.myanimelist.model.AnimeStatus.*;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/anime")
@@ -27,13 +30,13 @@ public class AnimeController {
     private final ReviewService reviewService;
     private final JikanApiService jikanApiService;
 
-    private static final Map<String, Consumer<UserAnimeDetail>> STATUS_CONSUMER = Map.of(
-            "watching", UserAnimeDetail::setAsWatching,
-            "planning", UserAnimeDetail::setAsPlanning,
-            "finished", UserAnimeDetail::setAsCompleted,
-            "on-hold", UserAnimeDetail::setAsOnHold,
-            "dropped", UserAnimeDetail::setAsDropped,
-            "favourite", x -> x.setFavourite(!x.isFavourite())
+    private static final Map<AnimeStatus, Consumer<UserAnime>> STATUS_CONSUMER = Map.of(
+            WATCHING, UserAnime::setAsWatching,
+            PLANNING, UserAnime::setAsPlanning,
+            FINISHED, UserAnime::setAsCompleted,
+            ON_HOLD, UserAnime::setAsOnHold,
+            DROPPED, UserAnime::setAsDropped,
+            FAVOURITE, x -> x.setFavourite(!x.isFavourite())
     );
 
     @GetMapping("/{animeId}")
@@ -45,7 +48,7 @@ public class AnimeController {
 
         model.addAttribute("anime", anime);
         model.addAttribute("reviews", reviewService.retrieveList(animeId));
-        model.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMalId()));
+        model.addAttribute("userAnime", animeService.getUserAnime(anime.getMalId()));
 
         if (!model.containsAttribute("reviewForm")) {
             model.addAttribute("reviewForm", new ReviewView(anime.getMalId()));
@@ -55,7 +58,7 @@ public class AnimeController {
     }
 
     @GetMapping("/random")
-    public Mono<String> searchRandom(
+    public Mono<String> getRandomAnime(
             Model model) {
 
         Mono<Anime> animeMono = jikanApiService.searchRandom();
@@ -64,14 +67,14 @@ public class AnimeController {
             model.addAttribute("anime", anime);
             model.addAttribute("reviewForm", new ReviewView(anime.getMalId()));
             model.addAttribute("reviews", reviewService.retrieveList(anime.getMalId()));
-            model.addAttribute("userAnimeDetail", animeService.getUserAnimeDetail(anime.getMalId()));
+            model.addAttribute("userAnime", animeService.getUserAnime(anime.getMalId()));
 
             return Mono.just("anime-details");
         }).switchIfEmpty(Mono.error(new EntityNotFoundException("Random anime not found")));
     }
 
     @PostMapping("/search/{pageId}")
-    public Mono<String> search(
+    public Mono<String> searchAnime(
             @ModelAttribute("searchAnime") AnimeView searchAnime,
             @PathVariable(name = "pageId") int pageId,
             Model model) {
@@ -88,7 +91,7 @@ public class AnimeController {
     }
 
     @GetMapping("/top/{pageId}")
-    public Mono<String> searchByRating(
+    public Mono<String> getTopRatedAnime(
             @PathVariable(name = "pageId") int pageId,
             Model model) {
 
@@ -105,31 +108,31 @@ public class AnimeController {
     @GetMapping("/set/{animeId}")
     public String setAnimeStatus(
             @PathVariable(name = "animeId") int animeId,
-            @RequestParam(name = "status") String status) {
+            @RequestParam(name = "status") AnimeStatus status) {
 
-        Consumer<UserAnimeDetail> consumer = STATUS_CONSUMER.get(status);
+        Consumer<UserAnime> consumer = STATUS_CONSUMER.get(status);
 
         if (consumer == null) {
             throw new IllegalArgumentException("Invalid status ... " + status);
         }
 
-        animeService.setUserAnimeDetail(animeId, consumer);
+        animeService.updateUserAnime(animeId, consumer);
 
         return "redirect:/anime/" + animeId;
     }
 
     @GetMapping("/score/{animeId}/{score}")
-    public String setAnimeScore(
+    public String setUserAnimeScore(
             @PathVariable(name = "animeId") int animeId,
             @PathVariable(name = "score") int score) {
 
-        animeService.setUserAnimeDetail(animeId, x -> x.setScore(score));
+        animeService.updateUserAnime(animeId, x -> x.setScore(score));
 
         return "redirect:/anime/" + animeId;
     }
 
     @GetMapping("/reset/{animeId}")
-    public String resetAnime(
+    public String resetUserAnime(
             @PathVariable(name = "animeId") int animeId) {
 
         animeService.reset(animeId);

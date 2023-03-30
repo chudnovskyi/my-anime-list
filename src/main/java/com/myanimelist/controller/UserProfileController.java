@@ -15,14 +15,14 @@ import java.io.IOException;
 @RequestMapping("/profile")
 public class UserProfileController {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	@PostMapping("/save-image")
-	public String save(
-			@RequestParam("image") MultipartFile multipartFile) throws IOException {
-		
-		userService.uploadProfilePicture(multipartFile.getBytes());
-		
-		return "redirect:/home?profile";
-	}
+    @PostMapping("/save-image")
+    public String saveImage(
+            @RequestParam("image") MultipartFile multipartFile) throws IOException {
+
+        userService.uploadProfilePicture(multipartFile.getBytes());
+
+        return "redirect:/home?profile";
+    }
 }

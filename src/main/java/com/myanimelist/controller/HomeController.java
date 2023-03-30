@@ -9,43 +9,44 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Base64;
+import java.util.Date;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
-	private final GenreService genreService;
-	private final UserService userService;
+    private final GenreService genreService;
+    private final UserService userService;
 
-	@GetMapping("/home")
-	public String home(
-			Model model) {
-		
-		byte[] profilePicture = userService.getProfilePicture();
-		
-		if (profilePicture != null) {
-			model.addAttribute("profilePicture", Base64.getEncoder().encodeToString(profilePicture));
-		}
-	
-		model.addAttribute("theDate", new java.util.Date());
-		model.addAttribute("searchAnime", new AnimeView());
-		model.addAttribute("genres", genreService.retrieveGenres());
-		
-		return "home-page";
-	}
+    @GetMapping("/home")
+    public String homePage(
+            Model model) {
 
-	@GetMapping("/admin")
-	public String admin(
-			Model model) {
-		
-		model.addAttribute("theDate", new java.util.Date());
-		
-		return "admin-page";
-	}
+        byte[] profilePicture = userService.getProfilePicture();
 
-	@GetMapping("/github")
-	public String github() {
-		
-		return "redirect:https://github.com/lwantPizza/my-anime-list";
-	}
+        if (profilePicture != null) {
+            model.addAttribute("profilePicture", Base64.getEncoder().encodeToString(profilePicture));
+        }
+
+        model.addAttribute("theDate", new Date());
+        model.addAttribute("searchAnime", new AnimeView());
+        model.addAttribute("genres", genreService.retrieveAllGenres());
+
+        return "home-page";
+    }
+
+    @GetMapping("/admin")
+    public String adminPage(
+            Model model) {
+
+        model.addAttribute("theDate", new Date());
+
+        return "admin-page";
+    }
+
+    @GetMapping("/github")
+    public String github() {
+
+        return "redirect:https://github.com/lwantPizza/my-anime-list";
+    }
 }

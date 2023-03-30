@@ -18,56 +18,56 @@ import javax.validation.Valid;
 @RequestMapping("/register")
 public class RegistrationController {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	@InitBinder
-	public void initBinder(WebDataBinder dataBinder) {
-		WebBindingUtils.initBinder(dataBinder);
-	}
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder) {
+        WebBindingUtils.initBinder(dataBinder);
+    }
 
-	@GetMapping
-	public String register(
-			Model model) {
-		
-		model.addAttribute("user", new UserView());
-		
-		return "register-form";
-	}
+    @GetMapping
+    public String register(
+            Model model) {
 
-	@GetMapping("/activate/{code}")
-	public String activate(
-			@PathVariable(name = "code") String code,
-			Model model) {
-		
-		boolean isActivated = userService.activateUser(code);
-		
-		if (isActivated) {
-			model.addAttribute("accountActivationSuccess", "User successfully activated");
-		} else {
-			model.addAttribute("accountActivationFailure", "Activation code not found ...");
-		}
-		
-		return "login-form";
-	}
+        model.addAttribute("user", new UserView());
 
-	@PostMapping("/process")
-	public String process(
-			@Valid @ModelAttribute(name = "user") UserView user,
-			BindingResult bindingResult,
-			Model model) {
-		
-		if (bindingResult.hasErrors()) {
-			return "register-form";
-		}
-		
-		try {
-			userService.save(user);
-		} catch (UsernameAlreadyExistsException e) {
- 			model.addAttribute("alreadyRegistered", "Username already registered!");
-			return "register-form";
-		}
-		
-		model.addAttribute("successfullyRegistered", "A verification email has been sent to: \n" + user.getEmail());
-		return "login-form";
-	}
+        return "register-form";
+    }
+
+    @GetMapping("/activate/{code}")
+    public String activate(
+            @PathVariable(name = "code") String code,
+            Model model) {
+
+        boolean isActivated = userService.activateUser(code);
+
+        if (isActivated) {
+            model.addAttribute("accountActivationSuccess", "User successfully activated");
+        } else {
+            model.addAttribute("accountActivationFailure", "Activation code not found ...");
+        }
+
+        return "login-form";
+    }
+
+    @PostMapping("/process")
+    public String process(
+            @Valid @ModelAttribute(name = "user") UserView user,
+            BindingResult bindingResult,
+            Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "register-form";
+        }
+
+        try {
+            userService.save(user);
+        } catch (UsernameAlreadyExistsException e) {
+            model.addAttribute("alreadyRegistered", "Username already registered!");
+            return "register-form";
+        }
+
+        model.addAttribute("successfullyRegistered", "A verification email has been sent to: \n" + user.getEmail());
+        return "login-form";
+    }
 }

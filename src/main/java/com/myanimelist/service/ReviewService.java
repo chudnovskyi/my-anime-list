@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ReviewService {
 
-	List<Review> retrieveList(int animeId);
+    List<Review> retrieveList(int animeId);
 
-	void save(ReviewView reviewForm);
+    void save(ReviewView reviewForm);
 
-	void remove(Integer reviewId);
+    void remove(Integer reviewId);
 }

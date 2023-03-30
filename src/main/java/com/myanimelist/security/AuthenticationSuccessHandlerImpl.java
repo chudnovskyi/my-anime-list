@@ -15,18 +15,18 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	@Override
-	public void onAuthenticationSuccess(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			Authentication authentication) throws IOException {
+    @Override
+    public void onAuthenticationSuccess(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication) throws IOException {
 
-		User authenticatedUser = userService.find(authentication.getName());
+        User authenticatedUser = userService.find(authentication.getName());
 
-		request.getSession().setAttribute("authenticatedUser", authenticatedUser);
-		
-		response.sendRedirect(request.getContextPath() + "/home?profile");
-	}
+        request.getSession().setAttribute("authenticatedUser", authenticatedUser);
+
+        response.sendRedirect(request.getContextPath() + "/home?profile");
+    }
 }

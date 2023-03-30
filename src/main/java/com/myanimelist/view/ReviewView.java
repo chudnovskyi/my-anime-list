@@ -13,10 +13,10 @@ import javax.validation.constraints.Size;
 @RequiredArgsConstructor
 public class ReviewView {
 
-	@NonNull
-	private Integer animeId;
+    @NonNull
+    private Integer animeId;
 
-	@NotNull(message = "{Review.NotNull}")
-	@Size(min = 5, message = "{Review.Size}")
-	private String content;
+    @NotNull(message = "{Review.NotNull}")
+    @Size(min = 5, message = "{Review.Size}")
+    private String content;
 }

@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AnimeView {
 
-	private String title;
-	private String genres;
+    private String title;
+    private String genres;
 }

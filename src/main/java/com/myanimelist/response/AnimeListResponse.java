@@ -11,22 +11,22 @@ import java.util.List;
 @NoArgsConstructor
 public class AnimeListResponse {
 
-	@JsonProperty("data")
-	private List<Anime> animeList;
+    @JsonProperty("data")
+    private List<Anime> animeList;
 
-	private Pagination pagination;
+    private Pagination pagination;
 
-	@Data
-	@NoArgsConstructor
-	public static class Pagination {
+    @Data
+    @NoArgsConstructor
+    public static class Pagination {
 
-		@JsonProperty("last_visible_page")
-		private int lastVisiblePage;
+        @JsonProperty("last_visible_page")
+        private int lastVisiblePage;
 
-		@JsonProperty("has_next_page")
-		private boolean hasNextPage;
+        @JsonProperty("has_next_page")
+        private boolean hasNextPage;
 
-		@JsonProperty("current_page")
-		private int currentPage;
-	}
+        @JsonProperty("current_page")
+        private int currentPage;
+    }
 }

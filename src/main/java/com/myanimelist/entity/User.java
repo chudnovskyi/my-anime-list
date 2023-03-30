@@ -1,67 +1,62 @@
 package com.myanimelist.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends AuditableEntity<Integer> {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+    private String username;
+    private String password;
+    private String email;
+    private String activationCode;
 
-	private String username;
+    @Lob
+    private byte[] image;
 
-	private String password;
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            })
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
 
-	private String email;
+    @Builder.Default
+    @OneToMany(
+            mappedBy = "user",
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            })
+    private List<Review> reviews = new ArrayList<>();
 
-	private String activationCode;
-
-	@Lob
-	private byte[] image;
-
-	@ManyToMany(
-			fetch = FetchType.EAGER,
-			cascade = {
-					CascadeType.DETACH,
-					CascadeType.MERGE,
-					CascadeType.PERSIST,
-					CascadeType.REFRESH
-			})
-	@JoinTable(
-			name = "users_roles", 
-			joinColumns = @JoinColumn(name = "user_id"), 
-			inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Collection<Role> roles;
-
-	@OneToMany(
-			mappedBy = "user",
-			fetch = FetchType.LAZY,
-			cascade = {
-					CascadeType.DETACH, 
-					CascadeType.MERGE, 
-					CascadeType.PERSIST, 
-					CascadeType.REFRESH
-			})
-	private Collection<Review> reviews;
-
-	@OneToMany(
-			mappedBy = "user",
-			fetch = FetchType.LAZY,
-			cascade = {
-					CascadeType.DETACH,
-					CascadeType.MERGE,
-					CascadeType.PERSIST,
-					CascadeType.REFRESH
-			})
-	private Set<UserAnimeDetail> userAnimeDetails = new HashSet<>();
+    @Builder.Default
+    @OneToMany(
+            mappedBy = "user",
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            })
+    private Set<UserAnime> userAnime = new HashSet<>();
 }

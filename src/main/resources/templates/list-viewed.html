@@ -43,11 +43,11 @@
 		    </thead>
 		    <tbody>
 		        <tr th:each="anime: ${page.content}">
-		        	<td align="center"><img th:src="${anime.animeDetail.image}"></td>
-				    <td style=font-size:28px align="center"><p th:if="${anime.animeDetail.title}" th:text="${anime.animeDetail.title}"/></td>
+		        	<td align="center"><img th:src="${anime.anime.image}"></td>
+				    <td style=font-size:28px align="center"><p th:if="${anime.anime.title}" th:text="${anime.anime.title}"/></td>
 				    <td style=font-size:28px align="center"><p th:if="${anime.score}" th:text="${anime.score}"/></td>
 				    <td style=font-size:28px align="center"><p th:if="${anime.favourite}" th:text="${anime.favourite}"/></td>
-				    <td align="center"><a th:href="@{/anime/{id}(id=${anime.animeDetail.malId})}">Details</a></td>
+				    <td align="center"><a th:href="@{/anime/{id}(id=${anime.anime.id})}">Details</a></td>
 		        </tr>
 		    </tbody>
 		</table>

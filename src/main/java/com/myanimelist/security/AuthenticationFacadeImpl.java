@@ -12,8 +12,8 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-	@Override
-	public String getUsername() {
+    @Override
+    public String getUsername() {
         return getAuthentication() != null ? getAuthentication().getName() : null;
-	}
+    }
 }

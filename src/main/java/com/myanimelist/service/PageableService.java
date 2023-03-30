@@ -6,9 +6,9 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 
-public interface PageableService {
+public interface PageableService<T> {
 
-	<E> void preparePageableModel(Model theModel, Page<E> animePage);
+    void preparePageableModel(Model theModel, Page<T> animePage);
 
-	<E> PageImpl<E> getPageable(List<E> animeList, int page, int size);
+    PageImpl<T> getPageable(List<T> animeList, int page, int size);
 }

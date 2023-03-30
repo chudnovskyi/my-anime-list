@@ -6,11 +6,11 @@ import reactor.core.publisher.Mono;
 
 public interface JikanApiService {
 
-	Mono<AnimeListResponse> search(String title, String genres, int pageId);
+    Mono<AnimeListResponse> search(String animeTitle, String animeGenres, int pageNumber);
 
-	Mono<AnimeListResponse> searchByRating(int pageId);
+    Mono<AnimeListResponse> searchByRating(int pageNumber);
 
-	Anime searchById(int animeId);
+    Anime searchById(int animeId);
 
-	Mono<Anime> searchRandom();
+    Mono<Anime> searchRandom();
 }

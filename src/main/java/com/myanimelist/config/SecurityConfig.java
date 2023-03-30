@@ -17,25 +17,25 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor(onConstructor_ = {@Lazy})
 public class SecurityConfig {
 
-	private final UserService userService;
+    private final UserService userService;
     private final AuthenticationSuccessHandlerImpl authenticationSuccessHandlerImpl;
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-		auth.setUserDetailsService(userService);
-		auth.setPasswordEncoder(passwordEncoder());
-		return auth;
-	}
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userService);
+        auth.setPasswordEncoder(passwordEncoder());
+        return auth;
+    }
 
-	@Bean
-	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		http
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        http
                 .userDetailsService(userService)
 
                 .authorizeRequests()
@@ -58,6 +58,6 @@ public class SecurityConfig {
                 .exceptionHandling()
                     .accessDeniedPage("/access-denied");
 
-		return http.build();
-	}
+        return http.build();
+    }
 }

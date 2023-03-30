@@ -6,13 +6,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
 
-	User find(String username);
+    User find(String username);
 
-	void save(UserView user);
+    void save(UserView user);
 
-	boolean activateUser(String code);
+    boolean activateUser(String code);
 
-	void uploadProfilePicture(byte[] bytes);
+    void uploadProfilePicture(byte[] bytes);
 
-	byte[] getProfilePicture();
+    byte[] getProfilePicture();
 }

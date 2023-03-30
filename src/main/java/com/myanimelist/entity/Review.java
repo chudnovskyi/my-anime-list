@@ -1,38 +1,29 @@
 package com.myanimelist.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "reviews")
-public class Review {
+public class Review extends AuditableEntity<Integer> {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+    private Integer animeId;
+    private String content;
 
-	@NonNull
-	private Integer animeId;
-
-	@NonNull
-	private String content;
-
-	@NonNull
-	@ManyToOne(
-			fetch = FetchType.LAZY,
-			cascade = {
-					CascadeType.DETACH, 
-					CascadeType.MERGE, 
-					CascadeType.PERSIST, 
-					CascadeType.REFRESH
-			})
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.PERSIST,
+                    CascadeType.REFRESH
+            })
+    @JoinColumn(name = "user_id")
+    private User user;
 }

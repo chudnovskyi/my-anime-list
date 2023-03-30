@@ -19,42 +19,42 @@ import javax.validation.Valid;
 @RequestMapping("/reviews")
 public class ReviewController {
 
-	private final ReviewService reviewService;
+    private final ReviewService reviewService;
 
-	@InitBinder
-	public void initBinder(WebDataBinder dataBinder) {
-		WebBindingUtils.initBinder(dataBinder);
-	}
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder) {
+        WebBindingUtils.initBinder(dataBinder);
+    }
 
-	@PostMapping("/add")
-	public String add(
-			@Valid @ModelAttribute(name = "reviewForm") ReviewView reviewForm,
-			BindingResult bindingResult,
-			RedirectAttributes attr) {
-		
-		if (bindingResult.hasErrors()) {
-			attr.addFlashAttribute("org.springframework.validation.BindingResult.reviewForm", bindingResult);
-			attr.addFlashAttribute("reviewForm", reviewForm);
-		} else {
-			reviewService.save(reviewForm);
-		}
-		
-		return "redirect:/anime/" + reviewForm.getAnimeId();
-	}
+    @PostMapping("/add")
+    public String add(
+            @Valid @ModelAttribute(name = "reviewForm") ReviewView reviewForm,
+            BindingResult bindingResult,
+            RedirectAttributes attr) {
 
-	@GetMapping("/remove/{animeId}/{reviewId}")
-	public String remove(
-			@PathVariable(name = "reviewId") int reviewId,
-			@PathVariable(name = "animeId") int animeId,
-			Model model) {
-		
-		try {
-			reviewService.remove(reviewId);
-		} catch (UserHasNoAccessException e) {
-			model.addAttribute("userHasNoAccess", "You cannot delete someone else's review!!");
-			return "home-page";
-		}
-		
-		return "redirect:/anime/" + animeId;
-	}
+        if (bindingResult.hasErrors()) {
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.reviewForm", bindingResult);
+            attr.addFlashAttribute("reviewForm", reviewForm);
+        }
+
+        reviewService.save(reviewForm);
+
+        return "redirect:/anime/" + reviewForm.getAnimeId();
+    }
+
+    @GetMapping("/remove/{animeId}/{reviewId}")
+    public String remove(
+            @PathVariable(name = "reviewId") int reviewId,
+            @PathVariable(name = "animeId") int animeId,
+            Model model) {
+
+        try {
+            reviewService.remove(reviewId);
+        } catch (UserHasNoAccessException e) {
+            model.addAttribute("userHasNoAccess", "You cannot delete someone else's review!!");
+            return "home-page";
+        }
+
+        return "redirect:/anime/" + animeId;
+    }
 }
