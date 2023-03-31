@@ -12,16 +12,23 @@ import com.myanimelist.view.ReviewView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.executable.ValidateOnExecution;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.myanimelist.model.AnimeStatus.*;
 
 @Controller
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/anime")
 public class AnimeController {
@@ -41,10 +48,15 @@ public class AnimeController {
 
     @GetMapping("/{animeId}")
     public String searchById(
-            @PathVariable(name = "animeId") int animeId,
+            @PathVariable(name = "animeId") @Min(1) int animeId,
             Model model) {
 
-        Anime anime = jikanApiService.searchById(animeId);
+        Anime anime;
+        try {
+            anime = jikanApiService.searchById(animeId);
+        } catch (WebClientResponseException.NotFound e) {
+            throw new EntityNotFoundException(e.getMessage());
+        }
 
         model.addAttribute("anime", anime);
         model.addAttribute("reviews", reviewService.retrieveList(animeId));
@@ -76,7 +88,7 @@ public class AnimeController {
     @PostMapping("/search/{pageId}")
     public Mono<String> searchAnime(
             @ModelAttribute("searchAnime") AnimeView searchAnime,
-            @PathVariable(name = "pageId") int pageId,
+            @PathVariable(name = "pageId") @Min(1) int pageId,
             Model model) {
 
         Mono<AnimeListResponse> animeListMono = jikanApiService.search(searchAnime.getTitle(), searchAnime.getGenres(), pageId);
@@ -92,7 +104,7 @@ public class AnimeController {
 
     @GetMapping("/top/{pageId}")
     public Mono<String> getTopRatedAnime(
-            @PathVariable(name = "pageId") int pageId,
+            @PathVariable(name = "pageId") @Min(1) int pageId,
             Model model) {
 
         Mono<AnimeListResponse> animeListResponseMono = jikanApiService.searchByRating(pageId);
@@ -107,7 +119,7 @@ public class AnimeController {
 
     @GetMapping("/set/{animeId}")
     public String setAnimeStatus(
-            @PathVariable(name = "animeId") int animeId,
+            @PathVariable(name = "animeId") @Min(1) int animeId,
             @RequestParam(name = "status") AnimeStatus status) {
 
         Consumer<UserAnime> consumer = STATUS_CONSUMER.get(status);
@@ -123,8 +135,8 @@ public class AnimeController {
 
     @GetMapping("/score/{animeId}/{score}")
     public String setUserAnimeScore(
-            @PathVariable(name = "animeId") int animeId,
-            @PathVariable(name = "score") int score) {
+            @PathVariable(name = "animeId") @Min(1) int animeId,
+            @PathVariable(name = "score") @Min(0) @Max(10) int score) {
 
         animeService.updateUserAnime(animeId, x -> x.setScore(score));
 
@@ -133,7 +145,7 @@ public class AnimeController {
 
     @GetMapping("/reset/{animeId}")
     public String resetUserAnime(
-            @PathVariable(name = "animeId") int animeId) {
+            @PathVariable(name = "animeId") @Min(1) int animeId) {
 
         animeService.reset(animeId);
 

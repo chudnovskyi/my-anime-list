@@ -11,6 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @Service
@@ -73,7 +75,7 @@ public class JikanApiServiceImpl implements JikanApiService {
                 .bodyToMono(AnimeResponse.class)
                 .map(AnimeResponse::getAnime)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException("Anime with id " + animeId + " not found")))
-                .block();
+                .block(Duration.of(1, ChronoUnit.SECONDS));
     }
 
     @Override

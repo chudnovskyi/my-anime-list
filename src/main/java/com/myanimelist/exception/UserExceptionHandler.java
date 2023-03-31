@@ -9,6 +9,9 @@ import org.springframework.web.client.HttpClientErrorException.TooManyRequests;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
+
 @ControllerAdvice
 public class UserExceptionHandler {
 
@@ -45,7 +48,31 @@ public class UserExceptionHandler {
         UserErrorResponse error = new UserErrorResponse();
 
         error.setCode(HttpStatus.BAD_REQUEST.value());
-        error.setMessage("Pressing the \"back\" button triggers a GET method, which is not supported by this application, please only use the in-app buttons to avoid this error.");
+        error.setMessage("Something went wrong. Please, only use the in-app buttons to avoid this error.");
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.PAYLOAD_TOO_LARGE);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<UserErrorResponse> handleConstraintViolationException(Exception e) {
+
+        UserErrorResponse error = new UserErrorResponse();
+
+        error.setCode(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(e.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.PAYLOAD_TOO_LARGE);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<UserErrorResponse> handleEntityNotFoundException(Exception e) {
+
+        UserErrorResponse error = new UserErrorResponse();
+
+        error.setCode(HttpStatus.BAD_REQUEST.value());
+        error.setMessage(e.getMessage());
         error.setTimestamp(System.currentTimeMillis());
 
         return new ResponseEntity<>(error, HttpStatus.PAYLOAD_TOO_LARGE);

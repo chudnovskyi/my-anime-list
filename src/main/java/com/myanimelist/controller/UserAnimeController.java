@@ -8,16 +8,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Min;
 import java.util.Map;
 import java.util.function.Predicate;
 
 import static com.myanimelist.model.AnimeStatus.*;
 
 @Controller
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/list")
 public class UserAnimeController {
@@ -37,8 +40,8 @@ public class UserAnimeController {
     @GetMapping
     public String getAnimeListByStatus(
             @RequestParam(name = "status") AnimeStatus status,
-            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size, Model model) {
+            @RequestParam(name = "page", required = false, defaultValue = "1") @Min(1) Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") @Min(1) Integer size, Model model) {
 
         Predicate<UserAnime> predicate = STATUS_PREDICATES.get(status);
 
