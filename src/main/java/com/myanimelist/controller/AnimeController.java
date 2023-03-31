@@ -54,7 +54,7 @@ public class AnimeController {
             model.addAttribute("reviewForm", new ReviewView(anime.getMalId()));
         }
 
-        return "anime-details";
+        return "anime/anime-details";
     }
 
     @GetMapping("/random")
@@ -69,7 +69,7 @@ public class AnimeController {
             model.addAttribute("reviews", reviewService.retrieveList(anime.getMalId()));
             model.addAttribute("userAnime", animeService.getUserAnime(anime.getMalId()));
 
-            return Mono.just("anime-details");
+            return Mono.just("anime/anime-details");
         }).switchIfEmpty(Mono.error(new EntityNotFoundException("Random anime not found")));
     }
 
@@ -86,7 +86,7 @@ public class AnimeController {
             model.addAttribute("animeList", animeListResponse.getAnimeList());
             model.addAttribute("pagination", animeListResponse.getPagination());
 
-            return "anime-search";
+            return "anime/anime-search";
         }).switchIfEmpty(Mono.error(new EntityNotFoundException("Anime list not found")));
     }
 
@@ -101,7 +101,7 @@ public class AnimeController {
             model.addAttribute("animeList", animeListResponse.getAnimeList());
             model.addAttribute("pagination", animeListResponse.getPagination());
 
-            return Mono.just("anime-top");
+            return Mono.just("anime/anime-top");
         }).switchIfEmpty(Mono.error(new EntityNotFoundException("Top anime list not found")));
     }
 

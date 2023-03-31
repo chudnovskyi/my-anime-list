@@ -31,7 +31,7 @@ public class RegistrationController {
 
         model.addAttribute("user", new UserView());
 
-        return "register-form";
+        return "security/register-form";
     }
 
     @GetMapping("/activate/{code}")
@@ -47,7 +47,7 @@ public class RegistrationController {
             model.addAttribute("accountActivationFailure", "Activation code not found ...");
         }
 
-        return "login-form";
+        return "security/login-form";
     }
 
     @PostMapping("/process")
@@ -57,17 +57,17 @@ public class RegistrationController {
             Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "register-form";
+            return "security/register-form";
         }
 
         try {
             userService.save(user);
         } catch (UsernameAlreadyExistsException e) {
             model.addAttribute("alreadyRegistered", "Username already registered!");
-            return "register-form";
+            return "security/register-form";
         }
 
         model.addAttribute("successfullyRegistered", "A verification email has been sent to: \n" + user.getEmail());
-        return "login-form";
+        return "security/login-form";
     }
 }

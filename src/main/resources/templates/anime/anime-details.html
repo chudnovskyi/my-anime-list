@@ -16,29 +16,29 @@
 		<br>
 		
     	<img align="left" th:src="${anime.images.jpg.largeImageUrl}">
-    	
+
     	<div class="row row-no-gutters">
     		<div>
 				<a th:if="${userAnime.watching == false}" th:href="@{/anime/set/{animeId}(animeId = ${anime.malId}, status = WATCHING)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Watching</a>
 				<a th:if="${userAnime.watching == true}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Watching</a>
-			
+
 				<a th:if="${userAnime.planning == false}" th:href="@{/anime/set/{animeId}(animeId = ${anime.malId}, status = PLANNING)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Planning</a>
 				<a th:if="${userAnime.planning == true}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Planning</a>
-				
+
 				<a th:if="${userAnime.completed == false}" th:href="@{/anime/set/{animeId}(animeId = ${anime.malId}, status = FINISHED)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Completed</a>
 				<a th:if="${userAnime.completed == true}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Completed</a>
-			
+
 				<a th:if="${userAnime.onHold == false}" th:href="@{/anime/set/{animeId}(animeId = ${anime.malId}, status = ON_HOLD)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">On-hold</a>
 				<a th:if="${userAnime.onHold == true}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">On-hold</a>
-			
+
 				<a th:if="${userAnime.dropped == false}" th:href="@{/anime/set/{animeId}(animeId = ${anime.malId}, status = DROPPED)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Dropped</a>
 				<a th:if="${userAnime.dropped == true}" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Dropped</a>
-				
+
 				<a th:if="${userAnime.id != 0}" th:href="@{/anime/reset/{animeId}(animeId = ${anime.malId})}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Reset</a>
 			</div>
 			
 			<br><br><br>
-			
+
 			<div th:if="${userAnime.id != 0 && userAnime.planning != true}" class="alert alert-success col-xs-6">
 				Rate:
 				<a th:if="${userAnime.score == 1}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">1</a>
@@ -61,10 +61,10 @@
 				<a th:if="${userAnime.score != 9}" th:href="@{/anime/score/{animeId}/{score}(animeId = ${anime.malId}, score = 9)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">9</a>
 				<a th:if="${userAnime.score == 10}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">10</a>
 				<a th:if="${userAnime.score != 10}" th:href="@{/anime/score/{animeId}/{score}(animeId = ${anime.malId}, score = 10)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">10</a>
-				
+
 				<a th:if="${userAnime.score != 0}" th:href="@{/anime/score/{animeId}/{score}(animeId = ${anime.malId}, score = 0)}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Reset</a>
 			</div>
-			
+
 			<div th:if="${userAnime.watching == true || userAnime.completed == true}">
 				<a th:if="${userAnime.favourite == true}" th:href="@{/anime/set/{animeId}(animeId = ${anime.malId}, status = FAVOURITE)}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">★</a>
 				<a th:if="${userAnime.favourite == false}" th:href="@{/anime/set/{animeId}(animeId = ${anime.malId}, status = FAVOURITE)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">★</a>

@@ -18,11 +18,11 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
 			int statusCode = Integer.parseInt(status.toString());
 			
 			if (statusCode == HttpStatus.NOT_FOUND.value()) {
-				return "error-404";
+				return "error/error-404";
 			} else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-				return "error-500";
+				return "error/error-500";
 			}
 		}
-		return "error";
+		return "error/error";
 	}
 }

@@ -16,7 +16,7 @@ CREATE TABLE `users` (
 	`username` VARCHAR(50) UNIQUE NOT NULL,
 	`password` CHAR(60) NOT NULL,
 	`email` VARCHAR(255) NOT NULL,
-	`activation_code` BINARY(32) DEFAULT NULL,
+	`activation_code` VARCHAR(80) DEFAULT NULL,
 	`image` MEDIUMBLOB DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -56,6 +56,6 @@ public class UserAnimeController {
 
         model.addAttribute("tab", status);
 
-        return "list-viewed";
+        return "anime/anime-list";
     }
 }
