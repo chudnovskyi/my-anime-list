@@ -34,12 +34,12 @@
 				<a th:if="${userAnime.dropped == false}" th:href="@{/anime/set/{animeId}(animeId = ${anime.malId}, status = DROPPED)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Dropped</a>
 				<a th:if="${userAnime.dropped == true}" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Dropped</a>
 
-				<a th:if="${userAnime.id != 0}" th:href="@{/anime/reset/{animeId}(animeId = ${anime.malId})}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Reset</a>
+				<a th:if="${userAnime.id != null}" th:href="@{/anime/reset/{animeId}(animeId = ${anime.malId})}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Reset</a>
 			</div>
 			
 			<br><br><br>
 
-			<div th:if="${userAnime.id != 0 && userAnime.planning != true}" class="alert alert-success col-xs-6">
+			<div th:if="${userAnime.getId() != null && userAnime.planning != true}" class="alert alert-success col-xs-6">
 				Rate:
 				<a th:if="${userAnime.score == 1}" class="btn btn-success btn-lg active" role="button" aria-pressed="true">1</a>
 				<a th:if="${userAnime.score != 1}" th:href="@{/anime/score/{animeId}/{score}(animeId = ${anime.malId}, score = 1)}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">1</a>

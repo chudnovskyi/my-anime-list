@@ -35,9 +35,9 @@ public class ReviewController {
         if (bindingResult.hasErrors()) {
             attr.addFlashAttribute("org.springframework.validation.BindingResult.reviewForm", bindingResult);
             attr.addFlashAttribute("reviewForm", reviewForm);
+        } else {
+            reviewService.save(reviewForm);
         }
-
-        reviewService.save(reviewForm);
 
         return "redirect:/anime/" + reviewForm.getAnimeId();
     }

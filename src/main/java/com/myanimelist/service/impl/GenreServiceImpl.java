@@ -1,6 +1,6 @@
 package com.myanimelist.service.impl;
 
-import com.myanimelist.config.JikanApiConfig;
+import com.myanimelist.config.JikanApiProperties;
 import com.myanimelist.response.GenresResponse;
 import com.myanimelist.response.GenresResponse.Genre;
 import com.myanimelist.service.GenreService;
@@ -20,17 +20,17 @@ import java.util.stream.Collectors;
 public class GenreServiceImpl implements GenreService {
 
     private final WebClient webClient;
-    private final JikanApiConfig config;
+    private final JikanApiProperties properties;
 
-    public GenreServiceImpl(WebClient.Builder webClientBuilder, JikanApiConfig config) {
-        this.webClient = webClientBuilder.baseUrl(config.getBaseUrl()).build();
-        this.config = config;
+    public GenreServiceImpl(WebClient.Builder webClientBuilder, JikanApiProperties properties) {
+        this.webClient = webClientBuilder.baseUrl(properties.getBaseUrl()).build();
+        this.properties = properties;
     }
 
     @Override
     @Cacheable("genres")
     public Map<Integer, String> retrieveAllGenres() {
-        String url = config.getPaths().get("genres");
+        String url = properties.getPaths().get("genres");
 
         log.info(url);
 

@@ -1,6 +1,6 @@
 package com.myanimelist.service.impl;
 
-import com.myanimelist.config.JikanApiConfig;
+import com.myanimelist.config.JikanApiProperties;
 import com.myanimelist.response.AnimeListResponse;
 import com.myanimelist.response.AnimeResponse;
 import com.myanimelist.response.AnimeResponse.Anime;
@@ -19,27 +19,27 @@ import java.time.temporal.ChronoUnit;
 public class JikanApiServiceImpl implements JikanApiService {
 
     private final WebClient webClient;
-    private final JikanApiConfig config;
+    private final JikanApiProperties properties;
 
-    public JikanApiServiceImpl(WebClient.Builder webClientBuilder, JikanApiConfig config) {
-        this.webClient = webClientBuilder.baseUrl(config.getBaseUrl()).build();
-        this.config = config;
+    public JikanApiServiceImpl(WebClient.Builder webClientBuilder, JikanApiProperties properties) {
+        this.webClient = webClientBuilder.baseUrl(properties.getBaseUrl()).build();
+        this.properties = properties;
     }
 
     @Override
     public Mono<AnimeListResponse> search(String animeTitle, String animeGenres, int pageNumber) {
-        StringBuilder urlBuilder = new StringBuilder(config.getPaths().get("anime"));
-        urlBuilder.append(config.getParams().get("page")).append(pageNumber)
-                .append(config.getParams().get("limit"))
-                .append(config.getParams().get("orderBy.score"))
-                .append(config.getParams().get("sort.desc"));
+        StringBuilder urlBuilder = new StringBuilder(properties.getPaths().get("anime"));
+        urlBuilder.append(properties.getParams().get("page")).append(pageNumber)
+                .append(properties.getParams().get("limit"))
+                .append(properties.getParams().get("orderBy.score"))
+                .append(properties.getParams().get("sort.desc"));
 
         if (animeTitle != null && !animeTitle.isBlank()) {
-            urlBuilder.append(config.getParams().get("title")).append(animeTitle);
+            urlBuilder.append(properties.getParams().get("title")).append(animeTitle);
         }
 
         if (animeGenres != null && !animeGenres.isBlank()) {
-            urlBuilder.append(config.getParams().get("genres")).append(animeGenres);
+            urlBuilder.append(properties.getParams().get("genres")).append(animeGenres);
         }
 
         String url = urlBuilder.toString();
@@ -53,9 +53,9 @@ public class JikanApiServiceImpl implements JikanApiService {
     }
 
     public Mono<AnimeListResponse> searchByRating(int pageNumber) {
-        String url = config.getPaths().get("top") +
-                config.getParams().get("page") + pageNumber +
-                config.getParams().get("limit");
+        String url = properties.getPaths().get("top") +
+                properties.getParams().get("page") + pageNumber +
+                properties.getParams().get("limit");
 
         log.info(url);
 
@@ -66,7 +66,7 @@ public class JikanApiServiceImpl implements JikanApiService {
     }
 
     public Anime searchById(int animeId) {
-        String url = config.getPaths().get("anime.id") + animeId;
+        String url = properties.getPaths().get("anime.id") + animeId;
 
         log.info(url);
 
@@ -75,12 +75,12 @@ public class JikanApiServiceImpl implements JikanApiService {
                 .bodyToMono(AnimeResponse.class)
                 .map(AnimeResponse::getAnime)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException("Anime with id " + animeId + " not found")))
-                .block(Duration.of(1, ChronoUnit.SECONDS));
+                .block(Duration.of(10, ChronoUnit.SECONDS));
     }
 
     @Override
     public Mono<Anime> searchRandom() {
-        String url = config.getPaths().get("random");
+        String url = properties.getPaths().get("random");
 
         log.info(url);
 
