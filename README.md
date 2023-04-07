@@ -57,7 +57,7 @@ Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](
 
 
 # SQL Schema
-![](https://github.com/lwantPizza/my-anime-list/blob/main/images/sql-schema.png?raw=true)
+![](https://github.com/lwantPizza/my-anime-list/blob/main/images/sql-schema1.png?raw=true)
 
 
 # MVC Endpoints
