@@ -10,7 +10,6 @@ import com.myanimelist.service.UUIDService;
 import com.myanimelist.service.impl.MailSenderServiceImpl;
 import com.myanimelist.service.impl.UserServiceImpl;
 import com.myanimelist.view.UserView;
-import com.sun.xml.bind.v2.TODO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

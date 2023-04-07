@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -24,11 +24,11 @@
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/anime/random}">Random</a>
                     <br>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(favourite=true, size=5, page=1)}">Favourite</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=WATCHING, size=5, page=1)}">Watching</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=PLANNING, size=5, page=1)}">Planning</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=FINISHED, size=5, page=1)}">Finished</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=ON_HOLD, size=5, page=1)}">On-hold</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=DROPPED, size=5, page=1)}">Dropped</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=${T(com.myanimelist.model.AnimeStatus).WATCHING}, size=5, page=1)}">Watching</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=${T(com.myanimelist.model.AnimeStatus).PLANNING}, size=5, page=1)}">Planning</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=${T(com.myanimelist.model.AnimeStatus).FINISHED}, size=5, page=1)}">Finished</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=${T(com.myanimelist.model.AnimeStatus).ON_HOLD}, size=5, page=1)}">On-hold</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=${T(com.myanimelist.model.AnimeStatus).DROPPED}, size=5, page=1)}">Dropped</a>
                 </div>
             </div>
             <!-- Page content wrapper-->
@@ -76,17 +76,19 @@
 					        <div style="margin-bottom: 25px" class="input-group">
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-user"></i>
-								</span> 
-								<input type="text" th:field="*{title}" placeholder="Enter title (opt)" 
-									class="form-control" th:errorclass="fieldError" />
+								</span>
+								<label>
+									<input type="text" th:field="*{title}" placeholder="Enter title (opt)"
+										class="form-control" th:errorclass="fieldError" />
+								</label>
 							</div>
-							
+
 							<select class="form-control" th:field="*{genres}" multiple="multiple" size="10">
 							    <option th:each="genre : ${genres}"
 							            th:value="${genre.key}"
 							            th:text="${genre.value}">genre name</option>
 							</select>
-							
+
 							<div style="margin-top: 10px" class="form-group">
 								<div class="col-sm-6 controls">
 									<button type="submit" class="btn btn-primary">

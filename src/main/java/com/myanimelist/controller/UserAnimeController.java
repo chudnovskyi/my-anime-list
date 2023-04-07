@@ -35,7 +35,7 @@ public class UserAnimeController {
             @RequestParam(name = "size", required = false, defaultValue = "5") @Min(1) Integer size,
             Model model) {
 
-        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("score").descending());
+        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("score").descending().and(Sort.by("anime.title")));
 
         Page<UserAnime> userAnimePage;
         if (isFavourite) {

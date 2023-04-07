@@ -5,6 +5,4 @@ import org.springframework.boot.test.context.TestConfiguration;
 @TestConfiguration
 public class TestApplicationRunner {
 
-//    @SpyBean(name = "dumm")
-//    private PageableService<String> p;
 }

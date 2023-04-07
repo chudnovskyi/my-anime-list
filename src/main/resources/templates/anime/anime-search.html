@@ -1,63 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>
-        	Anime search
-        </title>
-        
-        <link rel="stylesheet" th:href="@{/css/styles.css}" />
-    </head>
-    <body>
-    	<a th:href="@{/home}">
-			Back to home page
-		</a>
-		
-		<table class="table table-secondary">
-		    <thead>
-		        <tr align="center">
-		            <th>Image</th>
-		            <th class="col-5 text-truncate">Title</th>
-		            <th class="col-2 text-truncate">Year</th>
-		            <th class="col-2 text-truncate">Episodes</th>
-		            <th class="col-2 text-truncate">Score</th>
-		            <th class="col-2 text-truncate">More info</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-		        <tr th:each="anime: ${animeList}">
-				    <td><img th:src="${anime.images.jpg.imageUrl}"></td>
-				    <td style=font-size:22px align="center"><p th:if="${anime.title}"		th:text="${anime.title}"/></td>
-				    <td style=font-size:30px align="center"><p th:if="${anime.year}"		th:text="${anime.year}"/></td>
-				    <td style=font-size:30px align="center"><p th:if="${anime.episodes}"	th:text="${anime.episodes}"/></td>
-				    <td style=font-size:30px align="center"><p th:if="${anime.score}"		th:text="${anime.score}"/></p></td>
-				    <td align="center"><a th:href="@{/anime/{id}(id=${anime.malId})}">Details</a></td>
-		        </tr>
-		    </tbody>
-		</table>
-		
-		<div th:if="${pagination}">
-			<p th:text="'Current page: ' + ${pagination.currentPage}"></p>
-			<p th:text="'Total pages: ' + ${pagination.lastVisiblePage}"></p>
-		</div>
-		
-		<div th:if="${pagination.currentPage > 1}" class="inline">
-			<form method="post" th:action="@{/anime/search/__${pagination.currentPage - 1}__}" th:object="${animeView}">
-				<input type="hidden" th:field="*{title}" id="title">
-				<input type="hidden" th:field="*{genres}" id="title">
-			    <button type="submit" name="submit" value="value" class="link-button">
-			    	<-
-			    </button>
-			</form> 
-		</div>
-		
-		<div th:if="${pagination.hasNextPage == true}" class="inline">
-			<form method="post" th:action="@{/anime/search/__${pagination.currentPage + 1}__}" th:object="${animeView}">
-				<input type="hidden" th:field="*{title}" id="title">
-				<input type="hidden" th:field="*{genres}" id="title">
-			    <button type="submit" name="submit" value="value" class="link-button">
-			    	->
-			    </button>
-			</form> 
-		</div>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>
+        Anime search
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+<a th:href="@{/home}">
+    Back to home page
+</a>
+
+<table class="table table-secondary">
+    <thead>
+    <tr align="center">
+        <th>Image</th>
+        <th class="col-5 text-truncate">Title</th>
+        <th class="col-2 text-truncate">Year</th>
+        <th class="col-2 text-truncate">Episodes</th>
+        <th class="col-2 text-truncate">Score</th>
+        <th class="col-2 text-truncate">More info</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="anime: ${animeList}">
+        <td><img th:src="${anime.images.jpg.imageUrl}"></td>
+        <td style=font-size:22px align="center"><p th:if="${anime.title}" th:text="${anime.title}"/></td>
+        <td style=font-size:30px align="center"><p th:if="${anime.year}" th:text="${anime.year}"/></td>
+        <td style=font-size:30px align="center"><p th:if="${anime.episodes}" th:text="${anime.episodes}"/></td>
+        <td style=font-size:30px align="center"><p th:if="${anime.score}" th:text="${anime.score}"/></td>
+        <td align="center"><a th:href="@{/anime/{id}(id=${anime.malId})}">Details</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${pagination}">
+    <p th:text="'Current page: ' + ${pagination.currentPage}"></p>
+    <p th:text="'Total pages: ' + ${pagination.lastVisiblePage}"></p>
+</div>
+
+<div th:if="${pagination.currentPage > 1}" class="inline">
+    <form method="post" th:action="@{/anime/search/__${pagination.currentPage - 1}__}" th:object="${animeView}">
+        <input type="hidden" th:field="*{title}">
+        <input type="hidden" th:field="*{genres}">
+        <button type="submit" name="submit" value="value" class="link-button">
+            <-
+        </button>
+    </form>
+</div>
+
+<div th:if="${pagination.hasNextPage == true}" class="inline">
+    <form method="post" th:action="@{/anime/search/__${pagination.currentPage + 1}__}" th:object="${animeView}">
+        <input type="hidden" th:field="*{title}">
+        <input type="hidden" th:field="*{genres}">
+        <button type="submit" name="submit" value="value" class="link-button">
+            ->
+        </button>
+    </form>
+</div>
+</body>
 </html>
