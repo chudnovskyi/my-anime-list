@@ -2,6 +2,7 @@ package com.myanimelist.service.impl;
 
 import com.myanimelist.entity.Anime;
 import com.myanimelist.entity.UserAnime;
+import com.myanimelist.model.AnimeStatus;
 import com.myanimelist.repository.AnimeRepository;
 import com.myanimelist.repository.UserAnimeRepository;
 import com.myanimelist.response.AnimeResponse;
@@ -10,12 +11,12 @@ import com.myanimelist.service.AnimeService;
 import com.myanimelist.service.JikanApiService;
 import com.myanimelist.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 @Service
 @Transactional
@@ -35,11 +36,21 @@ public class AnimeServiceImpl implements AnimeService {
     }
 
     @Override
-    public List<UserAnime> filterUserAnimeListByPredicate(Predicate<UserAnime> predicate) {
-        return userAnimeRepository.findAllByUser_UsernameOrderByScoreDesc(authenticationFacade.getUsername())
-                .stream()
-                .filter(predicate)
-                .toList();
+    public Page<UserAnime> getUserAnimeListByStatus(AnimeStatus status, PageRequest pageRequest) {
+        return userAnimeRepository.findAllByStatusAndUser_Username(
+                status,
+                authenticationFacade.getUsername(),
+                pageRequest
+        );
+    }
+
+    @Override
+    public Page<UserAnime> getFavouriteUserAnimeList(boolean isFavourite, PageRequest pageRequest) {
+        return userAnimeRepository.findAllByFavouriteAndUser_Username(
+                isFavourite,
+                authenticationFacade.getUsername(),
+                pageRequest
+        );
     }
 
     @Override

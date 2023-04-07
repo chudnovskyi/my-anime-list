@@ -14,16 +14,23 @@ public class MailSenderServiceImpl implements MailSenderService {
     private final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
-    private String mailname;
+    private String senderEmail;
+    @Value("${host.domain}")
+    private String hostDomain;
 
     @Override
-    public void send(String emailTo, String subject, String message) {
+    public void send(String username, String userEmail, String activationCode) {
+        String message = """
+                Hello, %s!
+                Welcome to MyAnimeList. Please, follow link to verify your account:
+                %s/register/activate/%s,
+                """.formatted(username, hostDomain, activationCode);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-        mailMessage.setFrom(mailname);
-        mailMessage.setTo(emailTo);
-        mailMessage.setSubject(subject);
+        mailMessage.setFrom(senderEmail);
+        mailMessage.setTo(userEmail);
+        mailMessage.setSubject("Activation Code");
         mailMessage.setText(message);
 
         javaMailSender.send(mailMessage);

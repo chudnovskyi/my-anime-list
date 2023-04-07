@@ -16,7 +16,7 @@ public class ReviewView {
     @NonNull
     private Integer animeId;
 
-    @NotNull(message = "{Review.NotNull}")
-    @Size(min = 5, message = "{Review.Size}")
+    @NotNull(message = "{review.content.required}")
+    @Size(min = 5, message = "{review.content.minLength}")
     private String content;
 }

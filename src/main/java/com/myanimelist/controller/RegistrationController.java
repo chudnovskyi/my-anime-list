@@ -52,7 +52,7 @@ public class RegistrationController {
 
     @PostMapping("/process")
     public String process(
-            @Valid @ModelAttribute(name = "user") UserView user,
+            @Valid @ModelAttribute(name = "user") UserView userView,
             BindingResult bindingResult,
             Model model) {
 
@@ -61,13 +61,13 @@ public class RegistrationController {
         }
 
         try {
-            userService.save(user);
+            userService.save(userView);
         } catch (UsernameAlreadyExistsException e) {
             model.addAttribute("alreadyRegistered", "Username already registered!");
             return "security/register-form";
         }
 
-        model.addAttribute("successfullyRegistered", "A verification email has been sent to: \n" + user.getEmail());
+        model.addAttribute("successfullyRegistered", "A verification email has been sent to: \n" + userView.getEmail());
         return "security/login-form";
     }
 }

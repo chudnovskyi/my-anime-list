@@ -24,7 +24,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final AuthenticationFacade authenticationFacade;
 
     @Override
-    public List<Review> retrieveList(int animeId) {
+    public List<Review> getReviews(int animeId) {
         return reviewRepository.findAllByAnimeId(animeId);
     }
 

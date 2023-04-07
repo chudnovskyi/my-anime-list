@@ -1,18 +1,26 @@
 package com.myanimelist.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "users")
-public class User extends AuditableEntity<Integer> {
+public class User implements BaseEntity<Integer> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String username;
     private String password;
@@ -58,5 +66,5 @@ public class User extends AuditableEntity<Integer> {
                     CascadeType.PERSIST,
                     CascadeType.REFRESH
             })
-    private Set<UserAnime> userAnime = new HashSet<>();
+    private List<UserAnime> userAnimeList = new ArrayList<>();
 }

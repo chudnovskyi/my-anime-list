@@ -5,6 +5,5 @@ public enum AnimeStatus {
     PLANNING,
     FINISHED,
     ON_HOLD,
-    DROPPED,
-    FAVOURITE
+    DROPPED
 }

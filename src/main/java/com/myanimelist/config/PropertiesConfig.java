@@ -7,8 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource({
-        "classpath:${envTarget:jikan.api}.properties",
-        "classpath:${envTarget:host}.properties"
+        "classpath:${envTarget:jikan}.properties"
 })
 public class PropertiesConfig {
 

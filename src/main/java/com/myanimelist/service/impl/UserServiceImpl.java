@@ -5,10 +5,10 @@ import com.myanimelist.exception.UsernameAlreadyExistsException;
 import com.myanimelist.repository.RoleRepository;
 import com.myanimelist.repository.UserRepository;
 import com.myanimelist.security.UserPrincipal;
+import com.myanimelist.service.UUIDService;
 import com.myanimelist.service.UserService;
 import com.myanimelist.view.UserView;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -30,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final MailSenderServiceImpl mailSenderService;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final Environment env;
+    private final UUIDService uuidService;
 
     @Override
     public User find(String username) {
@@ -45,22 +44,15 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(userView.getPassword()))
                 .email(userView.getEmail())
                 .roles(List.of(roleRepository.findByName("ROLE_USER").orElseThrow()))
-                .activationCode(UUID.randomUUID().toString())
+                .activationCode(uuidService.generateRandomUUID())
                 .build();
 
         try {
             userRepository.save(user);
-        } catch (Exception e) {
+            mailSenderService.send(user.getUsername(), user.getEmail(), user.getActivationCode());
+        } catch (RuntimeException e) {
             throw new UsernameAlreadyExistsException("Username " + user.getUsername() + " already exists!");
         }
-
-        String message = """
-                Hello, %s!
-                Welcome to MyAnimeList. Please, follow link to verify your account:
-                %s/register/activate/%s,
-                """.formatted(user.getUsername(), env.getProperty("host.domain"), user.getActivationCode());
-
-        mailSenderService.send(user.getEmail(), "Activation code", message);
     }
 
     @Override

@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS `reviews`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `roles`;
 DROP TABLE IF EXISTS `anime`;
+DROP TABLE IF EXISTS `anime_status`;
 
 --
 -- User can log in only if activation code is null (account activated)
@@ -100,6 +101,19 @@ INSERT INTO `anime` (`id`, `title`, `image`)
 		('41467', 'Bleach: Sennen Kessen-hen', 'https://cdn.myanimelist.net/images/anime/1764/126627.jpg'),
 		('11061', 'Hunter x Hunter (2011)', 'https://cdn.myanimelist.net/images/anime/1337/99013.jpg'),
 		('9999', 'One Piece 3D: Mugiwara Chase', 'https://cdn.myanimelist.net/images/anime/4/32455.jpg');
+        
+CREATE TABLE `anime_status` (
+	`id` INT NOT NULL PRIMARY KEY,
+	`name` VARCHAR(50) NOT NULL
+);
+
+INSERT INTO `anime_status` (`id`, `name`)
+	VALUES
+		('0', 'WATCHING'),
+        ('1', 'PLANNING'),
+        ('2', 'FINISHED'),
+        ('3', 'ON_HOLD'),
+        ('4', 'DROPPED');
 	
 --
 -- Business rules:
@@ -111,13 +125,9 @@ CREATE TABLE `users_anime` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`user_id` INT NOT NULL,
 	`anime_id` INT NOT NULL,
+    `status_id` INT NOT NULL,
+    `favourite` BIT(1) NOT NULL DEFAULT FALSE,
 	`score` INT DEFAULT NULL,
-	`favourite` BIT(1) NOT NULL DEFAULT FALSE,
-	`watching` BIT(1) NOT NULL DEFAULT FALSE,
-	`planning` BIT(1) NOT NULL DEFAULT FALSE,
-	`completed` BIT(1) NOT NULL DEFAULT FALSE,
-	`on_hold` BIT(1) NOT NULL DEFAULT FALSE,
-	`dropped` BIT(1) NOT NULL DEFAULT FALSE,
     
 	PRIMARY KEY (`id`),
 	UNIQUE (`user_id`, `anime_id`),
@@ -127,20 +137,23 @@ CREATE TABLE `users_anime` (
 			ON DELETE NO ACTION ON UPDATE NO ACTION,
 	CONSTRAINT `FK_ANIME` FOREIGN KEY (`anime_id`) 
 		REFERENCES `anime`(`id`)
+			ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT `FK_STATUS` FOREIGN KEY (`status_id`) 
+		REFERENCES `anime_status`(`id`)
 			ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 INSERT INTO `users_anime` 
-(`user_id`, `anime_id`, `score`, `watching`, `planning`, `dropped`, `completed`, `on_hold`, `favourite`)
+(`user_id`, `anime_id`, `score`, `status_id`, `favourite`)
 	VALUES
-		('1', '1', 		'9', 	FALSE,		FALSE,		FALSE,		TRUE,		FALSE,		TRUE),
-		('1', '11061', 	'3', 	FALSE,		FALSE,		TRUE,		FALSE,		FALSE,		FALSE),
-		('1', '41467', 	'5', 	FALSE,		FALSE,		FALSE,		FALSE,		TRUE,		FALSE),
-		('1', '9999', 	'0', 	FALSE,		TRUE,		FALSE,		FALSE,		FALSE,		FALSE),
-		('2', '1', 		'1', 	FALSE,		FALSE,		TRUE,		FALSE,		FALSE,		FALSE),
-		('2', '11061', 	'10', 	FALSE,		FALSE,		FALSE,		TRUE,		FALSE,		TRUE),
-		('2', '41467', 	'8', 	TRUE,		FALSE,		FALSE,		FALSE,		FALSE,		TRUE),
-		('2', '9999', 	'3', 	TRUE,		FALSE,		FALSE,		FALSE,		FALSE,		FALSE);
+		('1', '1',		'9',	'2', TRUE),
+		('1', '11061',	'3',	'4', FALSE),
+		('1', '41467',	'5',	'3', FALSE),
+		('1', '9999',	'0',	'1', FALSE),
+		('2', '1',		'1',	'4', FALSE),
+		('2', '11061',	'10',	'2', TRUE),
+		('2', '41467',	'8',	'0', TRUE),
+		('2', '9999',	'3',	'0', FALSE);
 
 SELECT * FROM users;
 SELECT * FROM roles;
@@ -164,10 +177,12 @@ FROM reviews AS r
 		ON r.user_id = u.id
 ORDER BY 2;
 
-SELECT u.username, a.id, a.title, ua.score, ua.favourite, ua.watching, ua.planning, ua.completed, ua.on_hold, ua.dropped
+SELECT u.username, a.id, a.title, ua.score, ua.favourite, s.name AS `status`
 FROM users AS u
 	INNER JOIN users_anime AS ua
 		ON u.id = ua.user_id
 	INNER JOIN anime AS a
 		ON a.id = ua.anime_id
+	INNER JOIN anime_status as s
+		ON ua.status_id = s.id
 ORDER BY username;

@@ -1,10 +1,11 @@
-package com.myanimelist.service;
+package com.myanimelist.unit.service;
 
 import com.myanimelist.entity.Review;
 import com.myanimelist.entity.User;
 import com.myanimelist.exception.UserHasNoAccessException;
 import com.myanimelist.repository.ReviewRepository;
 import com.myanimelist.security.AuthenticationFacade;
+import com.myanimelist.service.UserService;
 import com.myanimelist.service.impl.ReviewServiceImpl;
 import com.myanimelist.view.ReviewView;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,15 +50,15 @@ public class ReviewServiceTest {
     void findReviewsTest() {
         doReturn(List.of(review)).when(reviewRepository).findAllByAnimeId(review.getAnimeId());
 
-        assertThat(reviewService.retrieveList(review.getAnimeId())).hasSize(1);
-        assertThat(reviewService.retrieveList(review.getAnimeId()).get(0)).isEqualTo(review);
+        assertThat(reviewService.getReviews(review.getAnimeId())).hasSize(1);
+        assertThat(reviewService.getReviews(review.getAnimeId()).get(0)).isEqualTo(review);
     }
 
     @Test
     void findNoReviewsTest() {
         doReturn(List.of()).when(reviewRepository).findAllByAnimeId(anyInt());
 
-        assertThat(reviewService.retrieveList(anyInt())).isEmpty();
+        assertThat(reviewService.getReviews(anyInt())).isEmpty();
     }
 
     @Test
@@ -73,6 +74,7 @@ public class ReviewServiceTest {
 
         reviewService.save(reviewView);
 
+        verify(reviewRepository, times(1)).save(review);
         verify(authenticationFacade, times(1)).getUsername();
         verify(userService, times(1)).find(review.getUser().getUsername());
     }
@@ -89,16 +91,12 @@ public class ReviewServiceTest {
 
     @Test
     void removeFail() {
-        assertAll(
-                () -> assertThrows(EntityNotFoundException.class, () -> reviewService.remove(Integer.MAX_VALUE)),
-                () -> assertThrows(EntityNotFoundException.class, () -> reviewService.remove(null)),
-                () -> {
-                    doReturn(Optional.of(review)).when(reviewRepository).findById(review.getId());
-                    doReturn("dummy").when(authenticationFacade).getUsername();
+        assertAll(() -> assertThrows(EntityNotFoundException.class, () -> reviewService.remove(Integer.MAX_VALUE)), () -> assertThrows(EntityNotFoundException.class, () -> reviewService.remove(null)), () -> {
+            doReturn(Optional.of(review)).when(reviewRepository).findById(review.getId());
+            doReturn("dummy").when(authenticationFacade).getUsername();
 
-                    assertThrows(UserHasNoAccessException.class, () -> reviewService.remove(review.getId()));
-                }
-        );
+            assertThrows(UserHasNoAccessException.class, () -> reviewService.remove(review.getId()));
+        });
     }
 
     private Review getReview() {

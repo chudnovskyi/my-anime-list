@@ -16,7 +16,7 @@
         	Welcome!!! This is an admin page!
         </h2> 
         
-        <p th:text="'Time on the server is ' + ${theDate}" class="green">
+        <p th:text="'Time on the server is ' + ${date}" class="green">
         
         <div sec:authorize="hasRole('ADMIN')" class="red">
         	Text visible to admin.

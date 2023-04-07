@@ -22,22 +22,22 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 @FieldMatch.List({
-        @FieldMatch(firstField = "password", secondField = "matchingPassword", message = "{ConfirmPassword.Match}")
+        @FieldMatch(firstField = "password", secondField = "matchingPassword", message = "{user.confirmPassword.match}")
 })
 public class UserView {
 
-    @NotNull(message = "{Username.NotNull}")
-    @Size(min = 3, message = "{Username.Size}")
+    @NotNull(message = "{user.username.required}")
+    @Size(min = 3, message = "{user.username.minLength}")
     private String username;
 
-    @NotNull(message = "{Password.NotNull}")
-    @Size(min = 3, message = "{Password.Size}")
+    @NotNull(message = "{user.password.required}")
+    @Size(min = 3, message = "{user.password.minLength}")
     private String password;
 
-    @NotNull(message = "{ConfirmPassword.NotNull}")
+    @NotNull(message = "{user.confirmPassword.required}")
     private String matchingPassword;
 
-    @NotNull(message = "{Email.NotNull}")
-    @Email(domains = {"gmail.com", "karazin.ua"}, message = "{Email.Domains}")
+    @NotNull(message = "{user.email.required}")
+    @Email(domains = {"gmail.com", "karazin.ua"}, message = "{user.email.invalidDomain}")
     private String email;
 }

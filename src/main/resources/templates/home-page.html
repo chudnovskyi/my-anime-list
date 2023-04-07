@@ -23,12 +23,12 @@
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/anime/top/1}">Top</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/anime/random}">Random</a>
                     <br>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=FAVOURITE, page=1, size=5)}">Favourite</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=WATCHING, page=1, size=5)}">Watching</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=PLANNING, page=1, size=5)}">Planning</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=FINISHED, page=1, size=5)}">Completed</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=ON_HOLD, page=1, size=5)}">On-hold</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=DROPPED, page=1, size=5)}">Dropped</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(favourite=true, size=5, page=1)}">Favourite</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=WATCHING, size=5, page=1)}">Watching</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=PLANNING, size=5, page=1)}">Planning</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=FINISHED, size=5, page=1)}">Finished</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=ON_HOLD, size=5, page=1)}">On-hold</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/list(status=DROPPED, size=5, page=1)}">Dropped</a>
                 </div>
             </div>
             <!-- Page content wrapper-->
@@ -67,8 +67,8 @@
                 <!-- Page content-->
                 <div class="container-fluid">
 			        <div th:if="${param.search}">
-		                <form th:action="@{/anime/search/{pageId}(pageId = 1)}" 
-		                	th:object="${searchAnime}" method="POST" class="form-control-plaintext">
+		                <form th:action="@{/anime/search/{pageId}(pageId = 1)}"
+							  th:object="${animeView}" method="POST" class="form-control-plaintext">
 					        <label>
 					        	Enter anime name:
 					        </label>
@@ -100,7 +100,7 @@
 					<div th:if="${param.profile}">
 						<h2>Welcome.</h2> 
 				        
-						<p th:text="'Time on the server is: ' + ${theDate}" class="green">
+						<p th:text="'Time on the server is: ' + ${date}" class="green">
 			        
 			        	<p>Profile picture:</p>
 			        	<td><img th:src="${'data:image/jpeg;charset=utf-8;base64,' + profilePicture}" alt=""></td>

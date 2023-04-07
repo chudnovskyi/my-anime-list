@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ReviewService {
 
-    List<Review> retrieveList(int animeId);
+    List<Review> getReviews(int animeId);
 
     void save(ReviewView reviewForm);
 

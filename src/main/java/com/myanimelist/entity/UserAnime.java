@@ -1,25 +1,33 @@
 package com.myanimelist.entity;
 
-import lombok.*;
+import com.myanimelist.entity.listeners.UserAnimeListener;
+import com.myanimelist.model.AnimeStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "users_anime")
-public class UserAnime extends AuditableEntity<Integer> {
+@EntityListeners(UserAnimeListener.class)
+public class UserAnime implements BaseEntity<Integer> {
 
-    private boolean favourite;
-    private boolean watching;
-    private boolean planning;
-    private boolean completed;
-    private boolean onHold;
-    private boolean dropped;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     private int score;
+    private boolean favourite;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status_id")
+    private AnimeStatus status;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
@@ -39,40 +47,13 @@ public class UserAnime extends AuditableEntity<Integer> {
     @JoinColumn(name = "anime_id")
     private Anime anime;
 
-    public void setAsWatching() {
-        setParamsToFalse();
-        watching = true;
+    public void setUser(User user) {
+        this.user = user;
+        this.user.getUserAnimeList().add(this);
     }
 
-    public void setAsPlanning() {
-        setParamsToFalse();
-        setFavourite(false);
-        setScore(0);
-        planning = true;
-    }
-
-    public void setAsCompleted() {
-        setParamsToFalse();
-        completed = true;
-    }
-
-    public void setAsOnHold() {
-        setParamsToFalse();
-        setFavourite(false);
-        onHold = true;
-    }
-
-    public void setAsDropped() {
-        setParamsToFalse();
-        setFavourite(false);
-        dropped = true;
-    }
-
-    private void setParamsToFalse() {
-        setCompleted(false);
-        setDropped(false);
-        setOnHold(false);
-        setWatching(false);
-        setPlanning(false);
+    public void setAnime(Anime anime) {
+        this.anime = anime;
+        this.anime.getUserAnimeList().add(this);
     }
 }

@@ -28,8 +28,8 @@ public class HomeController {
             model.addAttribute("profilePicture", Base64.getEncoder().encodeToString(profilePicture));
         }
 
-        model.addAttribute("theDate", new Date());
-        model.addAttribute("searchAnime", new AnimeView());
+        model.addAttribute("date", new Date());
+        model.addAttribute("animeView", new AnimeView());
         model.addAttribute("genres", genreService.retrieveAllGenres());
 
         return "home-page";
@@ -39,14 +39,13 @@ public class HomeController {
     public String adminPage(
             Model model) {
 
-        model.addAttribute("theDate", new Date());
+        model.addAttribute("date", new Date());
 
         return "admin-page";
     }
 
     @GetMapping("/github")
     public String github() {
-
         return "redirect:https://github.com/lwantPizza/my-anime-list";
     }
 }

@@ -28,18 +28,18 @@ public class ReviewController {
 
     @PostMapping("/add")
     public String add(
-            @Valid @ModelAttribute(name = "reviewForm") ReviewView reviewForm,
+            @Valid @ModelAttribute(name = "reviewView") ReviewView reviewView,
             BindingResult bindingResult,
             RedirectAttributes attr) {
 
         if (bindingResult.hasErrors()) {
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.reviewForm", bindingResult);
-            attr.addFlashAttribute("reviewForm", reviewForm);
+            attr.addFlashAttribute("org.springframework.validation.BindingResult.reviewView", bindingResult);
+            attr.addFlashAttribute("reviewView", reviewView);
         } else {
-            reviewService.save(reviewForm);
+            reviewService.save(reviewView);
         }
 
-        return "redirect:/anime/" + reviewForm.getAnimeId();
+        return "redirect:/anime/" + reviewView.getAnimeId();
     }
 
     @GetMapping("/remove/{animeId}/{reviewId}")
