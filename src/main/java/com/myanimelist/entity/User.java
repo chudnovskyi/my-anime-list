@@ -1,9 +1,9 @@
 package com.myanimelist.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,17 +11,20 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(of = "username")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "users")
-public class User implements BaseEntity<Integer> {
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+public class User extends AuditingEntity<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true, nullable = false)
     private String username;
     private String password;
     private String email;
@@ -30,6 +33,7 @@ public class User implements BaseEntity<Integer> {
     @Lob
     private byte[] image;
 
+    @NotAudited
     @ManyToMany(
             fetch = FetchType.EAGER,
             cascade = {
@@ -44,6 +48,7 @@ public class User implements BaseEntity<Integer> {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
+    @NotAudited
     @Builder.Default
     @OneToMany(
             mappedBy = "user",
@@ -56,6 +61,7 @@ public class User implements BaseEntity<Integer> {
             })
     private List<Review> reviews = new ArrayList<>();
 
+    @NotAudited
     @Builder.Default
     @OneToMany(
             mappedBy = "user",

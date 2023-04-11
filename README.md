@@ -4,7 +4,7 @@
 
 
 ## Demo
-Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](https://my-anime-listt.herokuapp.com/)
+Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](https://my-anime-listt.herokuapp.com/) !temporarily disabled!
 
 
 ## Table of Contents
@@ -36,17 +36,26 @@ Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](
 - Thymeleaf
 
 - Javax Validation API
-- Spring Mail
 
 ## Additional Tools
-- Lombok: A library used to reduce boilerplate code in Java.
+- Liquibase: Database migration management tool to manage changes with database schema over time.
+- Testcontainers: Library that simplifies integration testing by leveraging Docker containers.
+- Hibernate Envers: Library for auditing and versioning of entities.
+- Spring Mail: An API for sending registration confirmation emails.
+- Lombok: Library used to reduce boilerplate code in Java.
 - Swagger: An API documentation and testing tool.
+- Liquibase: Database migration management tool to manage changes with the database schema over time. Example: "We use Liquibase to maintain a history of our database schema changes, allowing us to easily track and apply migrations as our application evolves."
+- Testcontainers: Library that simplifies integration testing by leveraging Docker containers. Example: "Testcontainers allows us to write integration tests that run in isolated Docker containers, providing a consistent and reproducible environment for testing our application's interactions with external dependencies."
+- Hibernate Envers: Library for auditing and versioning of entities. Example: "Hibernate Envers helps us track changes to our entities, allowing us to audit modifications and retrieve historical snapshots of data for compliance, analysis, or debugging purposes."
+- Spring Mail: An API for sending mails, from within the Spring framework. Example: "We use Spring Mail to send registration confirmation emails to users who sign up for our application, providing a seamless and automated email notification process."
+- Lombok: Library used to reduce boilerplate code in Java. Used to simplify Java code by generating common boilerplate code automatically, such as getters, setters, and constructors.
+- Swagger: An API documentation and testing tool. Used for documenting and testing APIs, providing a visual interface for API documentation and testing.
 
 
 ## Features
 - Login/Registration: Users can create an account and log in, with email verification required.
 - Filtered anime search: Users can search for anime by title and genres, with pagination support.
-- Top anime: A list of the top rated anime, with pagination support.
+- Top anime: A list of the top-rated anime, with pagination support.
 - Random anime generation: Users can generate a random anime to watch.
 - Detailed anime information: Users can access information about each anime, including its trailer (if available).
 - Reviews: Users can write and delete reviews about any anime, with validation for at least 5 characters.

@@ -13,13 +13,13 @@ DROP TABLE IF EXISTS `anime_status`;
 -- User can log in only if activation code is null (account activated)
 --
 CREATE TABLE `users` (
-	`id` INT NOT NULL AUTO_INCREMENT,
-	`username` VARCHAR(50) UNIQUE NOT NULL,
-	`password` CHAR(60) NOT NULL,
-	`email` VARCHAR(255) NOT NULL,
-	`activation_code` VARCHAR(80) DEFAULT NULL,
-	`image` MEDIUMBLOB DEFAULT NULL,
-	PRIMARY KEY (`id`)
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(50) UNIQUE NOT NULL,
+    `password` VARCHAR(60) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `activation_code` VARCHAR(80) DEFAULT NULL,
+    `image` LONGBLOB DEFAULT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `reviews` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`user_id` INT NOT NULL,
 	`anime_id` INT NOT NULL,
-	`content` TEXT NOT NULL,
+    `content` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `fk_reviews_user_id` FOREIGN KEY (`user_id`) 
 		REFERENCES `users`(`id`)
