@@ -38,18 +38,12 @@ Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](
 - Javax Validation API
 
 ## Additional Tools
-- Liquibase: Database migration management tool to manage changes with database schema over time.
-- Testcontainers: Library that simplifies integration testing by leveraging Docker containers.
-- Hibernate Envers: Library for auditing and versioning of entities.
-- Spring Mail: An API for sending registration confirmation emails.
-- Lombok: Library used to reduce boilerplate code in Java.
-- Swagger: An API documentation and testing tool.
-- Liquibase: Database migration management tool to manage changes with the database schema over time. Example: "We use Liquibase to maintain a history of our database schema changes, allowing us to easily track and apply migrations as our application evolves."
-- Testcontainers: Library that simplifies integration testing by leveraging Docker containers. Example: "Testcontainers allows us to write integration tests that run in isolated Docker containers, providing a consistent and reproducible environment for testing our application's interactions with external dependencies."
-- Hibernate Envers: Library for auditing and versioning of entities. Example: "Hibernate Envers helps us track changes to our entities, allowing us to audit modifications and retrieve historical snapshots of data for compliance, analysis, or debugging purposes."
-- Spring Mail: An API for sending mails, from within the Spring framework. Example: "We use Spring Mail to send registration confirmation emails to users who sign up for our application, providing a seamless and automated email notification process."
-- Lombok: Library used to reduce boilerplate code in Java. Used to simplify Java code by generating common boilerplate code automatically, such as getters, setters, and constructors.
-- Swagger: An API documentation and testing tool. Used for documenting and testing APIs, providing a visual interface for API documentation and testing.
+- **`Liquibase:`** Database migration management tool to manage changes with the database schema over time. Example: "We use Liquibase to maintain a history of our database schema changes, allowing us to easily track and apply migrations as our application evolves."
+- **`Testcontainers:`** Library that simplifies integration testing by leveraging Docker containers. Example: "Testcontainers allows us to write integration tests that run in isolated Docker containers, providing a consistent and reproducible environment for testing our application's interactions with external dependencies."
+- **`Hibernate Envers:`** Library for auditing and versioning of entities. Example: "Hibernate Envers helps us track changes to our entities, allowing us to audit modifications and retrieve historical snapshots of data for compliance, analysis, or debugging purposes."
+- **`Spring Mail:`** An API for sending mails, from within the Spring framework. Example: "We use Spring Mail to send registration confirmation emails to users who sign up for our application, providing a seamless and automated email notification process."
+- **`Lombok:`** Library used to reduce boilerplate code in Java. Used to simplify Java code by generating common boilerplate code automatically, such as getters, setters, and constructors.
+- **`Swagger:`** An API documentation and testing tool. Used for documenting and testing APIs, providing a visual interface for API documentation and testing.
 
 
 ## Features
@@ -69,12 +63,9 @@ Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](
 ## Local Deployment
 1. Clone the repository using the following command in your terminal:
 
-```git clone https://github.com/lwantPizza/my-anime-list```
+```git clone https://github.com/lwantPizza/my-anime-list/tree/7e7fba23f3ad1c337d3e22f62da094df7e232a78```
 
-2. Set up the MySQL database locally, SQL script provided:
-
-```https://github.com/lwantPizza/my-anime-list/blob/main/sql-script/script.sql```
-
+2. Set up the MySQL database locally, [SQL script provided](https://github.com/lwantPizza/my-anime-list/blob/7e7fba23f3ad1c337d3e22f62da094df7e232a78/sql-script/script.sql)
 3. Set the db properties in project's `application.properties` file:
 ```
 spring.datasource.url=jdbc:mysql://localhost:3306/my_anime_list?useSSL=false&serverTimezone=UTC
