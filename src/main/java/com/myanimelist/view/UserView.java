@@ -2,6 +2,7 @@ package com.myanimelist.view;
 
 import com.myanimelist.validation.Email;
 import com.myanimelist.validation.FieldMatch;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import javax.validation.constraints.Size;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldMatch.List({
         @FieldMatch(firstField = "password", secondField = "matchingPassword", message = "{user.confirmPassword.match}")
 })

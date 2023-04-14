@@ -55,6 +55,6 @@ public class ReviewController {
             return "home-page";
         }
 
-        return "redirect:/anime/" + animeId;
+        return "redirect:/anime/{animeId}";
     }
 }

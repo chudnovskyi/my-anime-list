@@ -4,7 +4,7 @@
 
 
 ## Demo
-Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](https://my-anime-listt.herokuapp.com/) !temporarily disabled!
+Here is a working live demo deployed on Heroku cloud service: [_My Anime List_](https://my-anime-listt.herokuapp.com/)
 
 
 ## Table of Contents

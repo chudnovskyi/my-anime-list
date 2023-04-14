@@ -1,13 +1,11 @@
 package com.myanimelist.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
+@ToString(exclude = "user")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,7 +21,7 @@ public class Review implements BaseEntity<Integer> {
     private String content;
 
     @ManyToOne(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.DETACH,
                     CascadeType.MERGE,

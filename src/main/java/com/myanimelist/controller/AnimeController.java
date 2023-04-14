@@ -108,7 +108,7 @@ public class AnimeController {
 
         animeService.updateUserAnime(animeId, (x) -> x.setStatus(status));
 
-        return "redirect:/anime/" + animeId;
+        return "redirect:/anime/{animeId}";
     }
 
     @GetMapping("/set/{animeId}/favourite")
@@ -117,7 +117,7 @@ public class AnimeController {
 
         animeService.updateUserAnime(animeId, x -> x.setFavourite(!x.isFavourite()));
 
-        return "redirect:/anime/" + animeId;
+        return "redirect:/anime/{animeId}";
     }
 
     @GetMapping("/score/{animeId}/{score}")
@@ -127,7 +127,7 @@ public class AnimeController {
 
         animeService.updateUserAnime(animeId, x -> x.setScore(score));
 
-        return "redirect:/anime/" + animeId;
+        return "redirect:/anime/{animeId}";
     }
 
     @GetMapping("/reset/{animeId}")
@@ -136,6 +136,6 @@ public class AnimeController {
 
         animeService.reset(animeId);
 
-        return "redirect:/anime/" + animeId;
+        return "redirect:/anime/{animeId}";
     }
 }

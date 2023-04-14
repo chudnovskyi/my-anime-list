@@ -49,7 +49,9 @@ public class UserAnime implements BaseEntity<Integer> {
 
     public void setUser(User user) {
         this.user = user;
-        this.user.getUserAnimeList().add(this);
+        if (this.user != null) {
+            this.user.getUserAnimeList().add(this);
+        }
     }
 
     public void setAnime(Anime anime) {

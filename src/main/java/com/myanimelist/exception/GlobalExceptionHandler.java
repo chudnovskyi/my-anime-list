@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         ErrorResponse error = new ErrorResponse();
 
-        error.setCode(HttpStatus.TOO_MANY_REQUESTS.value());
+        error.setCode(HttpStatus.BAD_REQUEST.value());
         error.setTimestamp(System.currentTimeMillis());
 
         if (e.getParameter().getParameterType().equals(AnimeStatus.class)) {

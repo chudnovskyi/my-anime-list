@@ -49,10 +49,11 @@ public class UserServiceImpl implements UserService {
 
         try {
             userRepository.save(user);
-            mailSenderService.send(user.getUsername(), user.getEmail(), user.getActivationCode());
         } catch (RuntimeException e) {
             throw new UsernameAlreadyExistsException("Username " + user.getUsername() + " already exists!");
         }
+
+        mailSenderService.send(user.getUsername(), user.getEmail(), user.getActivationCode());
     }
 
     @Override

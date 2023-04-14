@@ -1,15 +1,13 @@
 package com.myanimelist.view;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class ReviewView {
 

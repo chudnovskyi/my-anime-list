@@ -11,9 +11,9 @@ DELETE FROM `users`;
 DELETE FROM `roles`;
 DELETE FROM `anime_status`;
 
-INSERT INTO `users` (`username`, `password`, `email`)
+INSERT INTO `users` (`username`, `password`, `email`, `activation_code`)
 VALUES
-    ('dummy', '$2a$12$shqirUNro2awqXU8trF7ruHQoQRTCtkI6d/dz2DTvfOo.wnhGucei', 'dummy@gmail.com');
+    ('dummy', '$2a$12$shqirUNro2awqXU8trF7ruHQoQRTCtkI6d/dz2DTvfOo.wnhGucei', 'dummy@gmail.com', 'code');
 
 INSERT INTO `roles` (`name`)
 VALUES
@@ -30,6 +30,7 @@ VALUES
 INSERT INTO `reviews` (`user_id`, `anime_id`, `content`)
 VALUES
     ((SELECT id FROM users WHERE username = 'dummy'), 1,    'comment1'),
+    ((SELECT id FROM users WHERE username = 'dummy'), 1,    'comment3'),
     ((SELECT id FROM users WHERE username = 'dummy'), 9999, 'comment2');
 
 INSERT INTO `anime` (`id`, `title`, `image`)
